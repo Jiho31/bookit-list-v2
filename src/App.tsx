@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import './App.css';
+import useOpenLibraryAPI from './useOpenLibraryAPI';
 
 type Option = string | number | boolean | undefined;
 
@@ -14,7 +15,17 @@ type Form = {
 	[questionNo: string]: Option | Option[];
 };
 
+type Book = {
+	key?: string;
+	author: string;
+	title: string;
+	coverEditionKey: string;
+	publishedYear: number;
+};
+
 function App() {
+	const { search: fetchBooks, getBookCoverImage } = useOpenLibraryAPI();
+
 	const [num, setNum] = useState(0);
 	const [form, setForm] = useState<Question[]>([
 		{
@@ -41,44 +52,36 @@ function App() {
 			Object.entries(userResponse).length === form.length,
 		[num, form.length, userResponse],
 	);
-	const [recommendations, setRecommendations] = useState([
-		{
-			title: '제목1',
-			author: '작가A',
-			coverImg: 'x.png',
-		},
-		{
-			title: '제목2',
-			author: '작가B',
-			coverImg: 'x.png',
-		},
-		{
-			title: '제목3',
-			author: '작가A',
-			coverImg: 'x.png',
-		},
-		{
-			title: '제목4',
-			author: '작가AASDFASDF',
-			coverImg: 'x.png',
-		},
-		{
-			title: '제목5',
-			author: '작가A',
-			coverImg: 'x.png',
-		},
-	]);
+	const [recommendations, setRecommendations] = useState<Book[]>([]);
 
 	const generateRecommendation = async () => {
 		setIsLoading(true);
 
 		try {
 			console.log('generating..');
-			await setTimeout(() => {
-				setIsLoading(false);
-			}, 2000);
 
-			// setRecommendations
+			// @todo 감정 기반으로 키워드 조합 생성해서 api 호출하기
+			const books = await fetchBooks('harry potter');
+
+			const dummyRec: Book[] = books?.docs
+				.slice(0, 5)
+				.map(
+					({
+						author_name,
+						title,
+						cover_edition_key,
+						first_publish_year,
+						key,
+					}: any) => ({
+						author: author_name,
+						title,
+						key,
+						publishedYear: first_publish_year,
+						coverEditionKey: cover_edition_key,
+					}),
+				);
+
+			setRecommendations(dummyRec);
 		} catch (err) {
 			console.error(err);
 		} finally {
@@ -163,7 +166,7 @@ function App() {
 										key={idx}
 										className="flex flex-col w-40 h-46 border border-amber-500 rounded-xl"
 									>
-										<img src={book.coverImg} />
+										<img src={getBookCoverImage(book.coverEditionKey)} />
 										<div>{book.title}</div>
 										<div>{book.author}</div>
 									</div>
