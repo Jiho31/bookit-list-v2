@@ -1,34 +1,46 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './App.css';
 
-type Form = {
+type Option = string | number | boolean | undefined;
+
+type Question = {
+	no: number;
 	question: string;
-	options: string[];
-	selected: object | string | boolean | undefined;
+	options: Option[];
 	priority?: number;
+};
+
+type Form = {
+	[questionNo: string]: Option | Option[];
 };
 
 function App() {
 	const [num, setNum] = useState(0);
-	const [form, setForm] = useState<Form[]>([
+	const [form, setForm] = useState<Question[]>([
 		{
+			no: 1,
 			question: 'How are you feeling today?',
 			options: ['Happy', 'Neutral', 'Bad'],
-			selected: undefined,
 		},
 		{
+			no: 2,
 			question: 'Which do you prefer?',
 			options: ['Fiction', 'Non-fiction', "I don't mind"],
-			selected: undefined,
 		},
 		{
+			no: 3,
 			question: 'Favorite genres?',
 			options: ['Romance', 'SF', 'Fantasy', 'Horror', 'Mystery'],
-			selected: undefined,
 		},
 	]);
+	const [userResponse, setUserResponse] = useState<Form>({});
 	const [isLoading, setIsLoading] = useState(false);
-	const [isFormComplete, setIsFormComplete] = useState(false);
+	const isFormComplete = useMemo(
+		() =>
+			num === form.length &&
+			Object.entries(userResponse).length === form.length,
+		[num, form.length, userResponse],
+	);
 	const [recommendations, setRecommendations] = useState([
 		{
 			title: '제목1',
@@ -65,7 +77,6 @@ function App() {
 			await setTimeout(() => {
 				setIsLoading(false);
 			}, 2000);
-			setIsFormComplete(true);
 
 			// setRecommendations
 		} catch (err) {
@@ -75,37 +86,36 @@ function App() {
 		}
 	};
 
-	const handleResponse = async (questionNum: number, response: String) => {
-		console.log(questionNum, response);
+	const handleResponse = async (
+		questionNum: number,
+		response: Option | Option[],
+	) => {
+		// console.log(questionNum, response);
 
-		const newForm = [...form];
-		newForm[questionNum] = {
-			...newForm[questionNum],
-			selected: response,
-		};
-		setForm(newForm);
+		setUserResponse({ ...userResponse, [questionNum]: response });
 		setNum(num + 1);
 	};
 
 	const toPrev = () => {
-		if (num == 0) {
+		if (num === 0) {
 			return;
 		}
 
-		const newForm = [...form];
-		newForm[num - 1].selected = undefined;
-
-		setForm(newForm);
+		setUserResponse({ [num - 1]: undefined });
 		setNum(num - 1);
 	};
 
 	const refreshForm = () => {
-		console.log('refresh selected data in form');
-		console.log('go to question 1');
+		setUserResponse({});
+		setNum(0);
+	};
+
+	const shuffleRecommendations = () => {
+		alert('shuffle!');
 	};
 
 	useEffect(() => {
-		if (num == form.length) {
+		if (num === form.length) {
 			generateRecommendation();
 		}
 	}, [num]);
@@ -167,7 +177,9 @@ function App() {
 			{isFormComplete ? (
 				<div className="flex gap-2 justify-center mt-6">
 					<button onClick={refreshForm}>Restart survey </button>
-					<button>More recommendations </button>
+					<button onClick={shuffleRecommendations}>
+						More recommendations{' '}
+					</button>
 				</div>
 			) : (
 				''
