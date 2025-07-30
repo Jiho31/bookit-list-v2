@@ -180,11 +180,7 @@ const genreOptions: OptionMeta[] = [
 // keyword 후보 : ['young adult', 'family', 'passion', 'motivating', 'philosophical', 'introspective', ]
 
 function App() {
-	const {
-		search: fetchBooks,
-		getBookCoverImage,
-		searchBySubject,
-	} = useOpenLibraryAPI();
+	const { search: fetchBooks, getBookCoverImage } = useOpenLibraryAPI();
 
 	const [num, setNum] = useState(0);
 	const [form, setForm] = useState<Question[]>([
