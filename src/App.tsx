@@ -215,7 +215,19 @@ function App() {
 			Object.entries(userResponse).length === form.length,
 		[num, form.length, userResponse],
 	);
+	const [fetchedBooks, setFetchedBooks] = useState<Book[]>([]);
 	const [recommendations, setRecommendations] = useState<Book[]>([]);
+	const [pageIndex, setPageIndex] = useState(1);
+
+	const [query, setQuery] = useState('');
+
+	const makeQuery = () => {
+		const query1 = userResponse[1].keywords.join(' OR ') || '';
+		const query2 = userResponse[2].queries?.join(' AND ') || '';
+		const query3 = userResponse[3].queries?.join('') || '';
+
+		return [query1, query2, query3].filter((q) => q !== '').join(' AND ');
+	};
 
 	const generateRecommendation = async () => {
 		setIsLoading(true);
@@ -223,11 +235,13 @@ function App() {
 		try {
 			console.log('generating..');
 
-			// @todo 감정 기반으로 키워드 조합 생성해서 api 호출하기
-			const books = await fetchBooks('harry potter');
+			const query = makeQuery();
+			// console.log(query, '<<<< QUERY');
+			setQuery(query);
 
-			const dummyRec: Book[] = books?.docs
-				.slice(0, 5)
+			const books = await fetchBooks(query);
+			const parsedResult: Book[] = books?.docs
+				// .slice(0, 10)
 				.map(
 					({
 						author_name,
@@ -244,7 +258,8 @@ function App() {
 					}),
 				);
 
-			setRecommendations(dummyRec);
+			setFetchedBooks(parsedResult);
+			setRecommendations(parsedResult.slice(0, 10));
 		} catch (err) {
 			console.error(err);
 		} finally {
@@ -333,7 +348,7 @@ function App() {
 										<div
 											key={idx}
 											className="flex px-5 py-10 w-36 justify-center bg-amber-100 rounded-lg hover:cursor-pointer hover:bg-amber-200"
-											onClick={() => handleResponse(num, option)}
+											onClick={() => handleResponse(num + 1, option)}
 										>
 											{option.label}
 										</div>
