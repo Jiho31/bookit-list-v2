@@ -267,17 +267,42 @@ function App() {
 			return;
 		}
 
-		setUserResponse({ [num - 1]: undefined });
+		const newUserResponse = { ...userResponse };
+		delete newUserResponse[num - 1];
+		setUserResponse(newUserResponse);
 		setNum(num - 1);
 	};
 
 	const refreshForm = () => {
 		setUserResponse({});
 		setNum(0);
+		setPageIndex(1);
 	};
 
-	const shuffleRecommendations = () => {
-		alert('shuffle!');
+	const shuffleRecommendations = async () => {
+		if (pageIndex === 10) {
+			alert('shuffle22!');
+			// @todo call book search API for more results
+			// or
+			// Recommend user to do the survey again ?
+			return;
+		}
+
+		await setIsLoading(true);
+		try {
+			await setRecommendations(
+				fetchedBooks.slice(pageIndex * 10, pageIndex * 10 + 10),
+			);
+			setPageIndex(pageIndex + 1);
+		} catch (err) {
+			console.error(err);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const showBookDetails = (book: Book) => {
+		console.log(book, '### DETAILS');
 	};
 
 	useEffect(() => {
