@@ -211,12 +211,7 @@ function App() {
 	]);
 	const [userResponse, setUserResponse] = useState<Form>({});
 	const [isLoading, setIsLoading] = useState(false);
-	const isFormComplete = useMemo(
-		() =>
-			num === form.length &&
-			Object.entries(userResponse).length === form.length,
-		[num, form.length, userResponse],
-	);
+	const isFormComplete = useMemo(() => num === form.length, [num, form.length]);
 	const [fetchedBooks, setFetchedBooks] = useState<Book[]>([]);
 	const [recommendations, setRecommendations] = useState<Book[]>([]);
 	const [pageIndex, setPageIndex] = useState(1);
@@ -340,7 +335,7 @@ function App() {
 					<div> Generating recommendations ... </div>
 				) : (
 					<div>
-						{num < form.length ? (
+						{!isFormComplete ? (
 							<>
 								<div className="text-gray-600">
 									Progress: Question {num + 1}/{form.length}
@@ -424,30 +419,25 @@ function App() {
 										</div>
 									))}
 								</section>
+								<div className="flex gap-2 justify-center mt-6">
+									<button
+										className="border rounded-b-md bg-gray-100 hover:bg-gray-200"
+										onClick={refreshForm}
+									>
+										Restart survey
+									</button>
+									<button
+										className="border rounded-b-md  bg-gray-100 hover:bg-gray-200"
+										onClick={shuffleRecommendations}
+									>
+										More recommendations
+									</button>
+								</div>
 							</>
 						)}
 					</div>
 				)}
 			</div>
-
-			{isFormComplete ? (
-				<div className="flex gap-2 justify-center mt-6">
-					<button
-						className="border rounded-b-md bg-gray-100 hover:bg-gray-200"
-						onClick={refreshForm}
-					>
-						Restart survey
-					</button>
-					<button
-						className="border rounded-b-md  bg-gray-100 hover:bg-gray-200"
-						onClick={shuffleRecommendations}
-					>
-						More recommendations
-					</button>
-				</div>
-			) : (
-				''
-			)}
 		</div>
 	);
 }
