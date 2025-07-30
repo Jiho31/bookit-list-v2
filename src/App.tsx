@@ -432,9 +432,17 @@ function App() {
 
 			{isFormComplete ? (
 				<div className="flex gap-2 justify-center mt-6">
-					<button onClick={refreshForm}>Restart survey </button>
-					<button onClick={shuffleRecommendations}>
-						More recommendations{' '}
+					<button
+						className="border rounded-b-md bg-gray-100 hover:bg-gray-200"
+						onClick={refreshForm}
+					>
+						Restart survey
+					</button>
+					<button
+						className="border rounded-b-md  bg-gray-100 hover:bg-gray-200"
+						onClick={shuffleRecommendations}
+					>
+						More recommendations
 					</button>
 				</div>
 			) : (
