@@ -203,11 +203,11 @@ function App() {
 			question: '📏 How long of a book would you prefer?',
 			options: bookLengthOptions,
 		},
-		{
+		/* {
 			id: 4,
 			question: '📚 What kind of stories are you in the mood for?',
 			options: genreOptions, // @todo 2번 문제 선택에 따라 4번 문제 option 선택지가 달라짐
-		},
+		}, */
 	]);
 	const [userResponse, setUserResponse] = useState<Form>({});
 	const [isLoading, setIsLoading] = useState(false);
@@ -215,7 +215,12 @@ function App() {
 	const [fetchedBooks, setFetchedBooks] = useState<Book[]>([]);
 	const [recommendations, setRecommendations] = useState<Book[]>([]);
 	const [pageIndex, setPageIndex] = useState(1);
+	const isEmpty = useMemo(
+		() => recommendations.length === 0,
+		[recommendations],
+	);
 
+	// @todo query 변수 삭제
 	const [query, setQuery] = useState('');
 
 	const makeQuery = () => {
@@ -291,10 +296,10 @@ function App() {
 
 	const shuffleRecommendations = async () => {
 		if (pageIndex === Math.ceil(fetchedBooks.length / MAX_RECOMMENDATIONS)) {
-			alert('shuffle22!');
 			// @todo call book search API for more results
 			// or
 			// Recommend user to do the survey again ?
+			setRecommendations([]);
 			return;
 		}
 
@@ -362,24 +367,31 @@ function App() {
 							</>
 						) : (
 							<>
-								<section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 p-6 max-w-6xl mx-auto">
-									{recommendations.map((book, idx) => (
-										<div
-											key={idx}
-											className="flex flex-col bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-103 cursor-pointer overflow-hidden max-w-xs h-90"
-											onClick={() => showBookDetails(book)}
-										>
-											<div className="relative w-full h-48 bg-gray-100 flex items-center justify-center">
-												<img
-													className="w-full h-full object-cover"
-													src={getBookCoverImage(book.coverEditionKey)}
-													alt={`Cover of ${book.title}`}
-													onError={(e) => {
-														const target = e.target as HTMLImageElement;
-														target.style.display = 'none';
-														const parent = target.parentElement;
-														if (parent) {
-															parent.innerHTML = `
+								{isEmpty ? (
+									<div className="text-center text-gray-500 py-10">
+										No books found for your preferences. <br />
+										Start over to adjust your choices to discover great reads.
+										:)
+									</div>
+								) : (
+									<section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 p-6 max-w-6xl mx-auto">
+										{recommendations.map((book, idx) => (
+											<div
+												key={idx}
+												className="flex flex-col bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-103 cursor-pointer overflow-hidden max-w-xs h-90"
+												onClick={() => showBookDetails(book)}
+											>
+												<div className="relative w-full h-48 bg-gray-100 flex items-center justify-center">
+													<img
+														className="w-full h-full object-cover"
+														src={getBookCoverImage(book.coverEditionKey)}
+														alt={`Cover of ${book.title}`}
+														onError={(e) => {
+															const target = e.target as HTMLImageElement;
+															target.style.display = 'none';
+															const parent = target.parentElement;
+															if (parent) {
+																parent.innerHTML = `
 															<div class="flex items-center justify-center w-full h-full bg-gradient-to-br from-amber-100 to-amber-200">
 																<div class="text-center text-amber-800">
 																	<div class="text-4xl mb-2">📚</div>
@@ -387,51 +399,54 @@ function App() {
 																</div>
 															</div>
 														`;
-														}
-													}}
-												/>
-											</div>
-											<div className="p-4 flex-1 flex flex-col middle min-h-0">
-												<div className="relative group">
-													<h3
-														className="font-bold text-md mb-2 text-gray-800 truncate"
-														title={book.title}
-													>
-														{book.title}
-													</h3>
+															}
+														}}
+													/>
 												</div>
-												<div className="relative group">
-													<p
-														className="text-gray-600 mb-3 text-sm truncate"
-														title={book.author}
-													>
-														{book.author}
-													</p>
+												<div className="p-4 flex-1 flex flex-col middle min-h-0">
+													<div className="relative group">
+														<h3
+															className="font-bold text-md mb-2 text-gray-800 truncate"
+															title={book.title}
+														>
+															{book.title}
+														</h3>
+													</div>
+													<div className="relative group">
+														<p
+															className="text-gray-600 mb-3 text-sm truncate"
+															title={book.author}
+														>
+															{book.author}
+														</p>
+													</div>
+													{book.publishedYear && (
+														<p className="text-gray-500 text-xs mb-3">
+															{book.publishedYear}
+														</p>
+													)}
+													<button className="mt-auto bg-amber-500 hover:bg-amber-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
+														Add to bookshelf
+													</button>
 												</div>
-												{book.publishedYear && (
-													<p className="text-gray-500 text-xs mb-3">
-														{book.publishedYear}
-													</p>
-												)}
-												<button className="mt-auto bg-amber-500 hover:bg-amber-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
-													Add to bookshelf
-												</button>
 											</div>
-										</div>
-									))}
-								</section>
+										))}
+									</section>
+								)}
 								<div className="flex gap-2 justify-center mt-6">
 									<button
 										className="border rounded-b-md bg-gray-100 hover:bg-gray-200"
 										onClick={refreshForm}
 									>
-										Restart survey
+										Start Over
+										{/* New Search */}
 									</button>
 									<button
-										className="border rounded-b-md  bg-gray-100 hover:bg-gray-200"
+										className="border rounded-b-md  bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+										disabled={isEmpty}
 										onClick={shuffleRecommendations}
 									>
-										More recommendations
+										More Recommendations
 									</button>
 								</div>
 							</>
