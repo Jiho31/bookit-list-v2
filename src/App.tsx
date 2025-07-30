@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import './App.css';
 import useOpenLibraryAPI from './useOpenLibraryAPI';
 
+const MAX_RECOMMENDATIONS = 8;
+
 type OptionMeta = {
 	id: Emotion | FictionGenre | NonfictionGenre | BookLength | BookType | 'any';
 	label: string;
@@ -240,26 +242,24 @@ function App() {
 			setQuery(query);
 
 			const books = await fetchBooks(query);
-			const parsedResult: Book[] = books?.docs
-				// .slice(0, 10)
-				.map(
-					({
-						author_name,
-						title,
-						cover_edition_key,
-						first_publish_year,
-						key,
-					}: any) => ({
-						author: author_name,
-						title,
-						key,
-						publishedYear: first_publish_year,
-						coverEditionKey: cover_edition_key,
-					}),
-				);
+			const parsedResult: Book[] = books?.docs.map(
+				({
+					author_name,
+					title,
+					cover_edition_key,
+					first_publish_year,
+					key,
+				}: any) => ({
+					author: author_name,
+					title,
+					key,
+					publishedYear: first_publish_year,
+					coverEditionKey: cover_edition_key,
+				}),
+			);
 
 			setFetchedBooks(parsedResult);
-			setRecommendations(parsedResult.slice(0, 10));
+			setRecommendations(parsedResult.slice(0, MAX_RECOMMENDATIONS));
 		} catch (err) {
 			console.error(err);
 		} finally {
@@ -295,7 +295,7 @@ function App() {
 	};
 
 	const shuffleRecommendations = async () => {
-		if (pageIndex === 10) {
+		if (pageIndex === Math.ceil(fetchedBooks.length / MAX_RECOMMENDATIONS)) {
 			alert('shuffle22!');
 			// @todo call book search API for more results
 			// or
@@ -306,7 +306,10 @@ function App() {
 		await setIsLoading(true);
 		try {
 			await setRecommendations(
-				fetchedBooks.slice(pageIndex * 10, pageIndex * 10 + 10),
+				fetchedBooks.slice(
+					pageIndex * MAX_RECOMMENDATIONS,
+					pageIndex * MAX_RECOMMENDATIONS + MAX_RECOMMENDATIONS,
+				),
 			);
 			setPageIndex(pageIndex + 1);
 		} catch (err) {
