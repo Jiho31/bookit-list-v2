@@ -7,6 +7,7 @@ type OptionMeta = {
 	label: string;
 	emoji?: string;
 	keywords: string[];
+	queries?: string[];
 };
 
 type Question = {
@@ -17,7 +18,7 @@ type Question = {
 };
 
 type Form = {
-	[questionNo: string]: OptionMeta | OptionMeta[];
+	[questionNo: string]: OptionMeta;
 };
 
 type Book = {
@@ -116,12 +117,18 @@ const bookTypeOptions: OptionMeta[] = [
 	{
 		id: 't_fiction',
 		label: 'Story-driven (fiction)',
-		keywords: ['fiction'],
+		keywords: [
+			/* 'fiction' */
+		],
+		queries: ['subject_key:fiction', '-subject_key:nonfiction'],
 	},
 	{
 		id: 't_nonfiction',
 		label: 'Information-based (non-fiction)',
-		keywords: ['nonfiction'],
+		keywords: [
+			/* 'nonfiction' */
+		],
+		queries: ['subject_key:nonfiction', '-subject_key:fiction'],
 	},
 	{
 		id: 'any',
@@ -134,17 +141,26 @@ const bookLengthOptions: OptionMeta[] = [
 	{
 		id: 'l_short',
 		label: 'Short (Under 150 pages)',
-		keywords: ['short'], // page 쪽수로 쿼리 만들기
+		keywords: [], // page 쪽수로 쿼리 만들기
+		queries: ['number_of_pages:[1 TO 150]'],
 	},
 	{
 		id: 'l_medium',
 		label: 'Medium (150-350 pages)',
 		keywords: [],
+		queries: ['number_of_pages:[150 TO 350]'],
 	},
 	{
 		id: 'l_long',
 		label: 'Long (Over 350 pages)',
 		keywords: [],
+		queries: ['number_of_pages:[350 TO *]'],
+	},
+	{
+		id: 'any',
+		label: "I don't mind",
+		keywords: [],
+		queries: [],
 	},
 ];
 
