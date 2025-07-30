@@ -362,10 +362,7 @@ function App() {
 							</>
 						) : (
 							<>
-								<div className="p-4 bg-amber-600 text-amber-50 rounded-3xl">
-									{query}
-								</div>
-								<section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6 p-6 max-w-4xl mx-auto">
+								<section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 p-6 max-w-6xl mx-auto">
 									{recommendations.map((book, idx) => (
 										<div
 											key={idx}
@@ -395,18 +392,22 @@ function App() {
 												/>
 											</div>
 											<div className="p-4 flex-1 flex flex-col middle min-h-0">
-												<h3
-													className="font-bold text-lg mb-2 text-gray-800 truncate hover:text-clip hover:rounded-md hover:whitespace-normal hover:shadow-lg hover:z-10"
-													title={book.title}
-												>
-													{book.title}
-												</h3>
-												<p
-													className="text-gray-600 mb-3 text-sm truncate hover:text-clip hover:whitespace-normal hover:shadow-lg hover:z-10"
-													title={book.author}
-												>
-													{book.author}
-												</p>
+												<div className="relative group">
+													<h3
+														className="font-bold text-md mb-2 text-gray-800 truncate"
+														title={book.title}
+													>
+														{book.title}
+													</h3>
+												</div>
+												<div className="relative group">
+													<p
+														className="text-gray-600 mb-3 text-sm truncate"
+														title={book.author}
+													>
+														{book.author}
+													</p>
+												</div>
 												{book.publishedYear && (
 													<p className="text-gray-500 text-xs mb-3">
 														{book.publishedYear}
