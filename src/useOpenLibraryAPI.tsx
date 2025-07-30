@@ -1,5 +1,5 @@
 function useOpenLibraryAPI() {
-	const search = async (keyword: string) => {
+	const search = async (keyword: string, limit: number = 100) => {
 		// console.log('search keyword: ', keyword);
 
 		/** SORT Options
@@ -12,7 +12,7 @@ function useOpenLibraryAPI() {
 
 		try {
 			const response = await fetch(
-				`https://openlibrary.org/search.json?q=${keyword} AND language:eng&sort=rating&limit=100`,
+				`https://openlibrary.org/search.json?q=${keyword} AND language:eng&sort=rating&limit=${limit}`,
 			);
 
 			if (response.status !== 200) {
