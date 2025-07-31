@@ -299,6 +299,7 @@ function App() {
 			// @todo call book search API for more results
 			// or
 			// Recommend user to do the survey again ?
+			setFetchedBooks([]);
 			setRecommendations([]);
 			return;
 		}
