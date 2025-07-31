@@ -361,7 +361,7 @@ function App() {
 								<button
 									onClick={toPrev}
 									disabled={num === 0}
-									className="mt-6 border hover:border-gray-300 bg-gray-100 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+									className="mt-6 border hover:bg-gray-200 bg-gray-100 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
 								>
 									{'< Back'}
 								</button>
@@ -371,7 +371,7 @@ function App() {
 								{isEmpty ? (
 									<div className="text-center text-gray-500 py-10">
 										No books found for your preferences. <br />
-										Start over to adjust your choices to discover great reads.
+										Start over to adjust your choices and discover great reads.
 										:)
 									</div>
 								) : (
