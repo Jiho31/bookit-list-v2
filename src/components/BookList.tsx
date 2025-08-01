@@ -1,5 +1,5 @@
-import type { Book } from './types';
-import useOpenLibraryAPI from './useOpenLibraryAPI';
+import type { Book } from '../types';
+import useOpenLibraryAPI from '../hooks/useOpenLibraryAPI';
 
 function BookList({ recommendations }: { recommendations: Book[] }) {
 	const { getBookCoverImage } = useOpenLibraryAPI();

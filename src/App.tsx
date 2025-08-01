@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import './App.css';
-import useOpenLibraryAPI from './useOpenLibraryAPI';
+import useOpenLibraryAPI from './hooks/useOpenLibraryAPI';
 import type { Book, Question, Form, OptionMeta } from './types';
-import BookList from './BookList';
-import RecommendationForm from './RecommendationForm';
+import BookList from './components/BookList';
+import RecommendationForm from './components/RecommendationForm';
 
 const MAX_RECOMMENDATIONS = 8;
 
