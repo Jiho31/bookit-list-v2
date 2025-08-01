@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import './App.css';
+import './styles/App.css';
 import useOpenLibraryAPI from './hooks/useOpenLibraryAPI';
 import type { Book, Question, Form, OptionMeta } from './types';
 import BookList from './components/BookList';
