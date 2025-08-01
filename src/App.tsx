@@ -130,7 +130,7 @@ const genreOptions: OptionMeta[] = [
 function App() {
 	const { search: fetchBooks } = useOpenLibraryAPI();
 
-	const [num, setNum] = useState(0);
+	const [questionIndex, setQuestionIndex] = useState(0);
 	const [form, setForm] = useState<Question[]>([
 		{
 			id: 1,
@@ -157,7 +157,10 @@ function App() {
 	]);
 	const [userResponse, setUserResponse] = useState<Form>({});
 	const [isLoading, setIsLoading] = useState(false);
-	const isFormComplete = useMemo(() => num === form.length, [num, form.length]);
+	const isFormComplete = useMemo(
+		() => questionIndex === form.length,
+		[questionIndex, form.length],
+	);
 	const [fetchedBooks, setFetchedBooks] = useState<Book[]>([]);
 	const [recommendations, setRecommendations] = useState<Book[]>([]);
 	const [pageIndex, setPageIndex] = useState(1);
@@ -213,30 +216,9 @@ function App() {
 		}
 	};
 
-	// const handleResponse = async (
-	// 	questionNum: number,
-	// 	response: OptionMeta | OptionMeta[],
-	// ) => {
-	// 	// console.log(questionNum, response);
-
-	// 	setUserResponse({ ...userResponse, [questionNum]: response });
-	// 	setNum(num + 1);
-	// };
-
-	// const toPrev = () => {
-	// 	if (num === 0) {
-	// 		return;
-	// 	}
-
-	// 	const newUserResponse = { ...userResponse };
-	// 	delete newUserResponse[num - 1];
-	// 	setUserResponse(newUserResponse);
-	// 	setNum(num - 1);
-	// };
-
 	const refreshForm = () => {
 		setUserResponse({});
-		setNum(0);
+		setQuestionIndex(0);
 		setPageIndex(1);
 	};
 
@@ -267,10 +249,10 @@ function App() {
 	};
 
 	useEffect(() => {
-		if (num === form.length) {
+		if (isFormComplete) {
 			generateRecommendation();
 		}
-	}, [num]);
+	}, [isFormComplete]);
 
 	return (
 		<div className="flex-col">
@@ -285,11 +267,11 @@ function App() {
 					<div>
 						{!isFormComplete ? (
 							<RecommendationForm
-								num={num}
+								questionIndex={questionIndex}
 								form={form}
 								userResponse={userResponse}
 								setUserResponse={setUserResponse}
-								setNum={setNum}
+								setQuestionIndex={setQuestionIndex}
 							/>
 						) : (
 							<>
