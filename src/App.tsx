@@ -1,61 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import './App.css';
 import useOpenLibraryAPI from './useOpenLibraryAPI';
-import type { Book } from './types';
+import type { Book, Question, Form, OptionMeta } from './types';
 import BookList from './BookList';
+import RecommendationForm from './RecommendationForm';
 
 const MAX_RECOMMENDATIONS = 8;
 
-type OptionMeta = {
-	id: Emotion | FictionGenre | NonfictionGenre | BookLength | BookType | 'any';
-	label: string;
-	emoji?: string;
-	keywords: string[];
-	queries?: string[];
-};
-
-type Question = {
-	id: number;
-	question: string;
-	options: OptionMeta[];
-	priority?: number;
-};
-
-type Form = {
-	[questionNo: string]: OptionMeta;
-};
-
 type Bookshelf = {};
-
-type Emotion =
-	| 'em_happy'
-	| 'em_sad'
-	| 'em_angry'
-	| 'em_tired'
-	| 'em_confused'
-	| 'em_excited'
-	| 'em_relaxed';
-
-type FictionGenre =
-	| 'g_romance'
-	| 'g_sf'
-	| 'g_fantasy'
-	| 'g_horror'
-	| 'g_mystery'
-	| 'g_drama'
-	| 'g_humor';
-
-type NonfictionGenre =
-	| 'g_essay'
-	| 'g_science'
-	| 'g_history'
-	| 'g_biography'
-	| 'g_philosophy'
-	| 'g_selfHelp';
-
-type BookLength = 'l_short' | 'l_medium' | 'l_long';
-
-type BookType = 't_fiction' | 't_nonfiction';
 
 const emotionOptions: OptionMeta[] = [
 	{
@@ -261,26 +213,26 @@ function App() {
 		}
 	};
 
-	const handleResponse = async (
-		questionNum: number,
-		response: OptionMeta | OptionMeta[],
-	) => {
-		// console.log(questionNum, response);
+	// const handleResponse = async (
+	// 	questionNum: number,
+	// 	response: OptionMeta | OptionMeta[],
+	// ) => {
+	// 	// console.log(questionNum, response);
 
-		setUserResponse({ ...userResponse, [questionNum]: response });
-		setNum(num + 1);
-	};
+	// 	setUserResponse({ ...userResponse, [questionNum]: response });
+	// 	setNum(num + 1);
+	// };
 
-	const toPrev = () => {
-		if (num === 0) {
-			return;
-		}
+	// const toPrev = () => {
+	// 	if (num === 0) {
+	// 		return;
+	// 	}
 
-		const newUserResponse = { ...userResponse };
-		delete newUserResponse[num - 1];
-		setUserResponse(newUserResponse);
-		setNum(num - 1);
-	};
+	// 	const newUserResponse = { ...userResponse };
+	// 	delete newUserResponse[num - 1];
+	// 	setUserResponse(newUserResponse);
+	// 	setNum(num - 1);
+	// };
 
 	const refreshForm = () => {
 		setUserResponse({});
@@ -332,30 +284,13 @@ function App() {
 				) : (
 					<div>
 						{!isFormComplete ? (
-							<>
-								<div className="text-gray-600">
-									Progress: Question {num + 1}/{form.length}
-								</div>
-								<div className="py-10">{form[num].question}</div>
-								<div className="flex flex-row gap-5 flex-wrap justify-center">
-									{form[num].options.map((option, idx) => (
-										<div
-											key={idx}
-											className="flex px-5 py-10 w-36 justify-center bg-amber-100 rounded-lg hover:cursor-pointer hover:bg-amber-200"
-											onClick={() => handleResponse(num + 1, option)}
-										>
-											{option.label}
-										</div>
-									))}
-								</div>
-								<button
-									onClick={toPrev}
-									disabled={num === 0}
-									className="mt-6 border hover:bg-gray-200 bg-gray-100 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-								>
-									{'< Back'}
-								</button>
-							</>
+							<RecommendationForm
+								num={num}
+								form={form}
+								userResponse={userResponse}
+								setUserResponse={setUserResponse}
+								setNum={setNum}
+							/>
 						) : (
 							<>
 								{isEmpty ? (
