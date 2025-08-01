@@ -1,4 +1,4 @@
-import type { Question, Form, OptionMeta } from '../types';
+import type { Question, Form, OptionMeta } from '../../types';
 
 function RecommendationForm({
 	questionIndex,
