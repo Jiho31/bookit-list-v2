@@ -2,13 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import './styles/App.css';
 import useOpenLibraryAPI from './hooks/useOpenLibraryAPI';
 import type { Book, Question, Form, OptionMeta } from './types';
-import BookList from './components/BookList';
 import RecommendationForm from './components/RecommendationForm';
 import Header from './components/common/Header';
+import BookRecommendationsPage from './pages/BookRecommendationsPage';
 
 const MAX_RECOMMENDATIONS = 8;
-
-type Bookshelf = {};
 
 const emotionOptions: OptionMeta[] = [
 	{
@@ -276,33 +274,12 @@ function App() {
 								setQuestionIndex={setQuestionIndex}
 							/>
 						) : (
-							<>
-								{isEmpty ? (
-									<div className="text-center text-gray-500 py-10">
-										No books found for your preferences. <br />
-										Start over to adjust your choices and discover great reads.
-										:)
-									</div>
-								) : (
-									<BookList recommendations={recommendations} />
-								)}
-								<div className="flex gap-2 justify-center mt-6">
-									<button
-										className="border rounded-b-md bg-gray-100 hover:bg-gray-200"
-										onClick={refreshForm}
-									>
-										Start Over
-										{/* New Search */}
-									</button>
-									<button
-										className="border rounded-b-md  bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-										disabled={isEmpty}
-										onClick={shuffleRecommendations}
-									>
-										More Recommendations
-									</button>
-								</div>
-							</>
+							<BookRecommendationsPage
+								isEmpty={isEmpty}
+								recommendations={recommendations}
+								refreshForm={refreshForm}
+								shuffleRecommendations={shuffleRecommendations}
+							/>
 						)}
 					</div>
 				)}
