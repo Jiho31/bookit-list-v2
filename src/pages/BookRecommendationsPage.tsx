@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import type { Book } from '../types';
 import BookList from '../components/BookList';
+import Header from '../components/common/Header';
 
 function BookRecommendationsPage({
 	isEmpty,
@@ -15,6 +15,7 @@ function BookRecommendationsPage({
 }) {
 	return (
 		<>
+			<Header title="Book recommendations for you 🤗" />
 			{isEmpty ? (
 				<div className="text-center text-gray-500 py-10">
 					No books found for your preferences. <br />

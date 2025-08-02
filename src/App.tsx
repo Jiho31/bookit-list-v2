@@ -3,7 +3,6 @@ import './styles/App.css';
 import useOpenLibraryAPI from './hooks/useOpenLibraryAPI';
 import type { Book, Question, Form, OptionMeta } from './types';
 import RecommendationForm from './components/RecommendationForm';
-import Header from './components/common/Header';
 import BookRecommendationsPage from './pages/BookRecommendationsPage';
 
 const MAX_RECOMMENDATIONS = 8;
@@ -255,11 +254,6 @@ function App() {
 
 	return (
 		<div className="flex-col">
-			<Header
-				title={
-					isFormComplete ? 'Book recommendations for you 🤗' : 'Welcome! 🤗'
-				}
-			/>
 			<div>
 				{isLoading ? (
 					<div> Generating recommendations ... </div>

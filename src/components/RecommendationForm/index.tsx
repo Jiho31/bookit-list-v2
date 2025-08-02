@@ -1,4 +1,5 @@
 import type { Question, Form, OptionMeta } from '../../types';
+import Header from '../common/Header';
 
 function RecommendationForm({
 	questionIndex,
@@ -35,6 +36,7 @@ function RecommendationForm({
 
 	return (
 		<>
+			<Header title="Welcome! 🤗" />
 			<div className="text-gray-600">
 				Progress: Question {questionIndex + 1}/{form.length}
 			</div>
