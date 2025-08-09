@@ -21,9 +21,6 @@ function MainPage() {
 	const [recommendations, setRecommendations] = useState<Book[]>([]);
 	const [pageIndex, setPageIndex] = useState(1);
 
-	// @todo query 변수 삭제
-	const [query, setQuery] = useState('');
-
 	const makeQuery = () => {
 		const query1 = userResponse[1].keywords.join(' OR ') || '';
 		const query2 = userResponse[2].queries?.join(' AND ') || '';
@@ -36,12 +33,10 @@ function MainPage() {
 		setIsLoading(true);
 
 		try {
-			console.log('generating..');
+			// console.log('generating..');
 
 			const query = makeQuery();
 			// console.log(query, '<<<< QUERY');
-			setQuery(query);
-
 			const books = await fetchBooks(query);
 			const parsedResult: Book[] = books?.docs.map(
 				({
@@ -108,26 +103,23 @@ function MainPage() {
 
 	return (
 		<div className="flex-col">
-			{isLoading ? (
-				<div> Generating recommendations ... </div>
-			) : (
-				<div>
-					{!isFormComplete ? (
-						<RecommendationForm
-							questionIndex={questionIndex}
-							userResponse={userResponse}
-							setUserResponse={setUserResponse}
-							setQuestionIndex={setQuestionIndex}
-						/>
-					) : (
-						<BookRecommendations
-							recommendations={recommendations}
-							refreshForm={refreshForm}
-							shuffleRecommendations={shuffleRecommendations}
-						/>
-					)}
-				</div>
-			)}
+			<div>
+				{!isFormComplete ? (
+					<RecommendationForm
+						questionIndex={questionIndex}
+						userResponse={userResponse}
+						setUserResponse={setUserResponse}
+						setQuestionIndex={setQuestionIndex}
+					/>
+				) : (
+					<BookRecommendations
+						isLoading={isLoading}
+						recommendations={recommendations}
+						refreshForm={refreshForm}
+						shuffleRecommendations={shuffleRecommendations}
+					/>
+				)}
+			</div>
 		</div>
 	);
 }
