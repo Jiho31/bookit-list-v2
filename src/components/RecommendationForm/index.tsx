@@ -1,15 +1,14 @@
-import type { Question, Form, OptionMeta } from '../../types';
+import { questions } from '../../consts/form';
+import type { Form, OptionMeta } from '../../types';
 import Header from '../common/Header';
 
 function RecommendationForm({
 	questionIndex,
-	form,
 	userResponse,
 	setUserResponse,
 	setQuestionIndex,
 }: {
 	questionIndex: number;
-	form: Question[];
 	userResponse: Form;
 	setUserResponse: (userResponse: Form) => void;
 	setQuestionIndex: (questionIndex: number) => void;
@@ -38,11 +37,11 @@ function RecommendationForm({
 		<>
 			<Header title="Welcome! 🤗" />
 			<div className="text-gray-600">
-				Progress: Question {questionIndex + 1}/{form.length}
+				Progress: Question {questionIndex + 1}/{questions.length}
 			</div>
-			<div className="py-10">{form[questionIndex].question}</div>
+			<div className="py-10">{questions[questionIndex].question}</div>
 			<div className="flex flex-row gap-5 flex-wrap justify-center">
-				{form[questionIndex].options.map((option, idx) => (
+				{questions[questionIndex].options.map((option, idx) => (
 					<div
 						key={idx}
 						className="flex px-5 py-10 w-36 justify-center bg-amber-100 rounded-lg hover:cursor-pointer hover:bg-amber-200"
