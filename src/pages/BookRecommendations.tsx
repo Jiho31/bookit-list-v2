@@ -1,18 +1,22 @@
 import type { Book } from '../types';
 import BookList from '../components/BookList';
 import Header from '../components/common/Header';
+import { useMemo } from 'react';
 
-function BookRecommendationsPage({
-	isEmpty,
+function BookRecommendations({
 	recommendations,
 	refreshForm,
 	shuffleRecommendations,
 }: {
-	isEmpty: boolean;
 	recommendations: Book[];
 	refreshForm: () => void;
 	shuffleRecommendations: () => void;
 }) {
+	const isEmpty = useMemo(
+		() => recommendations.length === 0,
+		[recommendations],
+	);
+
 	return (
 		<>
 			<Header title="Book recommendations for you 🤗" />
@@ -44,4 +48,4 @@ function BookRecommendationsPage({
 	);
 }
 
-export default BookRecommendationsPage;
+export default BookRecommendations;
