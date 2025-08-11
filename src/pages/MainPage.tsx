@@ -45,7 +45,9 @@ function MainPage() {
 					cover_edition_key,
 					first_publish_year,
 					key,
+					...rest
 				}: any) => ({
+					...rest,
 					author: author_name,
 					title,
 					key,

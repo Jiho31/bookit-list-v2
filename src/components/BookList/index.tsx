@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import type { Book } from '../../types';
+import type { Book, BookItem, Bookshelf } from '../../types';
 import useOpenLibraryAPI from '../../hooks/useOpenLibraryAPI';
 import Modal from '../common/Modal';
+
+const BOOKSHELF_KEY = 'bookshelf';
 
 function BookList({ recommendations }: { recommendations: Book[] }) {
 	const { getBookCoverImage } = useOpenLibraryAPI();
@@ -14,9 +16,34 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 
 	const showBookDetails = (book: Book) => {
 		// set scroll lock
+		console.log(book, '#####');
 
 		setSelectedBook(book);
-		setIsModalOpen(true);
+		// setIsModalOpen(true);
+	};
+
+	// removeFromBookshelf
+
+	const addToBookshelf = (
+		e: React.MouseEvent<HTMLButtonElement>,
+		book: Book,
+	) => {
+		e.stopPropagation();
+		// console.log('add to bookshelf', book);
+
+		const newBookItem: BookItem = {
+			id: book.key || 'UNKNOWN_KEY',
+			book,
+			createdAt: new Date().toISOString(),
+			updatedAt: new Date().toISOString(),
+		};
+
+		const bookshelf = localStorage.getItem(BOOKSHELF_KEY);
+		const newBookshelf = bookshelf
+			? { ...JSON.parse(bookshelf), [newBookItem.id]: newBookItem }
+			: { [newBookItem.id]: newBookItem };
+
+		localStorage.setItem(BOOKSHELF_KEY, JSON.stringify(newBookshelf));
 	};
 
 	return (
@@ -74,7 +101,10 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 									{book.publishedYear}
 								</p>
 							)}
-							<button className="mt-auto bg-amber-500 hover:bg-amber-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm">
+							<button
+								className="mt-auto bg-amber-500 hover:bg-amber-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
+								onClick={(e) => addToBookshelf(e, book)}
+							>
 								Add to bookshelf
 							</button>
 						</div>

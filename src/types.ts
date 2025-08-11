@@ -6,6 +6,20 @@ type Book = {
 	publishedYear: number;
 };
 
+type BookItem = {
+	id: string;
+	book: Book;
+	createdAt: string;
+	updatedAt: string;
+};
+
+type Bookshelf = {
+	id: string;
+	books: {
+		[key: string]: BookItem;
+	};
+};
+
 type Emotion =
 	| 'em_happy'
 	| 'em_sad'
@@ -55,4 +69,4 @@ type OptionMeta = {
 	queries?: string[];
 };
 
-export type { Book, Form, Question, OptionMeta };
+export type { Book, Form, Question, OptionMeta, BookItem, Bookshelf };
