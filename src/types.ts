@@ -1,5 +1,5 @@
 type Book = {
-	key?: string;
+	key: string;
 	author: string;
 	title: string;
 	coverEditionKey: string;
@@ -11,13 +11,6 @@ type BookItem = {
 	book: Book;
 	createdAt: string;
 	updatedAt: string;
-};
-
-type Bookshelf = {
-	id: string;
-	books: {
-		[key: string]: BookItem;
-	};
 };
 
 type Emotion =
@@ -69,4 +62,4 @@ type OptionMeta = {
 	queries?: string[];
 };
 
-export type { Book, Form, Question, OptionMeta, BookItem, Bookshelf };
+export type { Book, Form, Question, OptionMeta, BookItem };

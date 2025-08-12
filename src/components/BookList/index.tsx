@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import type { Book, BookItem, Bookshelf } from '../../types';
+import { useEffect, useState } from 'react';
+import type { Book, BookItem } from '../../types';
 import useOpenLibraryAPI from '../../hooks/useOpenLibraryAPI';
 import Modal from '../common/Modal';
 
@@ -9,6 +9,23 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 	const { getBookCoverImage } = useOpenLibraryAPI();
 	const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [bookshelf, setBookshelf] = useState<Record<string, BookItem>>({});
+
+	useEffect(() => {
+		const initBookshelf = localStorage.getItem(BOOKSHELF_KEY);
+		// console.log(initBookshelf, '######### INIT bookshelf from storage');
+
+		if (initBookshelf !== null) {
+			setBookshelf(JSON.parse(initBookshelf));
+		}
+	}, []);
+
+	useEffect(() => {
+		// console.log('update local storage ###### [bookshelf]', bookshelf);
+		if (Object.keys(bookshelf).length > 0) {
+			localStorage.setItem(BOOKSHELF_KEY, JSON.stringify(bookshelf));
+		}
+	}, [bookshelf]);
 
 	const closeModal = () => {
 		setIsModalOpen(false);
@@ -22,6 +39,8 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 		// setIsModalOpen(true);
 	};
 
+	const isBookInBookshelf = ({ key }: Book) =>
+		bookshelf?.[key] ? true : false;
 	// removeFromBookshelf
 
 	const addToBookshelf = (
@@ -29,7 +48,7 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 		book: Book,
 	) => {
 		e.stopPropagation();
-		// console.log('add to bookshelf', book);
+		// console.log('add to bookshelf', book, bookshelf);
 
 		const newBookItem: BookItem = {
 			id: book.key || 'UNKNOWN_KEY',
@@ -38,12 +57,10 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 			updatedAt: new Date().toISOString(),
 		};
 
-		const bookshelf = localStorage.getItem(BOOKSHELF_KEY);
-		const newBookshelf = bookshelf
-			? { ...JSON.parse(bookshelf), [newBookItem.id]: newBookItem }
-			: { [newBookItem.id]: newBookItem };
-
-		localStorage.setItem(BOOKSHELF_KEY, JSON.stringify(newBookshelf));
+		setBookshelf((prevBookshelf) => ({
+			...prevBookshelf,
+			[newBookItem.id]: newBookItem,
+		}));
 	};
 
 	return (
@@ -102,10 +119,11 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 								</p>
 							)}
 							<button
-								className="mt-auto bg-amber-500 hover:bg-amber-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
+								className="mt-auto bg-amber-500 hover:bg-amber-600 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
+								disabled={isBookInBookshelf(book)}
 								onClick={(e) => addToBookshelf(e, book)}
 							>
-								Add to bookshelf
+								{isBookInBookshelf(book) ? 'Added' : 'Add to bookshelf'}
 							</button>
 						</div>
 					</div>
