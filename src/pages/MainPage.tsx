@@ -21,6 +21,10 @@ function MainPage() {
 	const [recommendations, setRecommendations] = useState<Book[]>([]);
 	const [pageIndex, setPageIndex] = useState(1);
 
+	const [displayContent, setDisplayContent] = useState<
+		'mainPage' | 'form' | 'landingPage'
+	>('mainPage');
+
 	const makeQuery = () => {
 		const query1 = userResponse[1].keywords.join(' OR ') || '';
 		const query2 = userResponse[2].queries?.join(' AND ') || '';
@@ -105,23 +109,61 @@ function MainPage() {
 
 	return (
 		<div className="flex-col">
-			<div>
-				{!isFormComplete ? (
-					<RecommendationForm
-						questionIndex={questionIndex}
-						userResponse={userResponse}
-						setUserResponse={setUserResponse}
-						setQuestionIndex={setQuestionIndex}
-					/>
-				) : (
-					<BookRecommendations
-						isLoading={isLoading}
-						recommendations={recommendations}
-						refreshForm={refreshForm}
-						shuffleRecommendations={shuffleRecommendations}
-					/>
-				)}
-			</div>
+			{displayContent === 'mainPage' && (
+				<section className="flex flex-col gap-4">
+					<h1 className="text-3xl">
+						Welcome to the Book Recommendation System
+					</h1>
+					<p>
+						This is a system that recommends books based on your preferences.
+					</p>
+					<div className="flex flex-row gap-10 justify-center items-center">
+						<button
+							className="bg-amber-100 hover:bg-amber-200 rounded-3xl py-20 px-3 w-1/2 min-h-[250px]"
+							onClick={() => setDisplayContent('form')}
+						>
+							<span>❓ Start survey!</span>
+							<span>
+								<br />
+								(Get book recommendations)
+							</span>
+						</button>
+						<button
+							className="bg-amber-100 hover:bg-amber-200 rounded-3xl py-20 px-3 w-1/2 min-h-[250px]"
+							onClick={() => setDisplayContent('landingPage')}
+						>
+							🔍 Explore books
+						</button>
+					</div>
+				</section>
+			)}
+
+			{displayContent === 'landingPage' && (
+				<>
+					<div>display bookshelves and search bar</div>
+				</>
+			)}
+			{displayContent === 'form' && (
+				<>
+					<div>
+						{!isFormComplete ? (
+							<RecommendationForm
+								questionIndex={questionIndex}
+								userResponse={userResponse}
+								setUserResponse={setUserResponse}
+								setQuestionIndex={setQuestionIndex}
+							/>
+						) : (
+							<BookRecommendations
+								isLoading={isLoading}
+								recommendations={recommendations}
+								refreshForm={refreshForm}
+								shuffleRecommendations={shuffleRecommendations}
+							/>
+						)}
+					</div>
+				</>
+			)}
 		</div>
 	);
 }
