@@ -1,13 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router';
 import useOpenLibraryAPI from '../hooks/useOpenLibraryAPI';
 import type { Book, Form } from '../types';
 import RecommendationForm from '../components/RecommendationForm';
 import BookRecommendations from '../pages/BookRecommendations';
 import { questions } from '../consts/form';
+import HomePage from './HomePage';
 
 const MAX_RECOMMENDATIONS = 8;
 
 function MainPage() {
+	const navigate = useNavigate();
 	const { search: fetchBooks } = useOpenLibraryAPI();
 
 	const [questionIndex, setQuestionIndex] = useState(0);
@@ -22,7 +25,7 @@ function MainPage() {
 	const [pageIndex, setPageIndex] = useState(1);
 
 	const [displayContent, setDisplayContent] = useState<
-		'mainPage' | 'form' | 'landingPage'
+		'mainPage' | 'form' | 'homePage'
 	>('mainPage');
 
 	const makeQuery = () => {
@@ -130,19 +133,14 @@ function MainPage() {
 						</button>
 						<button
 							className="bg-amber-100 hover:bg-amber-200 rounded-3xl py-20 px-3 w-1/2 min-h-[250px]"
-							onClick={() => setDisplayContent('landingPage')}
+							onClick={() => navigate('/home')}
 						>
 							🔍 Explore books
 						</button>
 					</div>
 				</section>
 			)}
-
-			{displayContent === 'landingPage' && (
-				<>
-					<div>display bookshelves and search bar</div>
-				</>
-			)}
+			{/* {displayContent === 'homePage' && <HomePage />} */}
 			{displayContent === 'form' && (
 				<>
 					<div>
