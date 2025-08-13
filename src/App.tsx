@@ -1,4 +1,4 @@
-import './styles/App.css';
+import { createBrowserRouter, RouterProvider } from 'react-router';
 import MainPage from './pages/MainPage';
 
 function App() {
