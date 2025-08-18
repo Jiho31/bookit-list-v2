@@ -62,4 +62,11 @@ type OptionMeta = {
 	queries?: string[];
 };
 
-export type { Book, Form, Question, OptionMeta, BookItem };
+type User = {
+	uid: string;
+	email: string;
+	displayName: string;
+	profileImage?: string;
+};
+
+export type { Book, Form, Question, OptionMeta, BookItem, User };
