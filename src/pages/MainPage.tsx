@@ -5,7 +5,6 @@ import type { Book, Form } from '../types';
 import RecommendationForm from '../components/RecommendationForm';
 import BookRecommendations from '../pages/BookRecommendations';
 import { questions } from '../consts/form';
-import HomePage from './HomePage';
 
 const MAX_RECOMMENDATIONS = 8;
 
@@ -111,7 +110,7 @@ function MainPage() {
 	}, [isFormComplete]);
 
 	return (
-		<div className="flex-col">
+		<>
 			{displayContent === 'mainPage' && (
 				<section className="flex flex-col gap-4">
 					<h1 className="text-3xl">
@@ -162,7 +161,7 @@ function MainPage() {
 					</div>
 				</>
 			)}
-		</div>
+		</>
 	);
 }
 
