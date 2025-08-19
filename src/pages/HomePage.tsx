@@ -56,32 +56,65 @@ const SignupForm = () => {
 		}
 	};
 	return (
-		<>
-			<form onSubmit={handleSignup}>
-				<input
-					name="email"
-					type="email"
-					placeholder="Email"
-					onChange={handleInputChange}
-				/>
-				<input
-					name="password"
-					type="password"
-					placeholder="Password"
-					onChange={handleInputChange}
-				/>
-				<input
-					name="confirmPassword"
-					type="password"
-					placeholder="Confirm Password"
-					onChange={handleInputChange}
-				/>
+		<section className="flex gap-10 p-10 bg-amber-50 rounded-3xl">
+			{/* logo!! other info letters */}
+			<h2 className="text-md font-semibold mb-3">
+				Register with your email address
+			</h2>
+			<form className="flex flex-col gap-3" onSubmit={handleSignup}>
+				<div className="flex gap-3">
+					<label className="text-sm font-medium text-gray-800" htmlFor="email">
+						EMAIL
+					</label>
+					<input
+						id="email"
+						name="email"
+						type="email"
+						placeholder="Email"
+						autoComplete="false"
+						onChange={handleInputChange}
+					/>
+				</div>
+				<div className="flex gap-3">
+					<label
+						className="text-sm font-medium text-gray-800"
+						htmlFor="password"
+					>
+						PASSWORD
+					</label>
+					<input
+						id="password"
+						name="password"
+						type="password"
+						autoComplete="false"
+						placeholder="Password"
+						onChange={handleInputChange}
+					/>
+				</div>
+				<div className="flex gap-3">
+					<label
+						className="text-sm font-medium text-gray-800"
+						htmlFor="confirmPassword"
+					>
+						CONFIRM PASSWORD
+					</label>
+					<input
+						id="confirmPassword"
+						name="confirmPassword"
+						type="password"
+						placeholder="Confirm Password"
+						onChange={handleInputChange}
+					/>
+				</div>
+				{error && (
+					<div className="bg-red-100 rounded-md px-5 py-2 text-red-700 font-semibold text-sm">
+						⚠️ {error.toUpperCase()}
+					</div>
+				)}
+
 				<button type="submit">Register</button>
 			</form>
-			{error && (
-				<div className="bg-red-100 rounded-2xl p-3 text-red-700">{error}</div>
-			)}
-		</>
+		</section>
 	);
 };
 
