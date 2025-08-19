@@ -1,16 +1,30 @@
 import { Link, Outlet } from 'react-router';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function Layout() {
+	const { isAuthenticated, logout } = useAuth();
+
+	const handleClick = () => {
+		if (isAuthenticated) {
+			logout();
+		} else {
+			// direct to login or sign in page
+		}
+	};
+
 	return (
 		<>
-			<header className="w-screen h-15 bg-amber-100 px-20">
-				<nav className="h-full flex gap-10 items-center">
+			<header className="w-screen h-15 bg-amber-100 px-20 flex justify-between">
+				<nav className="flex gap-10 items-center">
 					<Link to="/">
 						{/* <img src="" alt="logo" /> */}
 						Main
 					</Link>
 					<Link to="/home">Home</Link>
 				</nav>
+				<button onClick={handleClick}>
+					{isAuthenticated ? 'Logout' : 'Login'}
+				</button>
 			</header>
 
 			<main className="w-screen h-screen flex justify-center items-center">
