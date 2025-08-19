@@ -193,10 +193,46 @@ const LoginForm = () => {
 	);
 };
 
+function UserAuthForm() {
+	const [display, setDisplay] = useState<'DEFAULT' | 'LOGIN' | 'SIGNUP'>(
+		'DEFAULT',
+	);
+
+	const displayContent = () => {
+		switch (display) {
+			case 'LOGIN':
+				return <LoginForm />;
+			case 'SIGNUP':
+				return <SignupForm />;
+		}
+	};
+
+	return (
+		<div>
+			{display === 'DEFAULT' ? (
+				<div className="flex gap-3">
+					<button
+						className="text-amber-50 rounded-2xl px-4 py-3 bg-amber-500"
+						onClick={() => setDisplay('LOGIN')}
+					>
+						Login
+					</button>
+					<button
+						className="text-amber-50 rounded-2xl px-4 py-3 bg-amber-500"
+						onClick={() => setDisplay('SIGNUP')}
+					>
+						Sign up
+					</button>
+				</div>
+			) : (
+				displayContent()
+			)}
+		</div>
+	);
+}
+
 // AuthPage / LoginPage
 export default function HomePage() {
-	const [showSignup, setShowSignup] = useState(false);
-	const [showLogin, setShowLogin] = useState(false);
 	const { isAuthenticated, userInfo } = useAuth();
 
 	return (
@@ -210,27 +246,8 @@ export default function HomePage() {
 					</div>
 				</section>
 			) : (
-				<div>
-					{!showLogin && !showSignup && (
-						<div className="flex gap-3">
-							<button
-								className="text-amber-50 rounded-2xl px-4 py-3 bg-amber-500"
-								onClick={() => setShowLogin(!showLogin)}
-							>
-								Login
-							</button>
-							<button
-								className="text-amber-50 rounded-2xl px-4 py-3 bg-amber-500"
-								onClick={() => setShowSignup(!showSignup)}
-							>
-								Sign up
-							</button>
-						</div>
-					)}
-				</div>
+				<UserAuthForm />
 			)}
-			{showSignup && <SignupForm />}
-			{showLogin && <LoginForm />}
 		</>
 	);
 }
