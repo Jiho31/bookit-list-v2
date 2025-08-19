@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { firebaseAuth } from '../plugins/fbase.ts';
 import {
 	createUserWithEmailAndPassword,
@@ -7,6 +7,7 @@ import {
 	signInWithEmailAndPassword,
 	signInWithPopup,
 } from 'firebase/auth';
+import { useAuth } from '../contexts/AuthContext.tsx';
 
 const OAUTH_PROVIDERS = {
 	GOOGLE: 'google',
@@ -192,22 +193,42 @@ const LoginForm = () => {
 	);
 };
 
+// AuthPage / LoginPage
 export default function HomePage() {
 	const [showSignup, setShowSignup] = useState(false);
 	const [showLogin, setShowLogin] = useState(false);
+	const { isAuthenticated, userInfo } = useAuth();
 
 	return (
 		<>
-			<div>display bookshelves and search bar</div>
-			<div>
-				{!showLogin && !showSignup && (
-					<>
-						<div>Login area</div>
-						<button onClick={() => setShowLogin(!showLogin)}>Login</button>
-						<button onClick={() => setShowSignup(!showSignup)}>Sign up</button>
-					</>
-				)}
-			</div>
+			{isAuthenticated ? (
+				<section>
+					<div>display personal bookshelves</div>
+					<div>
+						Email: {userInfo?.email}
+						Name: {userInfo?.displayName}
+					</div>
+				</section>
+			) : (
+				<div>
+					{!showLogin && !showSignup && (
+						<div className="flex gap-3">
+							<button
+								className="text-amber-50 rounded-2xl px-4 py-3 bg-amber-500"
+								onClick={() => setShowLogin(!showLogin)}
+							>
+								Login
+							</button>
+							<button
+								className="text-amber-50 rounded-2xl px-4 py-3 bg-amber-500"
+								onClick={() => setShowSignup(!showSignup)}
+							>
+								Sign up
+							</button>
+						</div>
+					)}
+				</div>
+			)}
 			{showSignup && <SignupForm />}
 			{showLogin && <LoginForm />}
 		</>
