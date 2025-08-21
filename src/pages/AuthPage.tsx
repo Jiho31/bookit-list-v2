@@ -266,7 +266,7 @@ function UserAuthForm() {
 }
 
 // AuthPage / LoginPage
-export default function HomePage() {
+export default function AuthPage() {
 	const { isAuthenticated, userInfo } = useAuth();
 
 	return (
