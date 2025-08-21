@@ -23,9 +23,9 @@ function MainPage() {
 	const [recommendations, setRecommendations] = useState<Book[]>([]);
 	const [pageIndex, setPageIndex] = useState(1);
 
-	const [displayContent, setDisplayContent] = useState<
-		'mainPage' | 'form' | 'homePage'
-	>('mainPage');
+	const [displayContent, setDisplayContent] = useState<'mainPage' | 'form'>(
+		'mainPage',
+	);
 
 	const makeQuery = () => {
 		const query1 = userResponse[1].keywords.join(' OR ') || '';
@@ -139,7 +139,6 @@ function MainPage() {
 					</div>
 				</section>
 			)}
-			{/* {displayContent === 'homePage' && <HomePage />} */}
 			{displayContent === 'form' && (
 				<>
 					<div>
