@@ -22,7 +22,7 @@ export default function Layout() {
 						{/* <img src="" alt="logo" /> */}
 						Main
 					</Link>
-					{/* <Link to="/home">Home</Link> */}
+					<Link to="/home">Home</Link>
 				</nav>
 				<button onClick={handleClick}>
 					{isAuthenticated ? 'Logout' : 'Login'}
