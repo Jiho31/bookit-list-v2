@@ -1,14 +1,16 @@
-import { Link, Outlet } from 'react-router';
+import { Link, Outlet, useNavigate } from 'react-router';
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function Layout() {
 	const { isAuthenticated, logout } = useAuth();
+	const navigate = useNavigate();
 
 	const handleClick = () => {
 		if (isAuthenticated) {
 			logout();
 		} else {
-			// direct to login or sign in page
+			// direct to user info page (?)
+			navigate('/auth');
 		}
 	};
 
@@ -20,7 +22,7 @@ export default function Layout() {
 						{/* <img src="" alt="logo" /> */}
 						Main
 					</Link>
-					<Link to="/home">Home</Link>
+					{/* <Link to="/home">Home</Link> */}
 				</nav>
 				<button onClick={handleClick}>
 					{isAuthenticated ? 'Logout' : 'Login'}
