@@ -13,6 +13,14 @@ type BookItem = {
 	updatedAt: string;
 };
 
+type BookshelfItem = {
+	key: string;
+	name: string;
+	books: BookItem[];
+	createdAt: number | undefined;
+	updatedAt: number | undefined;
+};
+
 type Emotion =
 	| 'em_happy'
 	| 'em_sad'
@@ -69,4 +77,4 @@ type User = {
 	profileImage?: string;
 };
 
-export type { Book, Form, Question, OptionMeta, BookItem, User };
+export type { Book, Form, Question, OptionMeta, BookItem, User, BookshelfItem };
