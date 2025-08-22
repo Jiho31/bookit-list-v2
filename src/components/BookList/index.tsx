@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Book, BookItem } from '../../types';
 import useOpenLibraryAPI from '../../hooks/useOpenLibraryAPI';
 import Modal from '../common/Modal';
-
-const BOOKSHELF_KEY = 'bookshelf';
+import { DEFAULT_BOOKSHELF_KEY } from '../../consts/books';
 
 function BookList({ recommendations }: { recommendations: Book[] }) {
 	const { getBookCoverImage } = useOpenLibraryAPI();
@@ -12,7 +11,7 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 	const [bookshelf, setBookshelf] = useState<Record<string, BookItem>>({});
 
 	useEffect(() => {
-		const initBookshelf = localStorage.getItem(BOOKSHELF_KEY);
+		const initBookshelf = localStorage.getItem(DEFAULT_BOOKSHELF_KEY);
 		// console.log(initBookshelf, '######### INIT bookshelf from storage');
 
 		if (initBookshelf !== null) {
@@ -23,7 +22,8 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 	useEffect(() => {
 		// console.log('update local storage ###### [bookshelf]', bookshelf);
 		if (Object.keys(bookshelf).length > 0) {
-			localStorage.setItem(BOOKSHELF_KEY, JSON.stringify(bookshelf));
+			console.log('save bookshelf to localstorage ########');
+			localStorage.setItem(DEFAULT_BOOKSHELF_KEY, JSON.stringify(bookshelf));
 		}
 	}, [bookshelf]);
 
