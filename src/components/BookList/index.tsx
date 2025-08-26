@@ -80,19 +80,20 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 								src={getBookCoverImage(book.coverEditionKey)}
 								alt={`Cover of ${book.title}`}
 								onError={(e) => {
-									const target = e.target as HTMLImageElement;
-									target.style.display = 'none';
-									const parent = target.parentElement;
-									if (parent) {
-										parent.innerHTML = `
-															<div class="flex items-center justify-center w-full h-full bg-gradient-to-br from-amber-100 to-amber-200">
-																<div class="text-center text-amber-800">
-																	<div class="text-4xl mb-2">📚</div>
-																	<div class="text-sm font-medium">No Cover Available</div>
-																</div>
-															</div>
-														`;
-									}
+									e.currentTarget.src = '../../assets/fallbackImage.png';
+									// const target = e.target as HTMLImageElement;
+									// target.style.display = 'none';
+									// const parent = target.parentElement;
+									// if (parent) {
+									// 	parent.innerHTML = `
+									// 						<div class="flex items-center justify-center w-full h-full bg-gradient-to-br from-amber-100 to-amber-200">
+									// 							<div class="text-center text-amber-800">
+									// 								<div class="text-4xl mb-2">📚</div>
+									// 								<div class="text-sm font-medium">No Cover Available</div>
+									// 							</div>
+									// 						</div>
+									// 					`;
+									// }
 								}}
 							/>
 						</div>
