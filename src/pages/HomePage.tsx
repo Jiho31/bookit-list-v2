@@ -81,7 +81,7 @@ export default function HomePage() {
 	}, [activeBookshelf]);
 
 	return (
-		<div className="w-full h-full flex overflow-y-hidden">
+		<div className="w-full h-screen flex overflow-y-hidden">
 			<Sidebar
 				activeKey={activeBookshelf}
 				setActiveBookshelf={setActiveBookshelf}

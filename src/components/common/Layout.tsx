@@ -15,7 +15,7 @@ export default function Layout() {
 	};
 
 	return (
-		<>
+		<div className="w-screen h-screen flex flex-col">
 			<header className="w-screen h-15 bg-amber-100 px-20 flex justify-between">
 				<nav className="flex gap-10 items-center">
 					<Link to="/">
@@ -29,10 +29,10 @@ export default function Layout() {
 				</button>
 			</header>
 
-			<main className="w-screen h-screen flex justify-center items-center">
+			<main className="w-screen h-auto flex justify-center items-center">
 				<Outlet />
 			</main>
 			<footer className="p-4 border-t border-b-gray-700">© Bookit List</footer>
-		</>
+		</div>
 	);
 }
