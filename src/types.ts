@@ -13,10 +13,12 @@ type BookItem = {
 	updatedAt: string;
 };
 
+// BookItemMeta
 type BookshelfItem = {
 	key: string;
 	name: string;
 	books: BookItem[];
+	numOfBooks: number;
 	createdAt: number | undefined;
 	updatedAt: number | undefined;
 };
