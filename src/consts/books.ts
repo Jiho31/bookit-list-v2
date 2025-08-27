@@ -1,6 +1,7 @@
 import type { BookshelfItem } from '../types';
 
 const DEFAULT_BOOKSHELF_KEY = 'default_bookshelf_key';
+const BOOKSHELF_LIST_KEY = 'bookshelf_list_key';
 
 const books = [
 	{
@@ -52,11 +53,15 @@ const bookItemsMock = books.map((b, i) => ({
 const DEFAULT_BOOKSHELF_ITEM: BookshelfItem = {
 	key: DEFAULT_BOOKSHELF_KEY,
 	name: 'To Read 📚',
-	books: bookItemsMock,
-	// books: [],
+	books: [], // bookItemsMock
 	numOfBooks: 0,
 	createdAt: undefined,
 	updatedAt: undefined,
 };
 
-export { DEFAULT_BOOKSHELF_KEY, DEFAULT_BOOKSHELF_ITEM };
+export {
+	DEFAULT_BOOKSHELF_KEY,
+	BOOKSHELF_LIST_KEY,
+	DEFAULT_BOOKSHELF_ITEM,
+	bookItemsMock,
+};

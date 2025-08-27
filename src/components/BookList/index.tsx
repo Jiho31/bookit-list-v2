@@ -31,11 +31,8 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 	};
 
 	const showBookDetails = (book: Book) => {
-		// set scroll lock
-		console.log(book, '#####');
-
 		setSelectedBook(book);
-		// setIsModalOpen(true);
+		setIsModalOpen(true);
 	};
 
 	const isBookInBookshelf = ({ key }: Book) =>
@@ -77,7 +74,12 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 					/>
 				))}
 			</section>
-			<Modal isOpen={isModalOpen} onClose={closeModal} />
+			<Modal isOpen={isModalOpen} onClose={closeModal}>
+				<div>
+					<p>Author: {selectedBook?.author}</p>
+					<p>Title: {selectedBook?.title}</p>
+				</div>
+			</Modal>
 		</>
 	);
 }

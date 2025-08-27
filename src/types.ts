@@ -11,6 +11,7 @@ type BookItem = {
 	book: Book;
 	createdAt: string;
 	updatedAt: string;
+	bookshelfKey?: string;
 };
 
 // BookItemMeta
