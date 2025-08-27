@@ -16,7 +16,7 @@ export default function Layout() {
 
 	return (
 		<div className="w-screen h-screen flex flex-col">
-			<header className="w-screen h-15 bg-amber-100 px-20 flex justify-between">
+			<header className="w-screen min-h-15 bg-amber-100 px-20 flex justify-between">
 				<nav className="flex gap-10 items-center">
 					<Link to="/">
 						{/* <img src="" alt="logo" /> */}
