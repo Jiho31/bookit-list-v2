@@ -265,13 +265,15 @@ function UserAuthForm() {
 	};
 
 	return (
-		<section className="flex w-[700px] min-w-50vw max-w-90vw gap-10 p-10 bg-amber-50 rounded-3xl">
+		<section className="flex my-20 h-[400px] min-h-1/2 w-[700px] min-w-50vw max-w-90vw gap-10 p-10 bg-amber-50 rounded-3xl">
 			{/* logo!! other info letters */}
-			<h2 className="text-md font-semibold mb-3">
-				Register with your email address
-			</h2>
+			<div className="w-1/2 flex flex-col gap-3 justify-center">
+				<h2 className="text-2xl font-semibold mb-3">Welcome to Bookit List!</h2>
+				<div className="text-2xl">📚 ✨ ❤️ 📖 💡</div>
+				<p>Sign in or get registered to create your personal bookshelves!</p>
+			</div>
 
-			<div className="w-1/2 flex flex-col gap-3">
+			<div className="w-1/2 flex flex-col gap-3 justify-center">
 				{display === 'DEFAULT' ? (
 					<>
 						{BUTTONS.map((b) => (
@@ -296,18 +298,18 @@ export default function AuthPage() {
 	const { isAuthenticated, userInfo } = useAuth();
 
 	return (
-		<>
+		<section id="container" className="w-full flex justify-center">
 			{isAuthenticated ? (
-				<section>
+				<>
 					<div>display personal bookshelves</div>
 					<div>
 						Email: {userInfo?.email}
 						Name: {userInfo?.displayName}
 					</div>
-				</section>
+				</>
 			) : (
 				<UserAuthForm />
 			)}
-		</>
+		</section>
 	);
 }
