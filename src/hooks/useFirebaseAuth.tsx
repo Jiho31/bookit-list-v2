@@ -10,7 +10,7 @@ export default function useFirebaseAuth() {
 	const parseUserData = (user: any) => ({
 		uid: user.uid,
 		email: user.email,
-		displayName: user.displayName,
+		displayName: user.displayName, // @todo handle empty cases
 		profileImage: user.photoURL,
 	});
 

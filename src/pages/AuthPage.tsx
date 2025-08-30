@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { firebaseAuth } from '../plugins/fbase.ts';
 import {
 	createUserWithEmailAndPassword,
+	getAdditionalUserInfo,
 	GithubAuthProvider,
 	GoogleAuthProvider,
 	signInWithEmailAndPassword,
@@ -14,11 +15,17 @@ const OAUTH_PROVIDERS = {
 	GITHUB: 'github',
 };
 
+const PROVIDER_INSTANCES = {
+	[OAUTH_PROVIDERS.GOOGLE]: new GoogleAuthProvider(),
+	[OAUTH_PROVIDERS.GITHUB]: new GithubAuthProvider(),
+};
+
 const SignupForm = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [error, setError] = useState('');
+	const { handleRegister } = useAuth();
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -51,7 +58,15 @@ const SignupForm = () => {
 		}
 
 		try {
-			await createUserWithEmailAndPassword(firebaseAuth, email, password);
+			const userCredential = await createUserWithEmailAndPassword(
+				firebaseAuth,
+				email,
+				password,
+			);
+
+			handleRegister(userCredential.user);
+			// response 받아서 확인하고 bookshelf init 처리?
+			// initUserBookshelf()
 		} catch (error: any) {
 			setError(error.message);
 		}
@@ -111,6 +126,8 @@ const SignupForm = () => {
 };
 
 const LoginForm = () => {
+	const { handleRegister } = useAuth();
+
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
@@ -146,12 +163,21 @@ const LoginForm = () => {
 	};
 
 	const handleSocialLogin = async (provider: string) => {
-		if (provider === OAUTH_PROVIDERS.GOOGLE) {
-			await signInWithPopup(firebaseAuth, new GoogleAuthProvider());
-		} else if (provider === OAUTH_PROVIDERS.GITHUB) {
-			await signInWithPopup(firebaseAuth, new GithubAuthProvider());
+		try {
+			const userCredential = await signInWithPopup(
+				firebaseAuth,
+				PROVIDER_INSTANCES[provider],
+			);
+
+			const additionalInfo = getAdditionalUserInfo(userCredential);
+			if (additionalInfo?.isNewUser) {
+				handleRegister(userCredential?.user);
+			}
+		} catch (err) {
+			console.error(err);
 		}
 	};
+
 	return (
 		<form className="flex flex-col gap-3" onSubmit={handleLogin}>
 			<input
