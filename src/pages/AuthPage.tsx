@@ -72,41 +72,48 @@ const SignupForm = () => {
 		}
 	};
 	return (
-		<form onSubmit={handleSignup}>
+		<form className="flex flex-col gap-3" onSubmit={handleSignup}>
 			<div className="flex gap-3">
-				<label className="text-sm font-medium text-gray-800" htmlFor="email">
+				<label
+					className="content-center basis-1/3 text-sm font-medium text-gray-800"
+					htmlFor="email"
+				>
 					EMAIL
 				</label>
 				<input
+					className="py-2 px-4 rounded-lg basis-2/3 bg-white"
 					id="email"
 					name="email"
 					type="email"
 					placeholder="Email"
-					autoComplete="false"
 					onChange={handleInputChange}
 				/>
 			</div>
 			<div className="flex gap-3">
-				<label className="text-sm font-medium text-gray-800" htmlFor="password">
+				<label
+					className="content-center basis-1/3 text-sm font-medium text-gray-800"
+					htmlFor="password"
+				>
 					PASSWORD
 				</label>
 				<input
+					className="py-2 px-4 rounded-lg basis-2/3 bg-white"
 					id="password"
 					name="password"
 					type="password"
-					autoComplete="false"
 					placeholder="Password"
 					onChange={handleInputChange}
 				/>
 			</div>
 			<div className="flex gap-3">
 				<label
-					className="text-sm font-medium text-gray-800"
+					className="content-center basis-1/3 text-sm font-medium text-gray-800"
 					htmlFor="confirmPassword"
 				>
 					CONFIRM PASSWORD
 				</label>
 				<input
+					className="py-2 px-4 rounded-lg basis-2/3 bg-white"
 					id="confirmPassword"
 					name="confirmPassword"
 					type="password"
@@ -120,7 +127,12 @@ const SignupForm = () => {
 				</div>
 			)}
 
-			<button type="submit">Register</button>
+			<button
+				className="text-white mt-3 bg-amber-400 hover:bg-amber-300 p-2 rounded-xl"
+				type="submit"
+			>
+				Register
+			</button>
 		</form>
 	);
 };
@@ -181,6 +193,7 @@ const LoginForm = () => {
 	return (
 		<form className="flex flex-col gap-3" onSubmit={handleLogin}>
 			<input
+				className="py-2 px-4 rounded-lg"
 				name="email"
 				type="email"
 				placeholder="Email"
@@ -188,6 +201,7 @@ const LoginForm = () => {
 				onChange={handleInputChange}
 			/>
 			<input
+				className="py-2 px-4 rounded-lg"
 				name="password"
 				type="password"
 				placeholder="Password"
