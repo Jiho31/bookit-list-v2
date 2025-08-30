@@ -2,14 +2,13 @@ import { Link, Outlet, useNavigate } from 'react-router';
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function Layout() {
-	const { isAuthenticated, logout } = useAuth();
+	const { isAuthenticated, handleLogout } = useAuth();
 	const navigate = useNavigate();
 
 	const handleClick = () => {
 		if (isAuthenticated) {
-			logout();
+			handleLogout();
 		} else {
-			// direct to user info page (?)
 			navigate('/auth');
 		}
 	};
