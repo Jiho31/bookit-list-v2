@@ -1,31 +1,15 @@
-import { useEffect, useState } from 'react';
-import { firebaseAuth } from '../plugins/fbase.ts';
-import {
-	createUserWithEmailAndPassword,
-	getAdditionalUserInfo,
-	GithubAuthProvider,
-	GoogleAuthProvider,
-	signInWithEmailAndPassword,
-	signInWithPopup,
-} from 'firebase/auth';
+import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext.tsx';
-
-const OAUTH_PROVIDERS = {
-	GOOGLE: 'google',
-	GITHUB: 'github',
-};
-
-const PROVIDER_INSTANCES = {
-	[OAUTH_PROVIDERS.GOOGLE]: new GoogleAuthProvider(),
-	[OAUTH_PROVIDERS.GITHUB]: new GithubAuthProvider(),
-};
+import useFirebaseAuth from '../hooks/useFirebaseAuth.tsx';
 
 const SignupForm = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [error, setError] = useState('');
+
 	const { handleRegister } = useAuth();
+	const { createUserWithEmail } = useFirebaseAuth();
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -58,13 +42,9 @@ const SignupForm = () => {
 		}
 
 		try {
-			const userCredential = await createUserWithEmailAndPassword(
-				firebaseAuth,
-				email,
-				password,
-			);
+			const userCredential = await createUserWithEmail(email, password);
+			handleRegister(userCredential);
 
-			handleRegister(userCredential.user);
 			// response 받아서 확인하고 bookshelf init 처리?
 			// initUserBookshelf()
 		} catch (error: any) {
@@ -138,6 +118,8 @@ const SignupForm = () => {
 };
 
 const LoginForm = () => {
+	const { handleSocialLogin, handleEmailLogin, OAUTH_PROVIDERS } =
+		useFirebaseAuth();
 	const { handleRegister } = useAuth();
 
 	const [email, setEmail] = useState('');
@@ -168,22 +150,23 @@ const LoginForm = () => {
 		}
 
 		try {
-			await signInWithEmailAndPassword(firebaseAuth, email, password);
+			await handleEmailLogin(email, password);
+			// @todo init bookshelf data
 		} catch (error: any) {
 			setError(error.message);
 		}
 	};
 
-	const handleSocialLogin = async (provider: string) => {
+	const onSocialLogin = async (provider: string) => {
 		try {
-			const userCredential = await signInWithPopup(
-				firebaseAuth,
-				PROVIDER_INSTANCES[provider],
-			);
+			const response = await handleSocialLogin(provider);
 
-			const additionalInfo = getAdditionalUserInfo(userCredential);
-			if (additionalInfo?.isNewUser) {
-				handleRegister(userCredential?.user);
+			if (
+				response &&
+				response.userCredential &&
+				response.additionalInfo?.isNewUser
+			) {
+				handleRegister(response.userCredential.user);
 			}
 		} catch (err) {
 			console.error(err);
@@ -220,7 +203,7 @@ const LoginForm = () => {
 			<button
 				className="inline-flex gap-3 px-4 py-2 bg-white border-amber-200 hover:bg-amber-300"
 				type="button"
-				onClick={() => handleSocialLogin(OAUTH_PROVIDERS.GOOGLE)}
+				onClick={() => onSocialLogin(OAUTH_PROVIDERS.GOOGLE)}
 			>
 				<svg
 					className="w-4"
@@ -236,7 +219,7 @@ const LoginForm = () => {
 			<button
 				className="inline-flex gap-3 px-4 py-2 bg-white border-amber-200 hover:bg-amber-300"
 				type="button"
-				onClick={() => handleSocialLogin(OAUTH_PROVIDERS.GITHUB)}
+				onClick={() => onSocialLogin(OAUTH_PROVIDERS.GITHUB)}
 			>
 				<svg
 					className="w-4"
