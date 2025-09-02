@@ -1,4 +1,5 @@
 import { Link, Outlet, useNavigate } from 'react-router';
+import { useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 
 export default function Layout() {
@@ -12,6 +13,14 @@ export default function Layout() {
 			navigate('/auth');
 		}
 	};
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			navigate('/home');
+		} else {
+			navigate('/');
+		}
+	}, [isAuthenticated]);
 
 	return (
 		<div className="w-screen h-screen flex flex-col">

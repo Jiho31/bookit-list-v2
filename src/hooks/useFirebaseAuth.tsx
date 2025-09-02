@@ -67,13 +67,6 @@ export default function useFirebaseAuth() {
 		}
 	};
 
-	useEffect(() => {
-		if (!isAuthenticated) {
-			// @todo redirect 처리
-			console.log('Redirect to main page');
-		}
-	}, [isAuthenticated]);
-
 	const getCurrentUser = () => firebaseAuth.currentUser;
 	const logout = () => firebaseAuth.signOut();
 
