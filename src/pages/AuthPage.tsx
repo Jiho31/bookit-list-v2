@@ -44,13 +44,11 @@ const SignupForm = () => {
 		try {
 			const userCredential = await createUserWithEmail(email, password);
 			handleRegister(userCredential);
-
-			// response 받아서 확인하고 bookshelf init 처리?
-			// initUserBookshelf()
 		} catch (error: any) {
 			setError(error.message);
 		}
 	};
+
 	return (
 		<form className="flex flex-col gap-3" onSubmit={handleSignup}>
 			<div className="flex gap-3">
@@ -273,8 +271,9 @@ function UserAuthForm() {
 			<div className="w-1/2 flex flex-col gap-3 justify-center">
 				{display === 'DEFAULT' ? (
 					<>
-						{BUTTONS.map((b) => (
+						{BUTTONS.map((b, idx) => (
 							<button
+								key={idx}
 								className="text-amber-50 rounded-2xl px-4 py-3 bg-amber-500 hover:bg-amber-600"
 								onClick={b.clickHandler}
 							>
@@ -298,7 +297,6 @@ export default function AuthPage() {
 		<section id="container" className="w-full flex justify-center">
 			{isAuthenticated ? (
 				<>
-					<div>display personal bookshelves</div>
 					<div>
 						Email: {userInfo?.email}
 						Name: {userInfo?.displayName}
