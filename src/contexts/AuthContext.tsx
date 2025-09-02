@@ -1,8 +1,15 @@
 import { createContext, useContext } from 'react';
 import useFirebaseAuth from '../hooks/useFirebaseAuth';
 import type { User } from '../types';
-import { doc, setDoc } from 'firebase/firestore';
+import {
+	addDoc,
+	collection,
+	doc,
+	serverTimestamp,
+	setDoc,
+} from 'firebase/firestore';
 import { firebaseDB } from '../plugins/fbase';
+import { DEFAULT_BOOKSHELF_ITEM, DEFAULT_BOOKSHELF_KEY } from '../consts/books';
 
 type AuthCtx = {
 	userInfo: User | undefined;
@@ -10,28 +17,46 @@ type AuthCtx = {
 	handleRegister: (userCredential: any) => void;
 	// login: (data: any) => Promise<void>;
 	handleLogout: () => void;
-	initUserBookshelf: () => void;
 };
 const AuthContext = createContext<AuthCtx | undefined>(undefined);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const { userInfo, isAuthenticated, logout } = useFirebaseAuth();
 
-	// bookshelf context 에서 구현하기?
-	const initUserBookshelf = () => {
-		// @todo create default bookshelf
-		// ---> check if there's data saved in local(or session) storage
-		console.log('init bookshelf########');
-	};
+	// const createDefaultBookshelf = async (uid: string) => {
+	// 	const shelvesRef = collection(firebaseDB, 'users', uid, 'bookshelves');
+	// 	await addDoc(shelvesRef, {
+	// 		name: 'To Read 📚',
+	// 		createdAt: serverTimestamp(),
+	// 		updatedAt: serverTimestamp(),
+	// 		numOfBooks: 0,
+	// 	});
+
+	// 	console.log('######2222 createDefaultBookshelf');
+	// };
 
 	// handleNewUser
 	const handleRegister = async ({ uid }: { uid: string }) => {
-		const newUserObject = {
-			bookshelves: {},
+		const newUserData = {
+			bookshelves: {
+				[DEFAULT_BOOKSHELF_KEY]: {
+					...DEFAULT_BOOKSHELF_ITEM,
+					createdAt: serverTimestamp(),
+					updatedAt: serverTimestamp(),
+				},
+			},
+			lastUpdatedAt: serverTimestamp(),
 		};
 
+		// const newUserData = {
+		// 	bookshelves: {},
+		// };
+
 		try {
-			await setDoc(doc(firebaseDB, 'users', uid), newUserObject);
+			// 	const shelvesRef = collection(firebaseDB, 'users', uid, 'bookshelves');
+
+			await setDoc(doc(firebaseDB, 'users', uid), newUserData);
+			// await createDefaultBookshelf(uid);
 		} catch (e) {
 			console.error('Error in new user registration: ', e);
 		}
@@ -52,7 +77,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 				isAuthenticated,
 				handleRegister,
 				handleLogout,
-				initUserBookshelf,
 			}}
 		>
 			{children}

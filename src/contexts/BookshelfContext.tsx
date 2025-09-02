@@ -1,17 +1,30 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import type { BookItem, BookshelfItem } from '../types';
 import {
 	BOOKSHELF_LIST_KEY,
 	DEFAULT_BOOKSHELF_ITEM,
 	DEFAULT_BOOKSHELF_KEY,
 } from '../consts/books';
+import { useAuth } from './AuthContext';
+import {
+	addDoc,
+	collection,
+	doc,
+	getDoc,
+	serverTimestamp,
+	updateDoc,
+} from 'firebase/firestore';
+import { firebaseDB } from '../plugins/fbase';
 
 type BookshelfCtx = {
 	activeKey: string;
+	setActiveKey: (key: string) => void;
 	list: BookshelfItem[];
+	fetchBookshelf: (bookshelfKey: string) => Promise<BookshelfItem[]>;
 	createBookshelf: (name: string) => void;
-	addToBookshelf: (book: BookItem) => Promise<void>;
-	removeFromBookshelf: (key: string) => Promise<void>;
+	addBookToShelf: (bookshelfKey: string, book: BookItem) => Promise<void>;
+	removeFromBookshelf: (bookshelfKey: string, bookKey: string) => Promise<void>;
+	// deleteBookshelf: (key: string) => Promise<void>;
 	// isLoading: boolean;
 	// error: Error | null;
 };
@@ -21,33 +34,110 @@ const BookshelfContext = createContext<BookshelfCtx | undefined>(undefined);
 const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 	const [activeKey, setActiveKey] = useState(DEFAULT_BOOKSHELF_KEY);
 	const [bookshelfList, setBookshelfList] = useState<BookshelfItem[]>([]);
+	const { userInfo, isAuthenticated } = useAuth();
 
-	const initDefaultBookshelf = () => {
-		// @todo bookshelf GET api 연동
-		const bookshelfList = localStorage.getItem(BOOKSHELF_LIST_KEY);
+	// const userBookshelfRef = useMemo(
+	// 	() => (userInfo ? doc(firebaseDB, 'users', userInfo?.uid) : null),
+	// 	[firebaseDB, userInfo],
+	// );
 
-		if (!bookshelfList) {
-			const newBookshelves = [DEFAULT_BOOKSHELF_ITEM];
+	const fetchBookshelfList = async () => {
+		if (!userInfo?.uid) {
+			throw new Error('Invalid user ID');
+		}
 
-			localStorage.setItem(BOOKSHELF_LIST_KEY, JSON.stringify(newBookshelves));
-			setBookshelfList(newBookshelves);
+		const userBookshelfRef = doc(firebaseDB, 'users', userInfo?.uid);
+		if (!userBookshelfRef) {
+			throw new Error('No valid bookshelf referenced');
+		}
+
+		const docSnap = await getDoc(userBookshelfRef);
+		if (docSnap.exists()) {
+			const bb = docSnap.data().bookshelves;
+			console.log(bb, '<<<<<<<<<< FETCHED BOOKSHELF LIST');
+			setBookshelfList(bb);
 		} else {
-			setBookshelfList(JSON.parse(bookshelfList));
+			// docSnap.data() will be undefined in this case
+			throw new Error('Bookshelf cannot be referenced!');
 		}
 	};
 
+	const fetchBookshelf = async (key: string) => {
+		if (!userInfo) {
+			console.log('invalide userInfo');
+
+			return [];
+		}
+
+		const shelfRef = doc(firebaseDB, 'users', userInfo.uid, 'bookshelves');
+		const shelfSnap = await getDoc(shelfRef);
+		console.log(shelfSnap, '#####9999');
+
+		if (shelfSnap.exists()) {
+			console.log(shelfSnap.data(), '####2222222222');
+			console.log(shelfSnap.get(key), '@@@@@@ ');
+
+			return [];
+		} else {
+			console.log(shelfSnap, '<<<<<<<<<<<< ERROR!1111111111');
+			return [];
+		}
+	};
+
+	// in local storage
+	// const initDefaultBookshelf = async () => {
+	// 	const bookshelfList = localStorage.getItem(BOOKSHELF_LIST_KEY);
+
+	// 	if (!bookshelfList) {
+	// 		const newBookshelves = [DEFAULT_BOOKSHELF_ITEM];
+
+	// 		localStorage.setItem(BOOKSHELF_LIST_KEY, JSON.stringify(newBookshelves));
+	// 		setBookshelfList(newBookshelves);
+	// 	} else {
+	// 		setBookshelfList(JSON.parse(bookshelfList));
+	// 	}
+	// };
+
 	useEffect(() => {
-		initDefaultBookshelf();
-	}, []);
+		if (isAuthenticated) {
+			setActiveKey(DEFAULT_BOOKSHELF_KEY);
+			fetchBookshelfList();
+		}
+	}, [isAuthenticated]);
 
 	const createBookshelf = (name: string) => {
 		console.log('[CREATE BOOKSHLEF]', name);
 	};
 
-	const addToBookshelf = (book: BookItem) => {
-		return Promise.resolve();
+	const addBookToShelf = async (bookshelfKey: string, book: BookItem) => {
+		if (!userInfo) {
+			throw new Error('invalid');
+		}
+
+		try {
+			const bookshelfRef = collection(
+				firebaseDB,
+				'users',
+				userInfo.uid,
+				'bookshelves',
+				bookshelfKey,
+				'books',
+			);
+
+			// const docRef = await addDoc(bookshelfRef, {
+			// 	// bookKey,
+			// 	books: [book],
+			// 	createdAt: serverTimestamp(),
+			// 	memos: [],
+			// });
+
+			// console.log(docRef);
+		} catch (err) {
+			console.error(err);
+		}
 	};
-	const removeFromBookshelf = (key: string) => {
+
+	const removeFromBookshelf = (bookshelfKey: string, bookKey: string) => {
 		return Promise.resolve();
 	};
 
@@ -56,8 +146,10 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 			value={{
 				list: bookshelfList,
 				activeKey,
+				setActiveKey,
+				fetchBookshelf,
 				createBookshelf,
-				addToBookshelf,
+				addBookToShelf,
 				removeFromBookshelf,
 			}}
 		>
