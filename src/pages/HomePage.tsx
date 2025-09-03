@@ -13,7 +13,10 @@ function Sidebar() {
 
 	const handleCreate = async () => {
 		// @todo bookshelf name 입력 받기 (모달 생성해서 input ?)
-		await createBookshelf('New Bookshelf');
+		const nameInput = (await prompt('Type in the name of bookshelf')) || '';
+		if (nameInput.length > 0) {
+			await createBookshelf(nameInput);
+		}
 	};
 
 	const parsedMenuList = useMemo(() => Object.values(menuList), [menuList]);
