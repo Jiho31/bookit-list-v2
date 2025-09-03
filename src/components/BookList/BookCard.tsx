@@ -55,12 +55,12 @@ export default function BookCard({
 	book,
 	onClickHandler,
 	// isBookInBookshelf,
-	// addToBookshelf,
+	addToBookshelf,
 }: {
 	book: any;
 	onClickHandler: () => void;
 	// isBookInBookshelf: (book: any) => boolean;
-	// addToBookshelf: Function;
+	addToBookshelf?: Function;
 }) {
 	return (
 		<div
@@ -88,13 +88,14 @@ export default function BookCard({
 				{book.publishedYear && (
 					<p className="text-gray-500 text-xs mb-3">{book.publishedYear}</p>
 				)}
-				{/* <button
+				<button
 					className="mt-auto bg-amber-500 hover:bg-amber-600 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
-					disabled={isBookInBookshelf(book)}
+					// disabled={isBookInBookshelf(book)}
 					onClick={(e) => addToBookshelf(e, book)}
 				>
-					{isBookInBookshelf(book) ? 'Added' : 'Add to bookshelf'}
-				</button> */}
+					{/* {isBookInBookshelf(book) ? 'Added' : 'Add to bookshelf'} */}
+					Add to bookshelf
+				</button>
 			</div>
 		</div>
 	);
