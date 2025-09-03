@@ -11,9 +11,9 @@ function Sidebar() {
 		createBookshelf,
 	} = useBookshelf();
 
-	const handleCreate = () => {
-		// bookshelf 정보 입력 받기 (모달 생성해서 input ?)
-		// createBookshelf() 호출
+	const handleCreate = async () => {
+		// @todo bookshelf name 입력 받기 (모달 생성해서 input ?)
+		await createBookshelf('New Bookshelf');
 	};
 
 	const parsedMenuList = useMemo(() => Object.values(menuList), [menuList]);
@@ -52,22 +52,33 @@ function Sidebar() {
 
 export default function HomePage() {
 	const { activeKey, fetchBookshelf } = useBookshelf();
-	const [bookshelfData, setBookshelfData] = useState<BookshelfItem>();
+	const [bookshelfData, setBookshelfData] = useState<BookshelfItem | null>();
+	const [isLoading, setIsLoading] = useState(false);
+
+	const handleFetchBookshelf = async () => {
+		setIsLoading(true);
+		try {
+			const newBookshelfData = await fetchBookshelf(activeKey);
+
+			setBookshelfData(newBookshelfData);
+		} catch (error) {
+			console.error('Error fetching bookshelf:', error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	useEffect(() => {
-		fetchBookshelf(activeKey);
-		console.log('rendered @@@', activeKey);
-
-		// setBookshelfData
-	}, []);
+		handleFetchBookshelf();
+	}, [activeKey]);
 
 	return (
 		<div className="w-full h-screen flex overflow-y-hidden">
 			<Sidebar />
-			{!!bookshelfData && (
+			{isLoading && <div>Loading...</div>}
+			{!!bookshelfData && !isLoading && (
 				<Bookshelf
-					{...bookshelfData}
-					id={bookshelfData.key}
+					{...(bookshelfData as BookshelfItem)}
 					key={bookshelfData.key}
 				/>
 			)}
