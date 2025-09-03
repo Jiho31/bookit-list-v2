@@ -23,40 +23,32 @@ const AuthContext = createContext<AuthCtx | undefined>(undefined);
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const { userInfo, isAuthenticated, logout } = useFirebaseAuth();
 
-	// const createDefaultBookshelf = async (uid: string) => {
-	// 	const shelvesRef = collection(firebaseDB, 'users', uid, 'bookshelves');
-	// 	await addDoc(shelvesRef, {
-	// 		name: 'To Read 📚',
-	// 		createdAt: serverTimestamp(),
-	// 		updatedAt: serverTimestamp(),
-	// 		numOfBooks: 0,
-	// 	});
+	const createDefaultBookshelf = async (uid: string) => {
+		const shelvesRef = collection(firebaseDB, 'users', uid, 'bookshelves');
+		await addDoc(shelvesRef, {
+			key: DEFAULT_BOOKSHELF_KEY,
+			name: DEFAULT_BOOKSHELF_ITEM.name,
+			books: [],
+			numOfBooks: 0,
+			createdAt: serverTimestamp(),
+			updatedAt: serverTimestamp(),
+		});
 
-	// 	console.log('######2222 createDefaultBookshelf');
-	// };
+		console.log('Default bookshelf created successfully');
+	};
 
 	// handleNewUser
 	const handleRegister = async ({ uid }: { uid: string }) => {
 		const newUserData = {
-			bookshelves: {
-				[DEFAULT_BOOKSHELF_KEY]: {
-					...DEFAULT_BOOKSHELF_ITEM,
-					createdAt: serverTimestamp(),
-					updatedAt: serverTimestamp(),
-				},
-			},
 			lastUpdatedAt: serverTimestamp(),
 		};
 
-		// const newUserData = {
-		// 	bookshelves: {},
-		// };
-
 		try {
-			// 	const shelvesRef = collection(firebaseDB, 'users', uid, 'bookshelves');
-
+			// Create the user document
 			await setDoc(doc(firebaseDB, 'users', uid), newUserData);
-			// await createDefaultBookshelf(uid);
+
+			// Create the default bookshelf as a subcollection
+			await createDefaultBookshelf(uid);
 		} catch (e) {
 			console.error('Error in new user registration: ', e);
 		}

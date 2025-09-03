@@ -1,3 +1,5 @@
+import type { Timestamp } from 'firebase/firestore';
+
 type Book = {
 	key: string;
 	author: string;
@@ -20,8 +22,8 @@ type BookshelfItem = {
 	name: string;
 	books: BookItem[];
 	numOfBooks: number;
-	createdAt: number | undefined;
-	updatedAt: number | undefined;
+	createdAt?: Timestamp | null;
+	updatedAt?: Timestamp | null;
 };
 
 type Emotion =
