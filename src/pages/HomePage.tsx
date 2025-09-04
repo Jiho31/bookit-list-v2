@@ -38,7 +38,11 @@ function Sidebar() {
 							</li>
 						))}
 				</ul>
-				<button type="button" className="my-3 ml-8" onClick={handleCreate}>
+				<button
+					type="button"
+					className="my-3 ml-8 text-sm"
+					onClick={handleCreate}
+				>
 					+ New Bookshelf
 				</button>
 			</div>
