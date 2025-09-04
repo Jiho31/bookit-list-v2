@@ -37,12 +37,11 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 	const { userInfo, isAuthenticated } = useAuth();
 
 	const fetchBookshelfList = async () => {
-		if (!userInfo?.uid) {
-			throw new Error('Invalid user ID');
-		}
-
 		setIsLoading(true);
 		try {
+			if (!userInfo?.uid) {
+				throw new Error('Invalid user ID');
+			}
 			// Fetch from the bookshelves subcollection
 			const bookshelvesRef = collection(
 				firebaseDB,
