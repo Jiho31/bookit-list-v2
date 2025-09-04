@@ -35,7 +35,7 @@ export default function Layout() {
 					</Link>
 				</nav>
 				<button className="h-fit text-sm self-center" onClick={handleClick}>
-					{isAuthenticated ? <span>Login → </span> : <span>Logout </span>}
+					{isAuthenticated ? <span>Logout </span> : <span>Login → </span>}
 				</button>
 			</header>
 
