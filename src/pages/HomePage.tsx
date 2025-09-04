@@ -22,14 +22,14 @@ function Sidebar() {
 	const parsedMenuList = useMemo(() => Object.values(menuList), [menuList]);
 
 	return (
-		<section className="w-md max-w-1/4 h-full bg-blue-100 ">
+		<section className="w-md max-w-1/4 h-full border-r bg-slate-100 border-slate-200 text-slate-900">
 			<div>
 				<p className="px-6 py-4 font-semibold">My Bookshelves</p>
 				<ul className="flex flex-col">
 					{parsedMenuList?.length > 0 &&
 						parsedMenuList.map((data) => (
 							<li
-								className={`p-4 pl-8 bg-inherit hover:bg-blue-200 hover:cursor-pointer translate-y-0 hover:transition hover:translate-y-0.5 ${activeKey === data.key && 'font-medium bg-pink-300'}`}
+								className={`p-4 pl-8 hover:bg-indigo-100 hover:cursor-pointer hover:scale-101 ${activeKey === data.key && 'font-medium bg-indigo-200'}`}
 								key={data.key}
 								id={data.key}
 								onClick={() => setActiveKey(data.key)}
@@ -38,12 +38,8 @@ function Sidebar() {
 							</li>
 						))}
 				</ul>
-				<button
-					type="button"
-					className="w-auto ml-8 py-2 px-4 text-amber-50 bg-amber-600"
-					onClick={handleCreate}
-				>
-					New Bookshelf
+				<button type="button" className="my-3 ml-8" onClick={handleCreate}>
+					+ New Bookshelf
 				</button>
 			</div>
 			<div>
@@ -76,7 +72,7 @@ export default function HomePage() {
 	}, [activeKey]);
 
 	return (
-		<div className="w-full h-screen flex overflow-y-hidden">
+		<div className="w-full h-full flex overflow-y-hidden">
 			<Sidebar />
 			{isLoading && <div>Loading...</div>}
 			{!!bookshelfData && !isLoading && (
