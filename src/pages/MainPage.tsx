@@ -112,29 +112,38 @@ function MainPage() {
 	return (
 		<>
 			{displayContent === 'mainPage' && (
-				<section className="flex flex-col gap-4">
-					<h1 className="text-3xl">
+				<section className="flex flex-col gap-4 text-center">
+					<h1 className="max-w-2/3 self-center text-slate-900 text-6xl font-extrabold">
 						Welcome to the Book Recommendation System
 					</h1>
-					<p>
+					<p className="text-slate-600 py-6">
 						This is a system that recommends books based on your preferences.
 					</p>
 					<div className="flex flex-row gap-10 justify-center items-center">
 						<button
-							className="bg-amber-100 hover:bg-amber-200 rounded-3xl py-20 px-3 w-1/2 min-h-[250px]"
+							className="group flex flex-col gap-2 bg-white text-slate-900 hover:text-indigo-50 hover:bg-indigo-400 border border-slate-200 rounded-2xl py-10 px-8 w-auto"
 							onClick={() => setDisplayContent('form')}
 						>
-							<span>❓ Start survey!</span>
-							<span>
-								<br />
-								(Get book recommendations)
+							<span className="w-fit h-fit self-center px-4 py-2 bg-slate-50 rounded-full group-hover:bg-amber-50">
+								✨
+							</span>
+							<span className="font-bold text-xl">Get Recommendations</span>
+							<span className="text-sm text-slate-600 group-hover:text-indigo-50">
+								Start survey!
 							</span>
 						</button>
 						<button
-							className="bg-amber-100 hover:bg-amber-200 rounded-3xl py-20 px-3 w-1/2 min-h-[250px]"
+							className="group flex flex-col gap-2 bg-white text-slate-900 hover:text-indigo-50 hover:bg-indigo-400 border border-slate-200 rounded-2xl py-10 px-8 w-auto"
 							onClick={() => navigate('/home')}
 						>
-							🔍 Explore books
+							<span className="w-fit h-fit self-center px-4 py-2 bg-slate-50 rounded-full group-hover:bg-amber-50">
+								🔍
+							</span>
+							<span className="font-bold text-xl">Browse Books</span>
+							<span className="text-sm text-slate-600 group-hover:text-indigo-50">
+								Explore library
+								{/* Bookshelf */}
+							</span>
 						</button>
 					</div>
 				</section>
