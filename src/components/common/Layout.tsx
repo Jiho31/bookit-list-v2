@@ -27,8 +27,8 @@ export default function Layout() {
 			<header className="w-screen min-h-15 bg-amber-100 px-20 flex justify-between">
 				<nav className="flex gap-10 items-center">
 					<Link to="/">
-						{/* <img src="" alt="logo" /> */}
-						Main
+						<img className="w-18 h-auto" src="/logo.png" alt="logo" />
+						{/* Main */}
 					</Link>
 					<Link to="/home">Home</Link>
 				</nav>
