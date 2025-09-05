@@ -53,13 +53,13 @@ const SignupForm = () => {
 		<form className="flex flex-col gap-3" onSubmit={handleSignup}>
 			<div className="flex gap-3">
 				<label
-					className="content-center basis-1/3 text-sm font-medium text-gray-800"
+					className="content-center basis-1/3 text-sm text-slate-400"
 					htmlFor="email"
 				>
-					EMAIL
+					Email
 				</label>
 				<input
-					className="py-2 px-4 rounded-lg basis-2/3 bg-white"
+					className="py-2 px-4 rounded-lg basis-2/3 text-sm bg-white border border-slate-200"
 					id="email"
 					name="email"
 					type="email"
@@ -69,13 +69,13 @@ const SignupForm = () => {
 			</div>
 			<div className="flex gap-3">
 				<label
-					className="content-center basis-1/3 text-sm font-medium text-gray-800"
+					className="content-center basis-1/3 text-sm text-slate-400"
 					htmlFor="password"
 				>
-					PASSWORD
+					Password
 				</label>
 				<input
-					className="py-2 px-4 rounded-lg basis-2/3 bg-white"
+					className="py-2 px-4 rounded-lg basis-2/3 text-sm bg-white border border-slate-200"
 					id="password"
 					name="password"
 					type="password"
@@ -85,13 +85,13 @@ const SignupForm = () => {
 			</div>
 			<div className="flex gap-3">
 				<label
-					className="content-center basis-1/3 text-sm font-medium text-gray-800"
+					className="content-center basis-1/3 text-sm text-slate-400"
 					htmlFor="confirmPassword"
 				>
-					CONFIRM PASSWORD
+					Confirm Password
 				</label>
 				<input
-					className="py-2 px-4 rounded-lg basis-2/3 bg-white"
+					className="py-2 px-4 rounded-lg basis-2/3 text-sm bg-white border border-slate-200"
 					id="confirmPassword"
 					name="confirmPassword"
 					type="password"
@@ -106,7 +106,7 @@ const SignupForm = () => {
 			)}
 
 			<button
-				className="text-white mt-3 bg-amber-400 hover:bg-amber-300 p-2 rounded-xl"
+				className="text-indigo-50 mt-3 bg-indigo-600 hover:bg-indigo-800 px-2 py-2.5 text-sm rounded-xl"
 				type="submit"
 			>
 				Register
@@ -173,16 +173,24 @@ const LoginForm = () => {
 
 	return (
 		<form className="flex flex-col gap-3" onSubmit={handleLogin}>
+			<label htmlFor="email" className="text-xs text-slate-400 mb-[-5px]">
+				Email
+			</label>
 			<input
-				className="py-2 px-4 rounded-lg"
+				className="py-2 px-4 rounded-lg border border-slate-200 text-sm"
+				id="email"
 				name="email"
 				type="email"
 				placeholder="Email"
 				value={email}
 				onChange={handleInputChange}
 			/>
+			<label htmlFor="password" className="text-xs text-slate-400 mb-[-5px]">
+				Password
+			</label>
 			<input
-				className="py-2 px-4 rounded-lg"
+				className="py-2 px-4 rounded-lg border border-slate-200 text-sm"
+				id="password"
 				name="password"
 				type="password"
 				placeholder="Password"
@@ -193,13 +201,13 @@ const LoginForm = () => {
 				<div className="bg-red-100 rounded-2xl p-3 text-red-700">{error}</div>
 			)}
 			<button
-				className="px-4 py-2 text-amber-50 bg-amber-400 hover:bg-amber-300"
+				className="px-4 py-2.5 text-sm text-indigo-50 bg-indigo-600 hover:bg-indigo-800"
 				type="submit"
 			>
 				Login
 			</button>
 			<button
-				className="inline-flex gap-3 px-4 py-2 bg-white border-amber-200 hover:bg-amber-300"
+				className="inline-flex gap-3 px-4 py-2 bg-white text-sm text-indigo-400 hover:text-indigo-50 border border-indigo-400 hover:bg-indigo-500"
 				type="button"
 				onClick={() => onSocialLogin(OAUTH_PROVIDERS.GOOGLE)}
 			>
@@ -215,7 +223,7 @@ const LoginForm = () => {
 				Sign In with Google
 			</button>
 			<button
-				className="inline-flex gap-3 px-4 py-2 bg-white border-amber-200 hover:bg-amber-300"
+				className="inline-flex gap-3 px-4 py-2 bg-white text-sm text-indigo-400 hover:text-indigo-50 border border-indigo-400 hover:bg-indigo-500"
 				type="button"
 				onClick={() => onSocialLogin(OAUTH_PROVIDERS.GITHUB)}
 			>
@@ -260,11 +268,16 @@ function UserAuthForm() {
 	};
 
 	return (
-		<section className="flex my-20 h-[400px] min-h-1/2 w-[700px] min-w-50vw max-w-90vw gap-10 p-10 bg-amber-50 rounded-3xl">
+		<section className="flex my-20 h-[400px] min-h-1/2 w-[700px] min-w-50vw max-w-90vw gap-10 p-10 bg-white border border-slate-200 rounded-3xl">
 			{/* logo!! other info letters */}
-			<div className="w-1/2 flex flex-col gap-3 justify-center">
-				<h2 className="text-2xl font-semibold mb-3">Welcome to Bookit List!</h2>
-				<div className="text-2xl">📚 ✨ ❤️ 📖 💡</div>
+			<div className="w-1/2 flex flex-col gap-3 items-center text-center">
+				<img
+					className="w-50 h-auto self-center"
+					src="/logo.png"
+					alt="Bookit List logo"
+				/>
+				<h2 className="text-xl font-semibold mb-3">Welcome to Bookit List!</h2>
+				{/* <div className="text-2xl">📚 ✨ ❤️ 📖 💡</div> */}
 				<p>Sign in or get registered to create your personal bookshelves!</p>
 			</div>
 
@@ -274,7 +287,7 @@ function UserAuthForm() {
 						{BUTTONS.map((b, idx) => (
 							<button
 								key={idx}
-								className="text-amber-50 rounded-2xl px-4 py-3 bg-amber-500 hover:bg-amber-600"
+								className="text-indigo-50 rounded-2xl px-4 py-3 bg-indigo-600 hover:bg-indigo-800"
 								onClick={b.clickHandler}
 							>
 								{b.buttonName}
