@@ -20,11 +20,11 @@ function BookRecommendations({
 	);
 
 	return (
-		<>
+		<section className="flex flex-col p-10">
 			{isLoading ? (
 				<div> Generating recommendations ... </div>
 			) : (
-				<section>
+				<>
 					<Header title="Book recommendations for you 🤗" />
 					{isEmpty ? (
 						<div className="text-center text-gray-500 py-10">
@@ -36,23 +36,23 @@ function BookRecommendations({
 					)}
 					<div className="flex gap-2 justify-center mt-6">
 						<button
-							className="border rounded-b-md bg-gray-100 hover:bg-gray-200"
+							className="border rounded-b-md bg-white text-indigo-600 hover:bg-indigo-600 hover:text-indigo-50"
 							onClick={refreshForm}
 						>
 							Start Over
 							{/* New Search */}
 						</button>
 						<button
-							className="border rounded-b-md  bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+							className="border rounded-b-md bg-white text-indigo-600 hover:bg-indigo-600 hover:text-indigo-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400"
 							disabled={isEmpty}
 							onClick={shuffleRecommendations}
 						>
 							More Recommendations
 						</button>
 					</div>
-				</section>
+				</>
 			)}
-		</>
+		</section>
 	);
 }
 
