@@ -76,7 +76,7 @@ export default function HomePage() {
 	}, [activeKey]);
 
 	return (
-		<div className="w-full h-full flex overflow-y-hidden">
+		<div className="w-full h-dvh flex">
 			<Sidebar />
 			{isLoading && <div>Loading...</div>}
 			{!!bookshelfData && !isLoading && (

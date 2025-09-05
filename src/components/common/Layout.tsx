@@ -23,7 +23,7 @@ export default function Layout() {
 	}, [isAuthenticated]);
 
 	return (
-		<div className="w-screen h-screen flex flex-col">
+		<div className="w-screen h-auto flex flex-col">
 			<header className="w-screen min-h-15 text-sm bg-slate-50 border-b border-b-slate-200 px-20 flex justify-between">
 				<nav className="flex gap-10 items-center text-slate-900">
 					<Link to="/" className="hover:text-indigo-400">
@@ -39,7 +39,7 @@ export default function Layout() {
 				</button>
 			</header>
 
-			<main className="w-screen h-auto min-h-4/5 bg-slate-50 flex justify-center items-center">
+			<main className="w-screen h-auto overflow-y-scroll min-h-dvh bg-slate-50 flex justify-center items-center">
 				<Outlet />
 			</main>
 			<footer className="p-3 border-t border-slate-200">© Bookit List</footer>

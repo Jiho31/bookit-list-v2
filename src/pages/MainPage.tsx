@@ -110,7 +110,7 @@ function MainPage() {
 	}, [isFormComplete]);
 
 	return (
-		<>
+		<div className="w-full h-auto">
 			{displayContent === 'mainPage' && (
 				<section className="flex flex-col gap-4 text-center">
 					<h1 className="max-w-2/3 self-center text-slate-900 text-6xl font-extrabold">
@@ -150,26 +150,24 @@ function MainPage() {
 			)}
 			{displayContent === 'form' && (
 				<>
-					<div>
-						{!isFormComplete ? (
-							<RecommendationForm
-								questionIndex={questionIndex}
-								userResponse={userResponse}
-								setUserResponse={setUserResponse}
-								setQuestionIndex={setQuestionIndex}
-							/>
-						) : (
-							<BookRecommendations
-								isLoading={isLoading}
-								recommendations={recommendations}
-								refreshForm={refreshForm}
-								shuffleRecommendations={shuffleRecommendations}
-							/>
-						)}
-					</div>
+					{!isFormComplete ? (
+						<RecommendationForm
+							questionIndex={questionIndex}
+							userResponse={userResponse}
+							setUserResponse={setUserResponse}
+							setQuestionIndex={setQuestionIndex}
+						/>
+					) : (
+						<BookRecommendations
+							isLoading={isLoading}
+							recommendations={recommendations}
+							refreshForm={refreshForm}
+							shuffleRecommendations={shuffleRecommendations}
+						/>
+					)}
 				</>
 			)}
-		</>
+		</div>
 	);
 }
 
