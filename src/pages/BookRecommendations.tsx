@@ -25,7 +25,10 @@ function BookRecommendations({
 				<div> Generating recommendations ... </div>
 			) : (
 				<>
-					<Header title="Book recommendations for you 🤗" />
+					<Header
+						className="text-center"
+						title="Book recommendations for you 🤗"
+					/>
 					{isEmpty ? (
 						<div className="text-center text-gray-500 py-10">
 							No books found for your preferences. <br />
