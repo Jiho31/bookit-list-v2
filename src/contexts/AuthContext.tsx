@@ -57,6 +57,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const handleLogout = async () => {
 		try {
 			await logout();
+			// @todo reload page or navigate to main page ?
+			location.reload();
 		} catch (err) {
 			console.error(err);
 		}
