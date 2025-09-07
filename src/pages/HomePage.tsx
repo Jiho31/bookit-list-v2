@@ -82,7 +82,7 @@ export default function HomePage() {
 			{!!bookshelfData && !isLoading && (
 				<Bookshelf
 					{...(bookshelfData as BookshelfItem)}
-					key={bookshelfData.key}
+					bookshelfKey={bookshelfData.key}
 				/>
 			)}
 		</div>
