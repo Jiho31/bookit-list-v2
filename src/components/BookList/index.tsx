@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { Book, BookItem, BookshelfItem } from '../../types';
+import type { Book, CardButton } from '../../types';
 import Modal from '../common/Modal';
 import BookCard from './BookCard';
 import { DEFAULT_BOOKSHELF_KEY } from '../../consts/books';
@@ -50,13 +50,13 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 
 		setBookshelf((prevBookshelf) =>
 			prevBookshelf
-				? {
-						...prevBookshelf,
-						books: [...prevBookshelf.books, newBookItem],
-					}
-				: prevBookshelf,
-		);
-	};
+
+	const buttons: CardButton[] = [
+		{
+			label: 'Add to bookshelf',
+			onClickHandler: addToBookshelf,
+		},
+	];
 
 	return (
 		<>
@@ -68,7 +68,7 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 						key={book.key}
 						book={book}
 						onClickHandler={() => showBookDetails(book)}
-						addToBookshelf={addToBookshelf}
+						buttons={buttons}
 					/>
 				))}
 			</section>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import useOpenLibraryAPI from '../../hooks/useOpenLibraryAPI';
 import fallbackImage from '../../assets/fallbackImage.png';
+import type { CardButton } from '../../types';
 
 function CoverImage({
 	coverEditionKey,
@@ -54,20 +55,33 @@ function CoverImage({
 export default function BookCard({
 	book,
 	onClickHandler,
-	// isBookInBookshelf,
-	addToBookshelf,
+	buttons,
 }: {
 	book: any;
 	onClickHandler: () => void;
-	// isBookInBookshelf: (book: any) => boolean;
-	addToBookshelf?: Function;
+	buttons: CardButton[];
 }) {
+	// @todo add loader
+
+	useEffect(() => {
+		console.log(book, book.length, '<<<<<<<<<< book data in [BookCard]');
+
+		// if book is not empty, load Book component
+		// else, show loading
+		// toast('hi');
+	}, [book]);
+
 	return (
 		<div
 			onClick={onClickHandler}
-			className="flex flex-col bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-103 cursor-pointer overflow-hidden max-w-xs h-90"
+			className="flex flex-col bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-103 cursor-pointer overflow-hidden max-w-xs h-auto"
 		>
-			<CoverImage coverEditionKey={book.coverEditionKey} title={book.title} />
+			<CoverImage
+				coverEditionKey={book.coverEditionKey}
+				coverId={book.coverId}
+				title={book.title}
+				// setIsLoading={setIsLoading}
+			/>
 			<div className="p-4 flex-1 flex flex-col middle min-h-0">
 				<div className="relative group">
 					<h3
@@ -88,14 +102,19 @@ export default function BookCard({
 				{book.publishedYear && (
 					<p className="text-gray-500 text-xs mb-3">{book.publishedYear}</p>
 				)}
-				<button
-					className="mt-auto bg-amber-500 hover:bg-amber-600 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:hover:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
-					// disabled={isBookInBookshelf(book)}
-					onClick={(e) => addToBookshelf(e, book)}
-				>
-					{/* {isBookInBookshelf(book) ? 'Added' : 'Add to bookshelf'} */}
-					Add to bookshelf
-				</button>
+				<div className="flex flex-col gap-1">
+					{buttons.length > 0 &&
+						buttons.map((b: CardButton, idx) => (
+							<button
+								key={idx}
+								type="button"
+								onClick={(e) => b.onClickHandler(e, book)}
+								className="text-sm"
+							>
+								{b.label}
+							</button>
+						))}
+				</div>
 			</div>
 		</div>
 	);

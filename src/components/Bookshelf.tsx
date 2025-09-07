@@ -1,17 +1,31 @@
 import { useEffect, useState } from 'react';
-import type { Book, BookItem, BookshelfItem } from '../types';
+import type { Book, BookItem, BookshelfItem, CardButton } from '../types';
 import BookCard from './BookList/BookCard';
+
+type BookshelfProps = BookshelfItem & {
+	bookshelfKey: string;
+};
 
 export default function Bookshelf({
 	name = '',
 	numOfBooks = 0,
-	key = '',
+	bookshelfKey,
 	books = [],
-}: BookshelfItem) {
+}: BookshelfProps) {
 	const [booksData, setBooksData] = useState<BookItem[]>([]);
 	useEffect(() => {
 		setBooksData(books);
-	}, [key]);
+	}, [bookshelfKey]);
+
+	const buttons: CardButton[] = [
+		{
+			label: 'View details',
+			onClickHandler: () => {
+				console.log('vew detials');
+			},
+			// isDisabled: () => false,
+		},
+	];
 
 	return (
 		<div className="flex flex-col overflow-y-scroll p-10">
@@ -20,8 +34,13 @@ export default function Bookshelf({
 			</h3>
 			{numOfBooks > 0 ? (
 				<section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 p-6 max-w-6xl mx-auto">
-					{booksData.map(({ book: b }: { book: Book }) => (
-						<BookCard book={b} onClickHandler={() => {}} />
+					{booksData.map(({ book: b }: { book: Book }, idx) => (
+						<BookCard
+							key={idx}
+							book={b}
+							onClickHandler={() => {}}
+							buttons={buttons}
+						/>
 					))}
 				</section>
 			) : (

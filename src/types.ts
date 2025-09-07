@@ -82,4 +82,18 @@ type User = {
 	profileImage?: string;
 };
 
-export type { Book, Form, Question, OptionMeta, BookItem, User, BookshelfItem };
+type CardButton = {
+	label: string;
+	onClickHandler: (...args: any[]) => void;
+};
+
+export type {
+	Book,
+	Form,
+	Question,
+	OptionMeta,
+	BookItem,
+	User,
+	BookshelfItem,
+	CardButton,
+};
