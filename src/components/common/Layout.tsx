@@ -1,6 +1,7 @@
 import { Link, Outlet, useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import { Toaster } from 'sonner';
 
 export default function Layout() {
 	const { isAuthenticated, handleLogout } = useAuth();
@@ -43,6 +44,7 @@ export default function Layout() {
 				<Outlet />
 			</main>
 			<footer className="p-3 border-t border-slate-200">© Bookit List</footer>
+			<Toaster />
 		</div>
 	);
 }
