@@ -1,27 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { Book, CardButton } from '../../types';
 import Modal from '../common/Modal';
 import BookCard from './BookCard';
 import { DEFAULT_BOOKSHELF_KEY } from '../../consts/books';
 import { useBookshelf } from '../../contexts/BookshelfContext';
+import { toast } from 'sonner';
 
 function BookList({ recommendations }: { recommendations: Book[] }) {
 	const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [bookshelf, setBookshelf] = useState<BookshelfItem | null>(null);
-	const { fetchBookshelf, addBookToShelf } = useBookshelf();
-
-	const initDefaultBookshelf = async () => {
-		const initBookshelf = await fetchBookshelf(DEFAULT_BOOKSHELF_KEY);
-
-		if (initBookshelf) {
-			setBookshelf(initBookshelf);
-		}
-	};
-
-	useEffect(() => {
-		initDefaultBookshelf();
-	}, []);
+	const { addBookToShelf } = useBookshelf();
 
 	const closeModal = () => {
 		setIsModalOpen(false);
@@ -37,19 +25,20 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 		book: Book,
 	) => {
 		e.stopPropagation();
-		const ok = await confirm('Add book to default bookshelf?');
-		if (!ok) return;
+		try {
+			const ok = await confirm('Add book to default bookshelf?');
+			if (!ok) return;
 
-		const newBookItem: BookItem = {
-			id: book.key || 'UNKNOWN_KEY',
-			book,
-			createdAt: new Date().toISOString(),
-			updatedAt: new Date().toISOString(),
-		};
-		await addBookToShelf(DEFAULT_BOOKSHELF_KEY, newBookItem);
-
-		setBookshelf((prevBookshelf) =>
-			prevBookshelf
+			// console.log(book, '########### add BOOK');
+			await addBookToShelf(DEFAULT_BOOKSHELF_KEY, book);
+		} catch (err) {
+			if (typeof err === 'string') {
+				toast.info(err);
+			} else {
+				console.error(err);
+			}
+		}
+	};
 
 	const buttons: CardButton[] = [
 		{

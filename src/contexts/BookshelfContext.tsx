@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import type { BookItem, BookshelfItem } from '../types';
+import type { Book, BookItem, BookshelfItem } from '../types';
 import { DEFAULT_BOOKSHELF_KEY } from '../consts/books';
 import { useAuth } from './AuthContext';
 import {
@@ -13,6 +13,7 @@ import {
 	where,
 } from 'firebase/firestore';
 import { firebaseDB } from '../plugins/fbase';
+import { toast } from 'sonner';
 
 type BookshelfCtx = {
 	activeKey: string;
@@ -21,7 +22,7 @@ type BookshelfCtx = {
 	fetchBookshelf: (bookshelfKey: string) => Promise<BookshelfItem | null>;
 	fetchBookshelfList: () => Promise<void>;
 	createBookshelf: (name: string) => void;
-	addBookToShelf: (bookshelfKey: string, book: BookItem) => Promise<void>;
+	addBookToShelf: (bookshelfKey: string, book: Book) => Promise<void>;
 	removeFromBookshelf: (bookshelfKey: string, bookKey: string) => Promise<void>;
 	isLoading: boolean;
 	// deleteBookshelf: (key: string) => Promise<void>;
@@ -77,7 +78,6 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const fetchBookshelf = async (bookshelfKey: string) => {
 		if (!userInfo?.uid) {
-			console.log('Invalid userInfo');
 			return {};
 		}
 
@@ -158,7 +158,14 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	};
 
-	const addBookToShelf = async (bookshelfKey: string, book: BookItem) => {
+	const getBookItemFormat = (book: Book): BookItem => ({
+		id: `${book.key}-${new Date().toISOString()}` || 'UNKNOWN_KEY',
+		book,
+		createdAt: new Date().toISOString(),
+		updatedAt: new Date().toISOString(),
+	});
+
+	const addBookToShelf = async (bookshelfKey: string, book: Book) => {
 		if (!userInfo?.uid) {
 			throw new Error('User not authenticated');
 		}
@@ -189,20 +196,31 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 
 			// Get current books array and add the new book
 			const currentData = bookshelfDoc.data();
-			const updatedBooks = [...(currentData.books || []), book];
+			const updatedBooks = [
+				...(currentData.books || []),
+				getBookItemFormat(book),
+			];
 
-			// Update the bookshelf document
+			if (!bookshelfRef) {
+				throw new Error('Error referencing target bookshelf');
+			}
+
+			console.log('#######11111 update doc', updatedBooks);
+
 			await updateDoc(bookshelfRef, {
 				books: updatedBooks,
 				numOfBooks: updatedBooks.length,
 				updatedAt: serverTimestamp(),
 			});
 
+			toast.success('Successfully added to bookshelf');
+
 			// Refresh the bookshelf list
 			await fetchBookshelfList();
 		} catch (err) {
-			console.error('Error adding book to bookshelf:', err);
-			throw err;
+			// console.error('Error adding book to bookshelf:', err);
+			toast.error(`Error: ${err as string}`);
+			// throw err;
 		}
 	};
 
