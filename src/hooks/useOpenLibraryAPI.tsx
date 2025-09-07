@@ -28,8 +28,18 @@ function useOpenLibraryAPI() {
 	};
 
 	// https://covers.openlibrary.org/b/$key/$value-$size.jpg
-	const getBookCoverImage = (key: string) =>
-		`https://covers.openlibrary.org/b/olid/${key}.jpg`;
+	const getBookCoverImage = ({
+		key,
+		id,
+	}: {
+		key: string | null;
+		id: number | null;
+	}) =>
+		typeof id === 'number'
+			? `https://covers.openlibrary.org/b/id/${id}.jpg`
+			: typeof key === 'string'
+				? `https://covers.openlibrary.org/b/olid/${key}.jpg`
+				: '/fallbackImage.png';
 
 	return {
 		search,

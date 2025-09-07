@@ -5,24 +5,25 @@ import type { CardButton } from '../../types';
 
 function CoverImage({
 	coverEditionKey,
+	coverId,
 	title,
+	// setIsLoading,
 }: {
-	coverEditionKey: string;
+	coverEditionKey: string | null;
+	coverId: number | null;
 	title: string;
+	// setIsLoading: Function;
 }) {
 	const { getBookCoverImage } = useOpenLibraryAPI();
 	const [imageStatus, setImageStatus] = useState('loading');
 
 	useEffect(() => {
-		if (
-			!coverEditionKey ||
-			coverEditionKey === 'undefined' ||
-			coverEditionKey === 'null'
-		) {
-			console.log(`[${title}] Invalid cover key:`, coverEditionKey);
+		// setIsLoading(true);
+		if (!coverId) {
+			console.log(`[${title}] Invalid cover id:`, coverId);
 			setImageStatus('failed');
 		}
-	}, [coverEditionKey, title]);
+	}, [coverId, title]);
 
 	const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
 		const img = e.target as HTMLImageElement;
@@ -40,7 +41,7 @@ function CoverImage({
 			{imageStatus === 'loading' && <div>Loading...</div>}
 			<img
 				className={`w-full h-full object-cover ${imageStatus === 'failed' && 'hidden'}`}
-				src={getBookCoverImage(coverEditionKey)}
+				src={getBookCoverImage({ key: coverEditionKey, id: coverId })}
 				alt={`Cover of ${title}`}
 				onLoad={handleImageLoad}
 				onError={() => setImageStatus('failed')}

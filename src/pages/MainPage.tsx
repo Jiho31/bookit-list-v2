@@ -51,6 +51,7 @@ function MainPage() {
 					cover_edition_key,
 					first_publish_year,
 					key,
+					cover_i,
 					...rest
 				}: any) => ({
 					...rest,
@@ -58,7 +59,8 @@ function MainPage() {
 					title,
 					key,
 					publishedYear: first_publish_year,
-					coverEditionKey: cover_edition_key,
+					// coverEditionKey: cover_edition_key || null,
+					coverId: cover_i || null,
 				}),
 			);
 

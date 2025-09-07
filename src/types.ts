@@ -4,7 +4,8 @@ type Book = {
 	key: string;
 	author: string;
 	title: string;
-	coverEditionKey: string;
+	coverEditionKey?: string;
+	coverId?: number;
 	publishedYear: number;
 };
 
