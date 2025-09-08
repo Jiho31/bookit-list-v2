@@ -29,12 +29,17 @@ function Sidebar() {
 					{parsedMenuList?.length > 0 &&
 						parsedMenuList.map((data) => (
 							<li
-								className={`p-4 pl-8 hover:bg-indigo-100 hover:cursor-pointer hover:scale-101 ${activeKey === data.key && 'font-medium bg-indigo-200'}`}
+								className={`flex justify-between items-center p-4 pl-8 hover:bg-indigo-100 hover:cursor-pointer hover:scale-101 ${activeKey === data.key && 'font-medium bg-indigo-200'}`}
 								key={data.key}
 								id={data.key}
 								onClick={() => setActiveKey(data.key)}
 							>
-								{data.name} ({data.numOfBooks})
+								<span>{data.name}</span>
+								<span
+									className={`w-10 h-6 inline-flex justify-center items-center text-sm rounded-2xl bg-slate-300  ${activeKey === data.key && 'text-amber-50 bg-slate-400'} `}
+								>
+									{data.numOfBooks}
+								</span>
 							</li>
 						))}
 				</ul>
@@ -46,8 +51,21 @@ function Sidebar() {
 					+ New Bookshelf
 				</button>
 			</div>
+			<div className="mx-auto my-2 w-full h-[1px] bg-slate-200 block"></div>
 			<div>
 				<p className="px-6 py-4 font-semibold">My Notes</p>
+				<ul className="flex flex-col">
+					<li
+						className={`flex justify-between items-center p-4 pl-8 hover:bg-indigo-100 hover:cursor-pointer hover:scale-101 `}
+					>
+						Recent Notes
+					</li>
+					<li
+						className={`flex justify-between items-center p-4 pl-8 hover:bg-indigo-100 hover:cursor-pointer hover:scale-101 `}
+					>
+						Favorites ⭐️
+					</li>
+				</ul>
 			</div>
 		</section>
 	);
