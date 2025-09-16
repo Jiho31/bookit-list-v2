@@ -103,14 +103,14 @@ export default function BookCard({
 				{book.publishedYear && (
 					<p className="text-gray-500 text-xs mb-3">{book.publishedYear}</p>
 				)}
-				<div className="flex flex-col gap-1">
+				<div className="flex flex-row gap-1">
 					{buttons.length > 0 &&
 						buttons.map((b: CardButton, idx) => (
 							<button
 								key={idx}
 								type="button"
 								onClick={(e) => b.onClickHandler(e, book)}
-								className="text-sm"
+								className="text-sm flex-1/2"
 							>
 								{b.label}
 							</button>
