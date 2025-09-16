@@ -269,7 +269,6 @@ function UserAuthForm() {
 
 	return (
 		<section className="flex my-20 h-[400px] min-h-1/2 w-[700px] min-w-50vw max-w-90vw gap-10 p-10 bg-white border border-slate-200 rounded-3xl">
-			{/* logo!! other info letters */}
 			<div className="w-1/2 flex flex-col gap-3 items-center text-center">
 				<img
 					className="w-50 h-auto self-center"
@@ -277,7 +276,6 @@ function UserAuthForm() {
 					alt="Bookit List logo"
 				/>
 				<h2 className="text-xl font-semibold mb-3">Welcome to Bookit List!</h2>
-				{/* <div className="text-2xl">📚 ✨ ❤️ 📖 💡</div> */}
 				<p>Sign in or get registered to create your personal bookshelves!</p>
 			</div>
 
