@@ -2,7 +2,6 @@ import { useState } from 'react';
 import type { Book, CardButton } from '../../types';
 import Modal from '../common/Modal';
 import BookCard from './BookCard';
-import { DEFAULT_BOOKSHELF_KEY } from '../../consts/books';
 import { useBookshelf } from '../../contexts/BookshelfContext';
 import { toast } from 'sonner';
 
@@ -22,15 +21,16 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 
 	const addToBookshelf = async (
 		e: React.MouseEvent<HTMLButtonElement>,
-		book: Book,
+		{ book }: { book: Book },
 	) => {
 		e.stopPropagation();
+
 		try {
 			const ok = await confirm('Add book to default bookshelf?');
 			if (!ok) return;
 
-			// console.log(book, '########### add BOOK');
-			await addBookToShelf(DEFAULT_BOOKSHELF_KEY, book);
+			// await addBookToShelf(DEFAULT_BOOKSHELF_KEY, book);
+			await addBookToShelf(book);
 		} catch (err) {
 			if (typeof err === 'string') {
 				toast.info(err);
