@@ -4,6 +4,7 @@ import { DEFAULT_BOOKSHELF_KEY } from '../consts/books';
 import { useAuth } from './AuthContext';
 import {
 	addDoc,
+	setDoc,
 	collection,
 	doc,
 	serverTimestamp,
@@ -11,9 +12,14 @@ import {
 	getDocs,
 	query,
 	where,
+	deleteDoc,
+	increment,
 } from 'firebase/firestore';
 import { firebaseDB } from '../plugins/fbase';
 import { toast } from 'sonner';
+
+// Ensure a Firestore-safe document id from external book keys (no slashes)
+const toSafeDocId = (raw: string) => Date.now() + raw.replaceAll('/', '_');
 
 type BookshelfCtx = {
 	activeKey: string;
@@ -22,10 +28,11 @@ type BookshelfCtx = {
 	fetchBookshelf: (bookshelfKey: string) => Promise<BookshelfItem | null>;
 	fetchBookshelfList: () => Promise<void>;
 	createBookshelf: (name: string) => void;
-	addBookToShelf: (bookshelfKey: string, book: Book) => Promise<void>;
-	removeFromBookshelf: (bookshelfKey: string, bookKey: string) => Promise<void>;
+	addBookToShelf: (book: Book) => Promise<void>;
+	removeBookFromShelf: (bookshelfKey: string, bookKey: string) => Promise<void>;
 	isLoading: boolean;
-	// deleteBookshelf: (key: string) => Promise<void>;
+	updateBookshelf: (bookshelfKey: string, name: string) => Promise<void>;
+	deleteBookshelf: (bookshelfKey: string) => Promise<void>;
 	// error: Error | null;
 };
 
@@ -36,6 +43,8 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 	const [bookshelfList, setBookshelfList] = useState<BookshelfItem[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const { userInfo, isAuthenticated } = useAuth();
+
+	const generateBookshelfKey = () => `bookshelf_${Date.now()}`;
 
 	const fetchBookshelfList = async () => {
 		setIsLoading(true);
@@ -53,23 +62,21 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 			const querySnapshot = await getDocs(bookshelvesRef);
 
 			const bookshelves: BookshelfItem[] = [];
-			querySnapshot.forEach((doc) => {
-				const data = doc.data();
+			querySnapshot.forEach((docSnap) => {
+				const data = docSnap.data();
 				bookshelves.push({
 					key: data.key,
 					name: data.name,
-					books: data.books || [],
+					books: [],
 					numOfBooks: data.numOfBooks || 0,
 					createdAt: data.createdAt,
 					updatedAt: data.updatedAt,
 				});
 			});
 
-			// console.log('Fetched bookshelves from subcollection:', bookshelves);
 			setBookshelfList(bookshelves);
 		} catch (error) {
 			console.error('Error fetching bookshelves:', error);
-			// Set empty list on error
 			setBookshelfList([]);
 		} finally {
 			setIsLoading(false);
@@ -78,36 +85,43 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 
 	const fetchBookshelf = async (bookshelfKey: string) => {
 		if (!userInfo?.uid) {
-			return {};
+			return null;
 		}
 
 		try {
-			// Query the bookshelves subcollection to find the specific bookshelf by key
-			const bookshelvesRef = collection(
+			// bookshelf doc id equals bookshelfKey
+			const booksCol = collection(
 				firebaseDB,
 				'users',
 				userInfo.uid,
 				'bookshelves',
+				bookshelfKey,
+				'books',
 			);
-			const q = query(bookshelvesRef, where('key', '==', bookshelfKey));
-			const querySnapshot = await getDocs(q);
+			const booksSnap = await getDocs(booksCol);
+			const books: BookItem[] = [];
+			booksSnap.forEach((b) => {
+				const data = b.data() as BookItem;
+				books.push({ ...data });
+			});
 
-			if (!querySnapshot.empty) {
-				const doc = querySnapshot.docs[0];
-				const data = doc.data();
-				// console.log('Found bookshelf:', data);
-				return {
-					key: data.key,
-					name: data.name,
-					books: data.books || [],
-					numOfBooks: data.numOfBooks || 0,
-					createdAt: data.createdAt,
-					updatedAt: data.updatedAt,
-				};
-			} else {
-				console.log('Bookshelf not found with key:', bookshelfKey);
-				return null;
-			}
+			// read shelf meta
+			const shelfQuery = query(
+				collection(firebaseDB, 'users', userInfo.uid, 'bookshelves'),
+				where('key', '==', bookshelfKey),
+			);
+			const shelfQuerySnap = await getDocs(shelfQuery);
+			if (shelfQuerySnap.empty) return null;
+			const shelfData = shelfQuerySnap.docs[0].data();
+
+			return {
+				key: shelfData.key,
+				name: shelfData.name,
+				books,
+				numOfBooks: shelfData.numOfBooks || books.length,
+				createdAt: shelfData.createdAt,
+				updatedAt: shelfData.updatedAt,
+			};
 		} catch (error) {
 			console.error('Error fetching bookshelf:', error);
 			return null;
@@ -117,7 +131,6 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 	useEffect(() => {
 		if (isAuthenticated && userInfo?.uid) {
 			setActiveKey(DEFAULT_BOOKSHELF_KEY);
-			// Fetch bookshelves with a small delay to ensure database operations complete
 			const timer = setTimeout(() => {
 				fetchBookshelfList();
 			}, 1500);
@@ -133,14 +146,17 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 
 		try {
-			const bookshelvesRef = collection(
+			const newKey = generateBookshelfKey();
+			const shelfRef = doc(
 				firebaseDB,
 				'users',
 				userInfo.uid,
 				'bookshelves',
+				newKey,
 			);
+
 			const newBookshelfData = {
-				key: `bookshelf_${Date.now()}`, // Generate a unique key
+				key: newKey,
 				name,
 				books: [],
 				numOfBooks: 0,
@@ -148,84 +164,126 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 				updatedAt: serverTimestamp(),
 			};
 
-			await addDoc(bookshelvesRef, newBookshelfData);
-			console.log('[CREATE BOOKSHELF]', name, 'successfully created');
-
-			// Refresh the bookshelf list
+			await setDoc(shelfRef, newBookshelfData);
 			await fetchBookshelfList();
 		} catch (error) {
 			console.error('Error creating bookshelf:', error);
 		}
 	};
 
-	const getBookItemFormat = (book: Book): BookItem => ({
-		id: `${book.key}-${new Date().toISOString()}` || 'UNKNOWN_KEY',
+	const getBookItemFormat = (id: string, book: Book): BookItem => ({
+		id,
 		book,
 		createdAt: new Date().toISOString(),
 		updatedAt: new Date().toISOString(),
 	});
 
-	const addBookToShelf = async (bookshelfKey: string, book: Book) => {
+	const updateBookshelf = async (bookshelfKey: string, name: string) => {
+		try {
+			if (!userInfo?.uid) throw new Error('User not authenticated');
+			const shelfRef = doc(
+				firebaseDB,
+				'users',
+				userInfo.uid,
+				'bookshelves',
+				bookshelfKey,
+			);
+			await updateDoc(shelfRef, { name, updatedAt: serverTimestamp() });
+			await fetchBookshelfList();
+			toast.success('Bookshelf updated');
+		} catch (err) {
+			console.error(err);
+			toast.error('Failed to update bookshelf');
+		}
+	};
+
+	const deleteBookshelf = async (bookshelfKey: string) => {
+		try {
+			if (!userInfo?.uid) throw new Error('User not authenticated');
+			await deleteDoc(
+				doc(firebaseDB, 'users', userInfo.uid, 'bookshelves', bookshelfKey),
+			);
+			await fetchBookshelfList();
+			toast.success('Bookshelf deleted');
+		} catch (err) {
+			console.error(err);
+			toast.error('Failed to delete bookshelf');
+		}
+	};
+
+	const removeBookFromShelf = async (bookshelfKey: string, bookKey: string) => {
+		if (!userInfo?.uid) {
+			toast('Invalid user object');
+			return;
+		}
+
+		try {
+			const bookRef = doc(
+				firebaseDB,
+				'users',
+				userInfo.uid,
+				'bookshelves',
+				bookshelfKey,
+				'books',
+				// toSafeDocId(bookKey),
+				bookKey,
+			);
+			await deleteDoc(bookRef);
+
+			const shelfRef = doc(
+				firebaseDB,
+				'users',
+				userInfo.uid,
+				'bookshelves',
+				bookshelfKey,
+			);
+			await updateDoc(shelfRef, {
+				numOfBooks: increment(-1),
+				updatedAt: serverTimestamp(),
+			});
+			toast.success('Book removed');
+			await fetchBookshelfList();
+		} catch (err) {
+			console.error(err);
+			toast.error('Failed to remove book');
+		}
+	};
+
+	const addBookToShelf = async (book: Book) => {
 		if (!userInfo?.uid) {
 			throw new Error('User not authenticated');
 		}
 
 		try {
-			// First, find the bookshelf document by its key
-			const bookshelvesRef = collection(
+			const targetShelfKey = activeKey || DEFAULT_BOOKSHELF_KEY;
+			const booksColRef = collection(
 				firebaseDB,
 				'users',
 				userInfo.uid,
 				'bookshelves',
+				targetShelfKey,
+				'books',
 			);
-			const q = query(bookshelvesRef, where('key', '==', bookshelfKey));
-			const querySnapshot = await getDocs(q);
+			const safeId = toSafeDocId(book.key || 'UNKNOWN_KEY');
+			await setDoc(doc(booksColRef, safeId), getBookItemFormat(safeId, book));
 
-			if (querySnapshot.empty) {
-				throw new Error('Bookshelf not found');
-			}
-
-			const bookshelfDoc = querySnapshot.docs[0];
-			const bookshelfRef = doc(
+			const shelfRef = doc(
 				firebaseDB,
 				'users',
 				userInfo.uid,
 				'bookshelves',
-				bookshelfDoc.id,
+				targetShelfKey,
 			);
-
-			// Get current books array and add the new book
-			const currentData = bookshelfDoc.data();
-			const updatedBooks = [
-				...(currentData.books || []),
-				getBookItemFormat(book),
-			];
-
-			if (!bookshelfRef) {
-				throw new Error('Error referencing target bookshelf');
-			}
-
-			console.log('#######11111 update doc', updatedBooks);
-
-			await updateDoc(bookshelfRef, {
-				books: updatedBooks,
-				numOfBooks: updatedBooks.length,
+			await updateDoc(shelfRef, {
+				numOfBooks: increment(1),
 				updatedAt: serverTimestamp(),
 			});
 
 			toast.success('Successfully added to bookshelf');
-
-			// Refresh the bookshelf list
 			await fetchBookshelfList();
 		} catch (err) {
-			// console.error('Error adding book to bookshelf:', err);
 			toast.error(`Error: ${err as string}`);
-			// throw err;
 		}
-	};
-
-	const removeFromBookshelf = (bookshelfKey: string, bookKey: string) => {
-		return Promise.resolve();
 	};
 
 	return (
@@ -237,8 +295,10 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 				fetchBookshelf,
 				fetchBookshelfList,
 				createBookshelf,
+				updateBookshelf,
+				deleteBookshelf,
 				addBookToShelf,
-				removeFromBookshelf,
+				removeBookFromShelf,
 				isLoading,
 			}}
 		>
