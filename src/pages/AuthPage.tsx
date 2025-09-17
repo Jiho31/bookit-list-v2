@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import useFirebaseAuth from '../hooks/useFirebaseAuth.tsx';
+import { toast } from 'sonner';
 
 const SignupForm = () => {
 	const [email, setEmail] = useState('');
@@ -43,7 +44,9 @@ const SignupForm = () => {
 
 		try {
 			const userCredential = await createUserWithEmail(email, password);
-			handleRegister(userCredential);
+
+			await handleRegister(userCredential.user);
+			toast.success('Successfully registered new user.');
 		} catch (error: any) {
 			setError(error.message);
 		}
@@ -165,6 +168,7 @@ const LoginForm = () => {
 				response.additionalInfo?.isNewUser
 			) {
 				handleRegister(response.userCredential.user);
+				toast.success('Successfully registered new user.');
 			}
 		} catch (err) {
 			console.error(err);
