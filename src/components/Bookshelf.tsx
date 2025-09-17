@@ -17,7 +17,8 @@ export default function Bookshelf({
 	const [booksData, setBooksData] = useState<BookItem[]>([]);
 	const [nameInput, setNameInput] = useState(name);
 	const [isEditing, setIsEditing] = useState(false);
-	const { deleteBookshelf, removeBookFromShelf } = useBookshelf();
+	const { deleteBookshelf, removeBookFromShelf, updateBookshelf } =
+		useBookshelf();
 
 	useEffect(() => {
 		setBooksData(books);
@@ -31,7 +32,37 @@ export default function Bookshelf({
 		setNameInput(e.target.value);
 	};
 
-	const handleEditClick = () => setIsEditing((val) => !val);
+	const validateNameValue = (name: string) => {
+		if (name === '' || /\//.test(name)) {
+			return false;
+		}
+
+		return true;
+	};
+
+	const handleSave = async () => {
+		const newName = nameInput.trim();
+
+		if (!validateNameValue(newName)) {
+			toast.info('Bookshelf name cannot involve character(/) or be empty');
+			return;
+		}
+
+		try {
+			await updateBookshelf(bookshelfKey, newName);
+			setIsEditing((val) => !val);
+		} catch (err) {
+			toast.error(err as string);
+		}
+	};
+
+	const handleEditClick = () => {
+		if (isEditing) {
+			handleSave();
+		} else {
+			setIsEditing((val) => !val);
+		}
+	};
 
 	const handleDeleteClick = async () => {
 		const ok = confirm('Do you really want to delete this bookshelf?');

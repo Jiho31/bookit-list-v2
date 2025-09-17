@@ -193,7 +193,6 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 			toast.success('Bookshelf updated');
 		} catch (err) {
 			console.error(err);
-			toast.error('Failed to update bookshelf');
 		}
 	};
 
