@@ -1,15 +1,10 @@
 import { createContext, useContext } from 'react';
 import useFirebaseAuth from '../hooks/useFirebaseAuth';
 import type { User } from '../types';
-import {
-	addDoc,
-	collection,
-	doc,
-	serverTimestamp,
-	setDoc,
-} from 'firebase/firestore';
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { firebaseDB } from '../plugins/fbase';
-import { DEFAULT_BOOKSHELF_ITEM, DEFAULT_BOOKSHELF_KEY } from '../consts/books';
+import { createBookshelfForUser } from '../services/bookshelf';
+import { DEFAULT_BOOKSHELF_KEY, DEFAULT_BOOKSHELF_ITEM } from '../consts/books';
 
 type AuthCtx = {
 	userInfo: User | undefined;
@@ -23,20 +18,6 @@ const AuthContext = createContext<AuthCtx | undefined>(undefined);
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const { userInfo, isAuthenticated, logout } = useFirebaseAuth();
 
-	const createDefaultBookshelf = async (uid: string) => {
-		const shelvesRef = collection(firebaseDB, 'users', uid, 'bookshelves');
-		await addDoc(shelvesRef, {
-			key: DEFAULT_BOOKSHELF_KEY,
-			name: DEFAULT_BOOKSHELF_ITEM.name,
-			books: [],
-			numOfBooks: 0,
-			createdAt: serverTimestamp(),
-			updatedAt: serverTimestamp(),
-		});
-
-		console.log('Default bookshelf created successfully');
-	};
-
 	// handleNewUser
 	const handleRegister = async ({ uid }: { uid: string }) => {
 		const newUserData = {
@@ -44,11 +25,17 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		};
 
 		try {
-			// Create the user document
+			if (!uid) {
+				throw new Error('user credential is invalid');
+			}
 			await setDoc(doc(firebaseDB, 'users', uid), newUserData);
 
-			// Create the default bookshelf as a subcollection
-			await createDefaultBookshelf(uid);
+			// Create the default bookshelf using shared service
+			await createBookshelfForUser({
+				uid,
+				key: DEFAULT_BOOKSHELF_KEY,
+				name: DEFAULT_BOOKSHELF_ITEM.name,
+			});
 		} catch (e) {
 			console.error('Error in new user registration: ', e);
 		}
