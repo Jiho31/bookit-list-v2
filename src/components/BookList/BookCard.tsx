@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import useOpenLibraryAPI from '../../hooks/useOpenLibraryAPI';
 import fallbackImage from '../../assets/fallbackImage.png';
-import type { CardButton } from '../../types';
+import type { BookItem, CardButton } from '../../types';
 
 function CoverImage({
 	coverEditionKey,
@@ -54,23 +54,25 @@ function CoverImage({
 }
 
 export default function BookCard({
+	data,
 	book,
 	onClickHandler,
 	buttons,
 }: {
+	data?: BookItem;
 	book: any;
 	onClickHandler: () => void;
 	buttons: CardButton[];
 }) {
 	// @todo add loader
 
-	useEffect(() => {
-		console.log(book, book.length, '<<<<<<<<<< book data in [BookCard]');
+	// useEffect(() => {
+	// 	console.log(data, book, book.length, '<<<<<<<<<< book data in [BookCard]');
 
-		// if book is not empty, load Book component
-		// else, show loading
-		// toast('hi');
-	}, [book]);
+	// 	// if book is not empty, load Book component
+	// 	// else, show loading
+	// 	// toast('hi');
+	// }, [book]);
 
 	return (
 		<div
@@ -109,7 +111,7 @@ export default function BookCard({
 							<button
 								key={idx}
 								type="button"
-								onClick={(e) => b.onClickHandler(e, book)}
+								onClick={(e) => b.onClickHandler(e, { data, book })}
 								className="text-sm flex-1/2"
 							>
 								{b.label}
