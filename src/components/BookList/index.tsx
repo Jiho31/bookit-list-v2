@@ -1,22 +1,27 @@
-import { useState } from 'react';
 import type { Book, CardButton } from '../../types';
-import Modal from '../common/Modal';
 import BookCard from './BookCard';
 import { useBookshelf } from '../../contexts/BookshelfContext';
 import { toast } from 'sonner';
+import { useModal } from '../../contexts/ModalContext';
+
+function BookDetailsModal({ book, close }: { book: Book; close: () => void }) {
+	return (
+		<div>
+			<p>Author: {book.author}</p>
+			<p>Title: {book.title}</p>
+			<button className="mt-4" onClick={close}>
+				Close
+			</button>
+		</div>
+	);
+}
 
 function BookList({ recommendations }: { recommendations: Book[] }) {
-	const [selectedBook, setSelectedBook] = useState<Book | null>(null);
-	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { addBookToShelf } = useBookshelf();
-
-	const closeModal = () => {
-		setIsModalOpen(false);
-	};
+	const { openModal } = useModal();
 
 	const showBookDetails = (book: Book) => {
-		setSelectedBook(book);
-		setIsModalOpen(true);
+		openModal({ component: BookDetailsModal, props: { book } });
 	};
 
 	const addToBookshelf = async (
@@ -48,26 +53,16 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 	];
 
 	return (
-		<>
-			<section
-				className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-5xl sm:max-w-full mx-auto ${isModalOpen && 'overflow-hidden'}`}
-			>
-				{recommendations.map((book) => (
-					<BookCard
-						key={book.key}
-						book={book}
-						onClickHandler={() => showBookDetails(book)}
-						buttons={buttons}
-					/>
-				))}
-			</section>
-			<Modal isOpen={isModalOpen} onClose={closeModal}>
-				<div>
-					<p>Author: {selectedBook?.author}</p>
-					<p>Title: {selectedBook?.title}</p>
-				</div>
-			</Modal>
-		</>
+		<section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-5xl sm:max-w-full mx-auto">
+			{recommendations.map((book) => (
+				<BookCard
+					key={book.key}
+					book={book}
+					onClickHandler={() => showBookDetails(book)}
+					buttons={buttons}
+				/>
+			))}
+		</section>
 	);
 }
 
