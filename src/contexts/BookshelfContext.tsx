@@ -28,7 +28,7 @@ type BookshelfCtx = {
 	fetchBookshelf: (bookshelfKey: string) => Promise<BookshelfItem | null>;
 	fetchBookshelfList: () => Promise<void>;
 	createBookshelf: (name: string) => void;
-	addBookToShelf: (book: Book) => Promise<void>;
+	addBookToShelf: (bookshelfKey: string, book: Book) => Promise<void>;
 	removeBookFromShelf: (bookshelfKey: string, bookKey: string) => Promise<void>;
 	isLoading: boolean;
 	updateBookshelf: (bookshelfKey: string, name: string) => Promise<void>;
@@ -248,13 +248,13 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	};
 
-	const addBookToShelf = async (book: Book) => {
+	const addBookToShelf = async (bookshelfKey: string, book: Book) => {
 		if (!userInfo?.uid) {
 			throw new Error('User not authenticated');
 		}
 
 		try {
-			const targetShelfKey = activeKey || DEFAULT_BOOKSHELF_KEY;
+			const targetShelfKey = bookshelfKey || DEFAULT_BOOKSHELF_KEY;
 			const booksColRef = collection(
 				firebaseDB,
 				'users',
