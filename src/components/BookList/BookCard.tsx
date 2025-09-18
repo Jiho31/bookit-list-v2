@@ -61,7 +61,7 @@ export default function BookCard({
 }: {
 	data?: BookItem;
 	book: any;
-	onClickHandler: () => void;
+	onClickHandler?: () => void;
 	buttons: CardButton[];
 }) {
 	// @todo add loader
@@ -77,7 +77,7 @@ export default function BookCard({
 	return (
 		<div
 			onClick={onClickHandler}
-			className="flex flex-col bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-103 cursor-pointer overflow-hidden max-w-xs h-auto"
+			className="flex flex-col bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-103 overflow-hidden max-w-xs h-auto"
 		>
 			<CoverImage
 				coverEditionKey={book.coverEditionKey}
