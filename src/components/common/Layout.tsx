@@ -2,6 +2,7 @@ import { Link, Outlet, useNavigate } from 'react-router';
 import { useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Toaster } from 'sonner';
+import ModalRoot from './ModalRoot';
 
 export default function Layout() {
 	const { isAuthenticated, handleLogout } = useAuth();
@@ -24,7 +25,7 @@ export default function Layout() {
 	}, [isAuthenticated]);
 
 	return (
-		<div className="w-screen h-auto flex flex-col">
+		<div id="app-container" className="w-screen h-auto flex flex-col">
 			<header className="w-screen min-h-15 text-sm bg-slate-50 border-b border-b-slate-200 px-20 flex justify-between">
 				<nav className="flex gap-10 items-center text-slate-900">
 					<Link to="/" className="hover:text-indigo-400">
@@ -45,6 +46,7 @@ export default function Layout() {
 			</main>
 			<footer className="p-3 border-t border-slate-200">© Bookit List</footer>
 			<Toaster />
+			<ModalRoot />
 		</div>
 	);
 }
