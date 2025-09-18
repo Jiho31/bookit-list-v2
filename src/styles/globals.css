@@ -17,9 +17,13 @@
 
     --primary-border-color: border-slate-200; */
   }
+  :root:has(.no-doc-scroll) {
+    overflow: hidden;
+  }
 
   button {
     width: auto;
+    font-size: 14px;
     border-radius: var(--radius-lg);
     padding: calc(var(--spacing)*2) calc(var(--spacing)*4);
     color: var(--color-indigo-50);
