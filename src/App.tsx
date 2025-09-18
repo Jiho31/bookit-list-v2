@@ -5,6 +5,7 @@ import AuthPage from './pages/AuthPage';
 import HomePage from './pages/HomePage';
 import { AuthProvider } from './contexts/AuthContext';
 import { BookshelfProvider } from './contexts/BookshelfContext';
+import { ModalProvider } from './contexts/ModalContext';
 
 const router = createBrowserRouter([
 	{
@@ -24,7 +25,9 @@ function App() {
 	return (
 		<AuthProvider>
 			<BookshelfProvider>
-				<RouterProvider router={router} />
+				<ModalProvider>
+					<RouterProvider router={router} />
+				</ModalProvider>
 			</BookshelfProvider>
 		</AuthProvider>
 	);
