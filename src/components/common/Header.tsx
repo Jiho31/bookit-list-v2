@@ -1,4 +1,3 @@
-// function Header({ children }: { children: React.ReactNode }) {
 function Header({
 	title,
 	className: classProps,
@@ -9,7 +8,7 @@ function Header({
 	return (
 		<>
 			<p
-				className={`py-10 text-2xl text-slate-900 underline font-bold ${classProps}`}
+				className={`py-10 text-2xl text-slate-900 font-semibold ${classProps}`}
 			>
 				{title}
 			</p>
