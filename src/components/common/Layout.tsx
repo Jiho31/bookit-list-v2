@@ -5,7 +5,7 @@ import { Toaster } from 'sonner';
 import ModalRoot from './ModalRoot';
 
 export default function Layout() {
-	const { isAuthenticated, handleLogout } = useAuth();
+	const { isAuthenticated, handleLogout, userInfo } = useAuth();
 	const navigate = useNavigate();
 
 	const handleClick = () => {
@@ -36,9 +36,32 @@ export default function Layout() {
 						Home
 					</Link>
 				</nav>
-				<button className="h-fit text-sm self-center" onClick={handleClick}>
-					{isAuthenticated ? <span>Logout </span> : <span>Login → </span>}
-				</button>
+				<div className="flex align-middle items-center gap-4">
+					{isAuthenticated && (
+						<span>Hello, {userInfo?.displayName || userInfo?.email}!</span>
+					)}
+					<button className="h-fit text-sm self-center" onClick={handleClick}>
+						{isAuthenticated ? (
+							<span className="inline-flex text-white gap-1 align-middle">
+								<svg
+									className="fill-current"
+									role="img"
+									aria-labelledby="logout-button"
+									xmlns="http://www.w3.org/2000/svg"
+									height="20px"
+									viewBox="0 -960 960 960"
+									width="20px"
+								>
+									<path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
+									<title id="logout-button">Logout</title>
+								</svg>
+								Logout
+							</span>
+						) : (
+							<span>Login → </span>
+						)}
+					</button>
+				</div>
 			</header>
 
 			<main className="w-screen h-auto overflow-y-scroll min-h-dvh bg-slate-50 flex justify-center items-center">
