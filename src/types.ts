@@ -86,6 +86,7 @@ type User = {
 type CardButton = {
 	label: string;
 	onClickHandler: (...args: any[]) => void;
+	icon?: React.ReactElement;
 };
 
 export type {
