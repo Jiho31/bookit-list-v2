@@ -133,7 +133,7 @@ export default function Bookshelf({
 				<span>({numOfBooks})</span>
 				<button
 					type="button"
-					className="ml-2 bg-white text-indigo-600 border border-indigo-600 w-[40px] h-[30px] flex justify-center items-center p-1"
+					className="ml-2 bg-white text-indigo-600 hover:bg-indigo-600 hover:text-white border border-indigo-600 w-[40px] h-[30px] flex justify-center items-center p-1"
 					onClick={handleEditClick}
 				>
 					{isEditing ? (
@@ -167,7 +167,7 @@ export default function Bookshelf({
 				{isEditing && (
 					<button
 						type="button"
-						className="ml-1 bg-white text-indigo-600 border border-indigo-600 w-[40px] h-[30px] flex justify-center items-center p-1"
+						className="ml-1 bg-white text-indigo-600 border border-indigo-600 hover:bg-indigo-600 hover:text-white w-[40px] h-[30px] flex justify-center items-center p-1"
 						onClick={handleDeleteClick}
 					>
 						<svg
