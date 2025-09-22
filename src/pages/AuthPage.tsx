@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import useFirebaseAuth from '../hooks/useFirebaseAuth.tsx';
 import { toast } from 'sonner';
@@ -11,6 +11,12 @@ const SignupForm = () => {
 
 	const { handleRegister } = useAuth();
 	const { createUserWithEmail } = useFirebaseAuth();
+
+	useEffect(() => {
+		if (error !== '') {
+			toast.warning(error);
+		}
+	}, [error]);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -102,12 +108,6 @@ const SignupForm = () => {
 					onChange={handleInputChange}
 				/>
 			</div>
-			{error && (
-				<div className="flex-wrap bg-red-100 rounded-md px-5 py-2 text-red-700 font-semibold text-sm">
-					⚠️ {error.toUpperCase()}
-				</div>
-			)}
-
 			<button
 				className="text-indigo-50 mt-3 bg-indigo-600 hover:bg-indigo-800 px-2 py-2.5 text-sm rounded-xl"
 				type="submit"
@@ -126,6 +126,12 @@ const LoginForm = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
+
+	useEffect(() => {
+		if (error !== '') {
+			toast.warning(error);
+		}
+	}, [error]);
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -201,9 +207,6 @@ const LoginForm = () => {
 				value={password}
 				onChange={handleInputChange}
 			/>
-			{error && (
-				<div className="bg-red-100 rounded-2xl p-3 text-red-700">{error}</div>
-			)}
 			<button
 				className="px-4 py-2.5 text-sm text-indigo-50 bg-indigo-600 hover:bg-indigo-800"
 				type="submit"
