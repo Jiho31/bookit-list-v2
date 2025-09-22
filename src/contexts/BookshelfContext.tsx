@@ -3,7 +3,6 @@ import type { Book, BookItem, BookshelfItem } from '../types';
 import { DEFAULT_BOOKSHELF_KEY } from '../consts/books';
 import { useAuth } from './AuthContext';
 import {
-	addDoc,
 	setDoc,
 	collection,
 	doc,
