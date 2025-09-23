@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import type { Book, CardButton } from '../../types';
 import BookCard from './BookCard';
 import { useBookshelf } from '../../contexts/BookshelfContext';
 import { useModal } from '../../contexts/ModalContext';
+import { useAuth } from '@/contexts/AuthContext';
+import RegisterModal from '../RegisterModal';
 
 function BookshelfListModal({
 	book,
@@ -63,7 +65,8 @@ function BookshelfListModal({
 }
 
 function BookList({ recommendations }: { recommendations: Book[] }) {
-	const { openModal } = useModal();
+	const { openModal, closeModal } = useModal();
+	const { isAuthenticated } = useAuth();
 
 	const handleAddBook = (
 		e: React.MouseEvent<HTMLButtonElement>,
@@ -71,7 +74,11 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 	) => {
 		e.stopPropagation();
 
-		openModal({ component: BookshelfListModal, props: { book } });
+		if (isAuthenticated) {
+			openModal({ component: BookshelfListModal, props: { book } });
+		} else {
+			openModal({ component: RegisterModal });
+		}
 	};
 
 	const buttons: CardButton[] = [
@@ -94,6 +101,10 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 			),
 		},
 	];
+
+	useEffect(() => {
+		return () => closeModal();
+	}, [closeModal]);
 
 	return (
 		<section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-5xl sm:max-w-full mx-auto">
