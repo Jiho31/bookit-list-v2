@@ -126,7 +126,7 @@ function MainPage() {
 							className="group flex flex-col gap-2 bg-white text-slate-900 hover:text-indigo-50 hover:bg-indigo-400 border border-slate-200 rounded-2xl py-10 px-8 w-auto"
 							onClick={() => setDisplayContent('form')}
 						>
-							<span className="w-fit h-fit self-center px-4 py-2 bg-slate-50 rounded-full group-hover:bg-amber-50">
+							<span className="w-fit h-fit self-center px-4 py-2 bg-slate-100 rounded-full group-hover:bg-amber-50">
 								✨
 							</span>
 							<span className="font-bold text-xl">Get Recommendations</span>
@@ -138,7 +138,7 @@ function MainPage() {
 							className="group flex flex-col gap-2 bg-white text-slate-900 hover:text-indigo-50 hover:bg-indigo-400 border border-slate-200 rounded-2xl py-10 px-8 w-auto"
 							onClick={() => navigate('/home')}
 						>
-							<span className="w-fit h-fit self-center px-4 py-2 bg-slate-50 rounded-full group-hover:bg-amber-50">
+							<span className="w-fit h-fit self-center px-4 py-2 bg-slate-100 rounded-full group-hover:bg-amber-50">
 								🔍
 							</span>
 							<span className="font-bold text-xl">Browse Books</span>
