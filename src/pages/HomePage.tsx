@@ -1,7 +1,50 @@
 import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
+import { Link } from 'react-router';
 import Bookshelf from '../components/Bookshelf';
 import { type BookshelfItem } from '../types';
 import { useBookshelf } from '../contexts/BookshelfContext';
+import { useModal } from '@/contexts/ModalContext';
+import { useAuth } from '@/contexts/AuthContext';
+import RegisterModal from '@/components/RegisterModal';
+
+function CreateBookshelfModal({
+	createBookshelf,
+	close,
+}: {
+	createBookshelf: (name: string) => void;
+	close: () => void;
+}) {
+	const [nameInput, setNameInput] = useState('');
+
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setNameInput(e.target.value);
+	};
+
+	const handleCreate = async () => {
+		// validate input value
+		const val = nameInput.trim();
+		if (val === '') {
+			toast.info('Bookshelf name cannot be empty');
+			return;
+		}
+
+		await createBookshelf(val);
+
+		// success toast message 표시?
+
+		close();
+	};
+
+	return (
+		<div className="flex flex-col gap-2 w-[350px] h-auto max-h-2/3 overflow-scroll bg-slate-200 p-5 rounded-2xl">
+			<h2 className="text-md font-semibold py-1 mb-5">Create new bookshelf</h2>
+			<p>Type in the name of bookshelf</p>
+			<input type="text" value={nameInput} onChange={handleInputChange} />
+			<button onClick={handleCreate}>Create</button>
+		</div>
+	);
+}
 
 function Sidebar() {
 	const {
@@ -11,15 +54,29 @@ function Sidebar() {
 		createBookshelf,
 	} = useBookshelf();
 
+	const { openModal, closeModal } = useModal();
+	const { isAuthenticated } = useAuth();
+
 	const handleCreate = async () => {
-		// @todo bookshelf name 입력 받기 (모달 생성해서 input ?)
-		const nameInput = (await prompt('Type in the name of bookshelf')) || '';
-		if (nameInput.length > 0) {
-			await createBookshelf(nameInput);
+		// const nameInput = (await prompt('Type in the name of bookshelf')) || '';
+		// if (nameInput.length > 0) {
+		// 	await createBookshelf(nameInput);
+		// }
+		if (isAuthenticated) {
+			openModal({
+				component: CreateBookshelfModal,
+				props: { createBookshelf },
+			});
+		} else {
+			openModal({ component: RegisterModal });
 		}
 	};
 
 	const parsedMenuList = useMemo(() => Object.values(menuList), [menuList]);
+
+	useEffect(() => {
+		return () => closeModal();
+	}, [closeModal]);
 
 	return (
 		<section className="w-md max-w-1/4 h-full border-r bg-slate-100 border-slate-200 text-slate-900">
@@ -72,6 +129,7 @@ function Sidebar() {
 }
 
 export default function HomePage() {
+	const { isAuthenticated } = useAuth();
 	const { activeKey, fetchBookshelf } = useBookshelf();
 	const [bookshelfData, setBookshelfData] = useState<BookshelfItem | null>();
 	const [isLoading, setIsLoading] = useState(false);
@@ -90,6 +148,9 @@ export default function HomePage() {
 	};
 
 	useEffect(() => {
+		if (!isAuthenticated) {
+			return;
+		}
 		handleFetchBookshelf();
 	}, [activeKey]);
 
@@ -102,6 +163,17 @@ export default function HomePage() {
 					{...(bookshelfData as BookshelfItem)}
 					bookshelfKey={bookshelfData.key}
 				/>
+			)}
+			{!isAuthenticated && (
+				<div className="w-full h-1/2 flex flex-col items-center justify-center text-lg font-medium">
+					<div className="text-4xl mb-2">📚</div>
+					<div>
+						<Link to="/auth" className="underline text-indigo-700">
+							Sign in
+						</Link>
+						<span className="ml-1"> to manage your personal bookshelves!</span>
+					</div>
+				</div>
 			)}
 		</div>
 	);
