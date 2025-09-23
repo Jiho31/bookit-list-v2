@@ -22,7 +22,6 @@ function CreateBookshelfModal({
 	};
 
 	const handleCreate = async () => {
-		// validate input value
 		const val = nameInput.trim();
 		if (val === '') {
 			toast.info('Bookshelf name cannot be empty');
@@ -30,18 +29,39 @@ function CreateBookshelfModal({
 		}
 
 		await createBookshelf(val);
-
-		// success toast message 표시?
-
+		toast.success('Successfully created bookshelf');
 		close();
 	};
 
 	return (
 		<div className="flex flex-col gap-2 w-[350px] h-auto max-h-2/3 overflow-scroll bg-slate-200 p-5 rounded-2xl">
-			<h2 className="text-md font-semibold py-1 mb-5">Create new bookshelf</h2>
-			<p>Type in the name of bookshelf</p>
-			<input type="text" value={nameInput} onChange={handleInputChange} />
-			<button onClick={handleCreate}>Create</button>
+			<h2 className="text-md font-semibold py-1 mb-2">Create new bookshelf</h2>
+			<label htmlFor="bookshelf-name" className="text-sm hidden">
+				Name
+			</label>
+			<input
+				id="bookshelf-name"
+				className="py-2 px-3 rounded-md basis-2/3 text-sm bg-white border-slate-300"
+				type="text"
+				value={nameInput}
+				placeholder="Type in your bookshelf name"
+				onChange={handleInputChange}
+			/>
+			<div className="flex gap-2 mt-1.5 justify-center">
+				<button onClick={handleCreate}>Create</button>
+				<button
+					onClick={close}
+					className="bg-slate-300 text-slate-600 hover:bg-slate-400"
+				>
+					Cancel
+				</button>
+			</div>
+			<button
+				className="text-slate-800 bg-slate-200 absolute top-4 right-5 p-2"
+				onClick={close}
+			>
+				X
+			</button>
 		</div>
 	);
 }
@@ -58,10 +78,6 @@ function Sidebar() {
 	const { isAuthenticated } = useAuth();
 
 	const handleCreate = async () => {
-		// const nameInput = (await prompt('Type in the name of bookshelf')) || '';
-		// if (nameInput.length > 0) {
-		// 	await createBookshelf(nameInput);
-		// }
 		if (isAuthenticated) {
 			openModal({
 				component: CreateBookshelfModal,
