@@ -120,71 +120,79 @@ export default function Bookshelf({
 
 	return (
 		<div className="flex flex-col gap-4 overflow-y-scroll p-10 w-full">
-			<h3 className="flex gap-0.5 items-center text-xl font-semibold py-3 h-auto max-w-1/2 w-auto">
-				<input
-					className={`font-normal w-auto text-wrap text-ellipsis ${isEditing && 'border-b border-slate-600 focus:outline-none'} `}
-					type="text"
-					id="newName"
-					value={nameInput}
-					onChange={handleInputChange}
-					readOnly={!isEditing}
-					disabled={!isEditing}
-				/>
-				<span>({numOfBooks})</span>
-				<button
-					type="button"
-					className="ml-2 bg-white text-indigo-600 hover:bg-indigo-600 hover:text-white border border-indigo-600 w-[40px] h-[30px] flex justify-center items-center p-1"
-					onClick={handleEditClick}
-				>
-					{isEditing ? (
-						<svg
-							className="fill-current"
-							aria-labelledby="save-button"
-							role="img"
-							xmlns="http://www.w3.org/2000/svg"
-							height="20px"
-							viewBox="0 -960 960 960"
-							width="20px"
-						>
-							<path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z" />
-							<title id="save-button">Save changes</title>
-						</svg>
-					) : (
-						<svg
-							className="fill-current"
-							role="img"
-							aria-labelledby="edit-button"
-							xmlns="http://www.w3.org/2000/svg"
-							height="20px"
-							viewBox="0 -960 960 960"
-							width="20px"
-						>
-							<title id="edit-button">Edit</title>
-							<path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
-						</svg>
-					)}
-				</button>
-				{isEditing && (
+			<div className="flex gap-0.5 justify-between items-center text-xl font-semibold py-3 h-auto w-full">
+				<h3 className="max-w-1/2">
+					<input
+						className={`font-normal w-auto text-wrap text-ellipsis ${isEditing && 'border-b border-slate-600 focus:outline-none'} `}
+						type="text"
+						id="newName"
+						value={nameInput}
+						onChange={handleInputChange}
+						readOnly={!isEditing}
+						disabled={!isEditing}
+					/>
+					<span>({numOfBooks})</span>
+				</h3>
+				<div className="inline-flex gap-1.5">
 					<button
 						type="button"
-						className="ml-1 bg-white text-indigo-600 border border-indigo-600 hover:bg-indigo-600 hover:text-white w-[40px] h-[30px] flex justify-center items-center p-1"
-						onClick={handleDeleteClick}
+						className="bg-white text-indigo-600 hover:bg-indigo-600 hover:text-white border border-indigo-600 w-auto min-w-[40px] h-[32px] flex justify-center items-center p-2"
+						onClick={handleEditClick}
 					>
-						<svg
-							className="fill-current"
-							aria-labelledby="delete-button"
-							role="img"
-							xmlns="http://www.w3.org/2000/svg"
-							height="20px"
-							viewBox="0 -960 960 960"
-							width="20px"
-						>
-							<path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
-							<title id="delete-button">Delete</title>
-						</svg>
+						{isEditing ? (
+							<svg
+								className="fill-current"
+								aria-labelledby="save-button"
+								role="img"
+								xmlns="http://www.w3.org/2000/svg"
+								height="20px"
+								viewBox="0 -960 960 960"
+								width="20px"
+							>
+								<path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z" />
+								<title id="save-button">Save changes</title>
+							</svg>
+						) : (
+							<>
+								<svg
+									className="fill-current"
+									role="img"
+									aria-labelledby="edit-button"
+									xmlns="http://www.w3.org/2000/svg"
+									height="20px"
+									viewBox="0 -960 960 960"
+									width="20px"
+								>
+									<title id="edit-button">Edit</title>
+									<path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+								</svg>
+								<span className="hidden sm:block ml-1 text-sm">Edit</span>
+							</>
+						)}
 					</button>
-				)}
-			</h3>
+					{isEditing && (
+						<button
+							type="button"
+							// className="ml-1 bg-white text-indigo-600 border border-indigo-600 hover:bg-indigo-600 hover:text-white w-[40px] h-[30px] flex justify-center items-center p-1"
+							className="bg-red-500 text-red-50 hover:bg-red-600 hover:text-white  w-auto min-w-[40px] h-[32px] flex justify-center items-center p-2"
+							onClick={handleDeleteClick}
+						>
+							<svg
+								className="fill-current"
+								aria-labelledby="delete-button"
+								role="img"
+								xmlns="http://www.w3.org/2000/svg"
+								height="20px"
+								viewBox="0 -960 960 960"
+								width="20px"
+							>
+								<path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
+								<title id="delete-button">Delete</title>
+							</svg>
+						</button>
+					)}
+				</div>
+			</div>
 			{numOfBooks > 0 ? (
 				<section className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-full sm:max-w-4xl">
 					{booksData.map((data: BookItem, idx) => (
