@@ -28,12 +28,42 @@ export default function Layout() {
 		<div id="app-container" className="w-screen h-auto flex flex-col">
 			<header className="w-screen min-h-15 text-sm bg-slate-50 border-b border-b-slate-200 px-20 flex justify-between">
 				<nav className="flex gap-10 items-center text-slate-900">
-					<Link to="/" className="hover:text-indigo-400">
+					<Link to="/">
 						<img className="w-18 h-auto" src="/logo.png" alt="logo" />
-						{/* Main */}
 					</Link>
-					<Link to="/home" className="hover:text-indigo-400">
+					<Link
+						to="/"
+						className="inline-flex gap-2 items-end group hover:text-indigo-600"
+					>
+						<svg
+							className="fill-current"
+							role="img"
+							xmlns="http://www.w3.org/2000/svg"
+							height="24px"
+							viewBox="0 -960 960 960"
+							width="24px"
+						>
+							<title>Home</title>
+							<path d="M160-120v-480l320-240 320 240v480H560v-280H400v280H160Z" />
+						</svg>
 						Home
+					</Link>
+					<Link
+						to="/home"
+						className="inline-flex gap-2 items-center group hover:text-indigo-600"
+					>
+						<svg
+							className="fill-current"
+							role="img"
+							xmlns="http://www.w3.org/2000/svg"
+							height="24px"
+							viewBox="0 -960 960 960"
+							width="24px"
+						>
+							<title>Library</title>
+							<path d="M80-160v-80h800v80H80Zm80-160v-320h80v320h-80Zm160 0v-480h80v480h-80Zm160 0v-480h80v480h-80Zm280 0L600-600l70-40 160 280-70 40Z" />
+						</svg>
+						Library
 					</Link>
 				</nav>
 				<div className="flex align-middle items-center gap-4">
