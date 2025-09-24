@@ -98,7 +98,7 @@ export default function Bookshelf({
 
 			toast.success('Successfully deleted book');
 
-			setTimeout(() => location.reload(), 2000);
+			setTimeout(() => location.reload(), 500);
 		} catch (err) {
 			console.error(err);
 			toast.error('Failed to remove book. Refresh page and try again');
@@ -119,7 +119,7 @@ export default function Bookshelf({
 	];
 
 	return (
-		<div className="flex flex-col overflow-y-scroll p-10">
+		<div className="flex flex-col gap-4 overflow-y-scroll p-10 w-full">
 			<h3 className="flex gap-0.5 items-center text-xl font-semibold py-3 h-auto max-w-1/2 w-auto">
 				<input
 					className={`font-normal w-auto text-wrap text-ellipsis ${isEditing && 'border-b border-slate-600 focus:outline-none'} `}
@@ -186,7 +186,7 @@ export default function Bookshelf({
 				)}
 			</h3>
 			{numOfBooks > 0 ? (
-				<section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 p-6 max-w-6xl mx-auto">
+				<section className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-full sm:max-w-4xl">
 					{booksData.map((data: BookItem, idx) => (
 						<BookCard
 							key={idx}
@@ -198,7 +198,7 @@ export default function Bookshelf({
 					))}
 				</section>
 			) : (
-				<p>Bookshelf is empty!</p>
+				<p className="text-slate-800 py-4">Bookshelf is empty!</p>
 			)}
 		</div>
 	);

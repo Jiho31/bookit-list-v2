@@ -107,7 +107,7 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 	}, [closeModal]);
 
 	return (
-		<section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-5xl sm:max-w-full mx-auto">
+		<section className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-full sm:max-w-4xl mx-auto">
 			{recommendations.map((book) => (
 				<BookCard key={book.key} book={book} buttons={buttons} />
 			))}

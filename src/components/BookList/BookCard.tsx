@@ -37,7 +37,7 @@ function CoverImage({
 	};
 
 	return (
-		<div className="relative w-full h-48 bg-gray-100 flex items-center justify-center">
+		<div className="relative w-full min-w-full h-48 min-h-48 bg-gray-100 flex items-center justify-center">
 			{imageStatus === 'loading' && <div>Loading...</div>}
 			<img
 				className={`w-full h-full object-cover ${imageStatus === 'failed' && 'hidden'}`}
@@ -77,15 +77,17 @@ export default function BookCard({
 	return (
 		<div
 			onClick={onClickHandler}
-			className="flex flex-col bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-103 overflow-hidden max-w-xs h-auto"
+			className="flex flex-row md:flex-col bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-103 overflow-hidden w-full h-auto min-w-64 sm:min-w-64"
 		>
-			<CoverImage
-				coverEditionKey={book.coverEditionKey}
-				coverId={book.coverId}
-				title={book.title}
-				// setIsLoading={setIsLoading}
-			/>
-			<div className="p-4 flex-1 flex flex-col middle min-h-0">
+			<div className="w-1/2 md:w-full h-32 sm:h-48">
+				<CoverImage
+					coverEditionKey={book.coverEditionKey}
+					coverId={book.coverId}
+					title={book.title}
+					// setIsLoading={setIsLoading}
+				/>
+			</div>
+			<div className="p-4 w-1/2 md:w-full flex flex-col">
 				<div className="relative group">
 					<h3
 						className="font-bold text-md mb-2 text-gray-800 truncate"
@@ -105,7 +107,7 @@ export default function BookCard({
 				{book.publishedYear && (
 					<p className="text-gray-500 text-xs mb-3">{book.publishedYear}</p>
 				)}
-				<div className="flex flex-row gap-1">
+				<div className="w-full flex flex-row gap-1">
 					{buttons.length > 0 &&
 						buttons.map((b: CardButton, idx) => (
 							<button

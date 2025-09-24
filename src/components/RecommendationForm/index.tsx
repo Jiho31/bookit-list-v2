@@ -42,11 +42,11 @@ function RecommendationForm({
 			<div className="py-10 text-slate-900">
 				{questions[questionIndex].question}
 			</div>
-			<div className="max-w-2/3 xs:max-w-full flex flex-row gap-5 flex-wrap justify-center">
+			<div className="max-w-1/2 w-2/3 md:max-w-[90%] flex flex-row gap-5 flex-wrap justify-center">
 				{questions[questionIndex].options.map((option, idx) => (
 					<div
 						key={idx}
-						className="flex px-5 py-10 w-36 h-[120px] justify-center items-center text-slate-600 bg-white rounded-lg border border-slate-200 hover:cursor-pointer hover:bg-indigo-600 hover:text-indigo-50 scale-100 hover:scale-110 transition-all duration-100"
+						className="flex px-5 py-10 w-[90%] h-[120px] sm:w-56 justify-center items-center text-slate-600 bg-white rounded-lg border border-slate-200 hover:cursor-pointer hover:bg-indigo-600 hover:text-indigo-50 scale-100 hover:scale-110 transition-all duration-100"
 						onClick={() => handleResponse(questionIndex + 1, option)}
 					>
 						{option.label}
