@@ -114,16 +114,16 @@ function MainPage() {
 	return (
 		<div className="w-full h-auto">
 			{displayContent === 'mainPage' && (
-				<section className="flex flex-col gap-4 text-center">
-					<h1 className="max-w-2/3 self-center text-slate-900 text-6xl font-extrabold">
+				<section className="flex flex-col w-full h-full align-middle items-center justify-center gap-4 text-center">
+					<h1 className="max-w-2/3 self-center sm:text-slate-900 text-3xl md:text-4xl lg:text-6xl font-extrabold">
 						Welcome to the Book Recommendation System
 					</h1>
 					<p className="text-slate-600 py-6">
 						This is a system that recommends books based on your preferences.
 					</p>
-					<div className="flex flex-row gap-10 justify-center items-center">
+					<div className="flex flex-col md:flex-row max-w-[90%] gap-4 sm:gap-10 justify-center items-center">
 						<button
-							className="group flex flex-col gap-2 bg-white text-slate-900 hover:text-indigo-50 hover:bg-indigo-400 border border-slate-200 rounded-2xl py-10 px-8 w-auto"
+							className="group flex flex-col gap-2 bg-white text-slate-900 hover:text-indigo-50 hover:bg-indigo-400 border border-slate-200 rounded-2xl py-10 px-8 w-[100%] md:w-auto min-w-[90%] md:min-w-64"
 							onClick={() => setDisplayContent('form')}
 						>
 							<span className="w-fit h-fit self-center px-4 py-2 bg-slate-100 rounded-full group-hover:bg-amber-50">
@@ -135,7 +135,7 @@ function MainPage() {
 							</span>
 						</button>
 						<button
-							className="group flex flex-col gap-2 bg-white text-slate-900 hover:text-indigo-50 hover:bg-indigo-400 border border-slate-200 rounded-2xl py-10 px-8 w-auto"
+							className="group flex flex-col gap-2 bg-white text-slate-900 hover:text-indigo-50 hover:bg-indigo-400 border border-slate-200 rounded-2xl py-10 px-8 w-[100%] md:w-auto min-w-[90%] md:min-w-64 "
 							onClick={() => navigate('/home')}
 						>
 							<span className="w-fit h-fit self-center px-4 py-2 bg-slate-100 rounded-full group-hover:bg-amber-50">

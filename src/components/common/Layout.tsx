@@ -25,8 +25,8 @@ export default function Layout() {
 	}, [isAuthenticated]);
 
 	return (
-		<div id="app-container" className="w-screen h-auto flex flex-col">
-			<header className="w-screen min-h-15 text-sm bg-slate-50 border-b border-b-slate-200 px-20 flex justify-between">
+		<div id="app-container" className="w-full h-auto flex flex-col">
+			<header className="w-full min-h-15 text-sm bg-slate-50 border-b border-b-slate-200 px-4 sm:px-6 md:px-10 lg:px-20 flex justify-between">
 				<nav className="flex gap-10 items-center text-slate-900">
 					<Link to="/">
 						<img className="w-18 h-auto" src="/logo.png" alt="logo" />
@@ -94,7 +94,7 @@ export default function Layout() {
 				</div>
 			</header>
 
-			<main className="w-screen h-auto overflow-y-scroll min-h-dvh bg-slate-50 flex justify-center items-center">
+			<main className="w-full h-auto overflow-y-auto min-h-dvh bg-slate-50 flex items-stretch">
 				<Outlet />
 			</main>
 			<footer className="p-3 border-t border-slate-200">© Bookit List</footer>
