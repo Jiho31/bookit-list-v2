@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 
 type BookshelfProps = BookshelfItem & {
 	bookshelfKey: string;
+	toggleSidebar: () => void;
 };
 
 export default function Bookshelf({
@@ -13,6 +14,7 @@ export default function Bookshelf({
 	numOfBooks = 0,
 	bookshelfKey,
 	books = [],
+	toggleSidebar,
 }: BookshelfProps) {
 	const [booksData, setBooksData] = useState<BookItem[]>([]);
 	const [nameInput, setNameInput] = useState(name);
@@ -119,11 +121,26 @@ export default function Bookshelf({
 	];
 
 	return (
-		<div className="flex flex-col gap-4 overflow-y-scroll p-10 w-full">
+		<div className="relative flex flex-col gap-4 overflow-y-scroll p-10 w-full">
 			<div className="flex gap-0.5 justify-between items-center text-xl font-semibold py-3 h-auto w-full">
+				<button
+					className="block sm:hidden mr-2 bg-slate-200 hover:bg-slate-300 text-sm text-slate-600 border-slate-400"
+					onClick={toggleSidebar}
+				>
+					<svg
+						role="img"
+						aria-labelledby="sidebar-menu-buton"
+						className="fill-current w-5 h-5"
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 -960 960 960"
+					>
+						<title id="sidebar-menu-buton">menu</title>
+						<path d="M160-240q-17 0-28.5-11.5T120-280q0-17 11.5-28.5T160-320h640q17 0 28.5 11.5T840-280q0 17-11.5 28.5T800-240H160Zm0-200q-17 0-28.5-11.5T120-480q0-17 11.5-28.5T160-520h640q17 0 28.5 11.5T840-480q0 17-11.5 28.5T800-440H160Zm0-200q-17 0-28.5-11.5T120-680q0-17 11.5-28.5T160-720h640q17 0 28.5 11.5T840-680q0 17-11.5 28.5T800-640H160Z" />
+					</svg>
+				</button>
 				<h3 className="flex w-full sm:w-full max-w-[90%]">
 					<input
-						className={`font-normal w-full sm:w-[60%] text-wrap text-ellipsis ${isEditing && 'border-b border-slate-600 focus:outline-none'} `}
+						className={`font-normal w-[90%] sm:w-[60%] text-wrap text-ellipsis ${isEditing && 'border-b border-slate-600 focus:outline-none'} `}
 						type="text"
 						id="newName"
 						value={nameInput}

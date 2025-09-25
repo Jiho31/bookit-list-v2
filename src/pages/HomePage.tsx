@@ -66,7 +66,7 @@ function CreateBookshelfModal({
 	);
 }
 
-function Sidebar() {
+function Sidebar({ isVisible }: { isVisible: boolean }) {
 	const {
 		activeKey,
 		setActiveKey,
@@ -95,7 +95,9 @@ function Sidebar() {
 	}, [closeModal]);
 
 	return (
-		<section className="w-md max-w-1/4 h-full border-r bg-slate-100 border-slate-200 text-slate-900">
+		<section
+			className={`w-full ${!isVisible && 'hidden'} sm:block sm:max-w-1/4 sm:w-md h-auto sm:h-full border-b sm:border-r bg-slate-100 border-slate-200 text-slate-900`}
+		>
 			<div>
 				<p className="px-6 py-4 font-semibold">My Bookshelves</p>
 				<ul className="flex flex-col">
@@ -149,6 +151,7 @@ export default function HomePage() {
 	const { activeKey, fetchBookshelf } = useBookshelf();
 	const [bookshelfData, setBookshelfData] = useState<BookshelfItem | null>();
 	const [isLoading, setIsLoading] = useState(false);
+	const [showSidebar, setShowSidebar] = useState(false);
 
 	const handleFetchBookshelf = async () => {
 		setIsLoading(true);
@@ -163,6 +166,10 @@ export default function HomePage() {
 		}
 	};
 
+	const toggleSidebar = () => {
+		setShowSidebar((prev) => !prev);
+	};
+
 	useEffect(() => {
 		if (!isAuthenticated) {
 			return;
@@ -171,13 +178,14 @@ export default function HomePage() {
 	}, [activeKey]);
 
 	return (
-		<div className="w-full h-dvh flex">
-			<Sidebar />
+		<div className="w-full h-auto sm:h-dvh flex flex-col sm:flex-row">
+			<Sidebar isVisible={showSidebar} />
 			{isLoading && <div>Loading...</div>}
 			{!!bookshelfData && !isLoading && (
 				<Bookshelf
 					{...(bookshelfData as BookshelfItem)}
 					bookshelfKey={bookshelfData.key}
+					toggleSidebar={toggleSidebar}
 				/>
 			)}
 			{!isAuthenticated && (
