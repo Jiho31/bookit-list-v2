@@ -20,7 +20,7 @@ function NavigationBar() {
 		<header className="w-full min-h-15 text-sm bg-slate-50 border-b border-b-slate-200 px-4 sm:px-6 md:px-10 lg:px-20 flex justify-between">
 			<nav className="flex gap-2 md:gap-10 items-center text-slate-900">
 				<Link to="/">
-					<img className="w-18 h-auto" src="/logo.png" alt="logo" />
+					<img className="w-18 h-auto min-w-10" src="/logo.png" alt="logo" />
 				</Link>
 				<Link
 					to="/"
