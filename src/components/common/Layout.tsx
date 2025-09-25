@@ -40,7 +40,7 @@ function NavigationBar() {
 					Home
 				</Link>
 				<Link
-					to="/home"
+					to="/library"
 					className="inline-flex flex-col sm:flex-row gap-0.5 sm:gap-2 items-center sm:items-end group text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 py-2 px-3 rounded-xl"
 				>
 					<svg
@@ -93,7 +93,7 @@ export default function Layout() {
 
 	useEffect(() => {
 		if (isAuthenticated) {
-			navigate('/home');
+			navigate('/library');
 		} else {
 			navigate('/');
 		}

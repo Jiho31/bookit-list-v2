@@ -146,7 +146,7 @@ function Sidebar({ isVisible }: { isVisible: boolean }) {
 	);
 }
 
-export default function HomePage() {
+export default function LibraryPage() {
 	const { isAuthenticated } = useAuth();
 	const { activeKey, fetchBookshelf } = useBookshelf();
 	const [bookshelfData, setBookshelfData] = useState<BookshelfItem | null>();

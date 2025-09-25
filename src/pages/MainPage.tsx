@@ -136,7 +136,7 @@ function MainPage() {
 						</button>
 						<button
 							className="group flex flex-col gap-2 bg-white text-slate-900 hover:text-indigo-50 hover:bg-indigo-400 border border-slate-200 rounded-2xl py-10 px-8 w-[100%] md:w-auto min-w-[90%] md:min-w-64 "
-							onClick={() => navigate('/home')}
+							onClick={() => navigate('/library')}
 						>
 							<span className="w-fit h-fit self-center px-4 py-2 bg-slate-100 rounded-full group-hover:bg-amber-50">
 								🔍
