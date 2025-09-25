@@ -111,7 +111,7 @@ function Sidebar({ isVisible }: { isVisible: boolean }) {
 							>
 								<span>{data.name}</span>
 								<span
-									className={`w-10 h-6 inline-flex justify-center items-center text-sm rounded-2xl bg-slate-300  ${activeKey === data.key && 'text-amber-50 bg-slate-400'} `}
+									className={`w-10 shrink-0 h-6 inline-flex justify-center items-center text-sm rounded-2xl bg-slate-300  ${activeKey === data.key && 'text-amber-50 bg-slate-400'} `}
 								>
 									{data.numOfBooks}
 								</span>
