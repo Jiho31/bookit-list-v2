@@ -121,17 +121,18 @@ export default function Bookshelf({
 	return (
 		<div className="flex flex-col gap-4 overflow-y-scroll p-10 w-full">
 			<div className="flex gap-0.5 justify-between items-center text-xl font-semibold py-3 h-auto w-full">
-				<h3 className="max-w-1/2">
+				<h3 className="flex w-full sm:w-full max-w-[90%]">
 					<input
-						className={`font-normal w-auto text-wrap text-ellipsis ${isEditing && 'border-b border-slate-600 focus:outline-none'} `}
+						className={`font-normal w-full sm:w-[60%] text-wrap text-ellipsis ${isEditing && 'border-b border-slate-600 focus:outline-none'} `}
 						type="text"
 						id="newName"
 						value={nameInput}
 						onChange={handleInputChange}
 						readOnly={!isEditing}
 						disabled={!isEditing}
+						maxLength={40}
 					/>
-					<span>({numOfBooks})</span>
+					<span className="shrink-0">({numOfBooks})</span>
 				</h3>
 				<div className="inline-flex gap-1.5">
 					<button
@@ -173,7 +174,6 @@ export default function Bookshelf({
 					{isEditing && (
 						<button
 							type="button"
-							// className="ml-1 bg-white text-indigo-600 border border-indigo-600 hover:bg-indigo-600 hover:text-white w-[40px] h-[30px] flex justify-center items-center p-1"
 							className="bg-red-500 text-red-50 hover:bg-red-600 hover:text-white  w-auto min-w-[40px] h-[32px] flex justify-center items-center p-2"
 							onClick={handleDeleteClick}
 						>
