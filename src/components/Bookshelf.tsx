@@ -107,12 +107,14 @@ export default function Bookshelf({
 		}
 	};
 
+	const handleAddMemo = () => {
+		toast('🛠️ This feature is currently being developed. Thank you. ');
+	};
+
 	const buttons: CardButton[] = [
 		{
 			label: 'Add Memo',
-			onClickHandler: () => {
-				console.log('Open modal for new memo');
-			},
+			onClickHandler: handleAddMemo,
 		},
 		{
 			label: 'Delete',
