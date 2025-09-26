@@ -34,15 +34,15 @@ function RecommendationForm({
 	};
 
 	return (
-		<section className="flex flex-col items-center">
+		<section className="flex flex-col items-center my-0 md:my-24">
 			<Header title="Welcome! 🤗" />
 			<div className="text-slate-600 text-sm">
 				Progress: Question {questionIndex + 1}/{questions.length}
 			</div>
-			<div className="py-10 text-slate-900">
+			<div className="py-10 max-w-[90%] text-slate-900">
 				{questions[questionIndex].question}
 			</div>
-			<div className="max-w-1/2 w-2/3 md:max-w-[90%] flex flex-row gap-5 flex-wrap justify-center">
+			<div className="max-w-[90%] md:max-w-[70%] w-full md:w-2/3 flex flex-row gap-3 md:gap-5 flex-wrap justify-center">
 				{questions[questionIndex].options.map((option, idx) => (
 					<div
 						key={idx}
