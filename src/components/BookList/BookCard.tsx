@@ -41,7 +41,7 @@ function CoverImage({
 		<div className="relative w-full min-w-full h-48 min-h-48 bg-gray-100 flex items-center justify-center">
 			{imageStatus === 'loading' && <LoadingSpinner width={36} height={36} />}
 			<img
-				className={`w-full h-full object-cover ${imageStatus !== 'loaded' && 'hidden'}`}
+				className={`w-full h-full object-cover ${(imageStatus == 'loading' || imageStatus == 'failed') && 'hidden'}`}
 				src={getBookCoverImage({ key: coverEditionKey, id: coverId })}
 				alt={`Cover of ${title}`}
 				onLoad={handleImageLoad}
