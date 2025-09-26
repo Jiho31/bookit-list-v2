@@ -116,10 +116,12 @@ function MainPage() {
 			{displayContent === 'mainPage' && (
 				<section className="flex flex-col w-full h-full align-middle items-center justify-center gap-4 text-center">
 					<h1 className="max-w-2/3 self-center sm:text-slate-900 text-3xl md:text-4xl lg:text-6xl font-extrabold">
-						Welcome to the Book Recommendation System
+						{/* Welcome to Bookit List: Your Personal Reading Tracker */}
+						Bookit List: Track, Organize, and Discover
 					</h1>
-					<p className="text-slate-600 py-6">
-						This is a system that recommends books based on your preferences.
+					<p className="text-slate-600 py-6 md:py-10">
+						Your comprehensive system to manage your reads and find your next
+						favorite book.
 					</p>
 					<div className="flex flex-col md:flex-row max-w-[90%] gap-4 sm:gap-10 justify-center items-center">
 						<button
@@ -129,9 +131,11 @@ function MainPage() {
 							<span className="w-fit h-fit self-center px-4 py-2 bg-slate-100 rounded-full group-hover:bg-amber-50">
 								✨
 							</span>
-							<span className="font-bold text-xl">Get Recommendations</span>
+							<span className="font-bold text-xl">
+								Get Personalized Recommendations
+							</span>
 							<span className="text-sm text-slate-600 group-hover:text-indigo-50">
-								Start survey!
+								Start the short survey now!
 							</span>
 						</button>
 						<button
@@ -141,10 +145,9 @@ function MainPage() {
 							<span className="w-fit h-fit self-center px-4 py-2 bg-slate-100 rounded-full group-hover:bg-amber-50">
 								🔍
 							</span>
-							<span className="font-bold text-xl">Browse Books</span>
+							<span className="font-bold text-xl">View My Bookshelves</span>
 							<span className="text-sm text-slate-600 group-hover:text-indigo-50">
-								Explore library
-								{/* Bookshelf */}
+								Organize your reads and add new books.
 							</span>
 						</button>
 					</div>

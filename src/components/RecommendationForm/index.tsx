@@ -35,7 +35,7 @@ function RecommendationForm({
 
 	return (
 		<section className="flex flex-col items-center my-0 md:my-24">
-			<Header title="Welcome! 🤗" />
+			<Header title="Find Your Next Read" />
 			<div className="text-slate-600 text-sm">
 				Progress: Question {questionIndex + 1}/{questions.length}
 			</div>

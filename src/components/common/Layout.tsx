@@ -24,7 +24,7 @@ function NavigationBar() {
 				</Link>
 				<Link
 					to="/"
-					className="inline-flex flex-col sm:flex-row gap-0.5 sm:gap-2 items-center sm:items-end group text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 py-2 px-3 rounded-xl"
+					className="inline-flex flex-col sm:flex-row gap-0.5 sm:gap-2 items-center group text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 py-2 px-3 rounded-xl"
 				>
 					<svg
 						className="fill-current"
@@ -41,7 +41,7 @@ function NavigationBar() {
 				</Link>
 				<Link
 					to="/library"
-					className="inline-flex flex-col sm:flex-row gap-0.5 sm:gap-2 items-center sm:items-end group text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 py-2 px-3 rounded-xl"
+					className="inline-flex flex-col sm:flex-row gap-0.5 sm:gap-2 items-center group text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 py-2 px-3 rounded-xl"
 				>
 					<svg
 						className="fill-current"
@@ -51,10 +51,10 @@ function NavigationBar() {
 						viewBox="0 -960 960 960"
 						width="24px"
 					>
-						<title>Library</title>
+						<title>My Shelves</title>
 						<path d="M80-160v-80h800v80H80Zm80-160v-320h80v320h-80Zm160 0v-480h80v480h-80Zm160 0v-480h80v480h-80Zm280 0L600-600l70-40 160 280-70 40Z" />
 					</svg>
-					Library
+					My Shelves
 				</Link>
 			</nav>
 			<div className="flex align-middle items-center gap-4">
@@ -102,7 +102,7 @@ export default function Layout() {
 	return (
 		<div id="app-container" className="w-full h-auto flex flex-col">
 			<NavigationBar />
-			<main className="w-full h-auto py-15 md:py-0 overflow-y-auto min-h-dvh bg-slate-50 flex items-stretch">
+			<main className="w-full h-auto overflow-y-auto min-h-dvh bg-slate-50 flex items-stretch">
 				<Outlet />
 			</main>
 			<footer className="p-5 text-center border-t border-slate-200">
