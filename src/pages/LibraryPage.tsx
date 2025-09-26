@@ -7,6 +7,7 @@ import { useBookshelf } from '../contexts/BookshelfContext';
 import { useModal } from '@/contexts/ModalContext';
 import { useAuth } from '@/contexts/AuthContext';
 import RegisterModal from '@/components/RegisterModal';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 function CreateBookshelfModal({
 	createBookshelf,
@@ -180,7 +181,7 @@ export default function LibraryPage() {
 	return (
 		<div className="w-full h-auto sm:h-dvh flex flex-col sm:flex-row">
 			<Sidebar isVisible={showSidebar} />
-			{isLoading && <div>Loading...</div>}
+			{isLoading && <LoadingSpinner width={56} height={56} />}
 			{!!bookshelfData && !isLoading && (
 				<Bookshelf
 					{...(bookshelfData as BookshelfItem)}
@@ -188,7 +189,7 @@ export default function LibraryPage() {
 					toggleSidebar={toggleSidebar}
 				/>
 			)}
-			{!isAuthenticated && (
+			{!isLoading && !isAuthenticated && (
 				<div className="w-full h-1/2 flex flex-col items-center justify-center text-lg font-medium">
 					<div className="text-4xl mb-2">📚</div>
 					<div>

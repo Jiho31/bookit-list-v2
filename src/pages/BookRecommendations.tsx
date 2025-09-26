@@ -1,7 +1,8 @@
+import { useMemo } from 'react';
 import type { Book } from '../types';
 import BookList from '../components/BookList';
 import Header from '../components/common/Header';
-import { useMemo } from 'react';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 function BookRecommendations({
 	isLoading,
@@ -22,7 +23,10 @@ function BookRecommendations({
 	return (
 		<section className="flex flex-col p-10">
 			{isLoading ? (
-				<div> Generating recommendations ... </div>
+				<div className="w-full h-full m-auto">
+					<LoadingSpinner width={48} height={48} />
+					<p className="text-center">Generating recommendations ...</p>
+				</div>
 			) : (
 				<>
 					<Header
