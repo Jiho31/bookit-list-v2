@@ -99,13 +99,13 @@ function Sidebar({ isVisible }: { isVisible: boolean }) {
 		<section
 			className={`w-full ${!isVisible && 'hidden'} sm:block sm:max-w-1/4 sm:w-md h-auto sm:h-full border-b sm:border-r bg-slate-100 border-slate-200 text-slate-900`}
 		>
-			<div>
-				<p className="px-6 py-4 font-semibold">My Bookshelves</p>
-				<ul className="flex flex-col">
+			<div className="px-4">
+				<p className="py-6 font-semibold">My Bookshelves</p>
+				<ul className="flex flex-col gap-1">
 					{parsedMenuList?.length > 0 &&
 						parsedMenuList.map((data) => (
 							<li
-								className={`flex justify-between items-center p-4 pl-8 hover:bg-indigo-100 hover:cursor-pointer hover:scale-101 ${activeKey === data.key && 'font-medium bg-indigo-200'}`}
+								className={`flex justify-between items-center border border-slate-300 rounded-xl py-3 px-4 hover:bg-indigo-100 hover:cursor-pointer hover:scale-101 ${activeKey === data.key ? 'font-medium bg-indigo-200' : 'bg-slate-50'}`}
 								key={data.key}
 								id={data.key}
 								onClick={() => setActiveKey(data.key)}
@@ -121,13 +121,13 @@ function Sidebar({ isVisible }: { isVisible: boolean }) {
 				</ul>
 				<button
 					type="button"
-					className="my-3 ml-8 text-sm"
+					className="my-3 text-sm w-full"
 					onClick={handleCreate}
 				>
 					+ New Bookshelf
 				</button>
 			</div>
-			<div className="mx-auto my-2 w-full h-[1px] bg-slate-200 block"></div>
+			{/* <div className="mx-auto my-2 w-full h-[1px] bg-slate-200 block"></div>
 			<div>
 				<p className="px-6 py-4 font-semibold">My Notes</p>
 				<ul className="flex flex-col">
@@ -142,7 +142,7 @@ function Sidebar({ isVisible }: { isVisible: boolean }) {
 						Favorites ⭐️
 					</li>
 				</ul>
-			</div>
+			</div> */}
 		</section>
 	);
 }
