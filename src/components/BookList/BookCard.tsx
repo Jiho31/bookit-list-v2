@@ -78,7 +78,7 @@ export default function BookCard({
 	return (
 		<div
 			onClick={onClickHandler}
-			className="flex flex-row md:flex-col bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-103 overflow-hidden w-full h-auto min-w-64 sm:min-w-56"
+			className="flex flex-row md:flex-col bg-white rounded-xl shadow-md sm:shadow-lg hover:shadow-lg sm:hover:shadow-2xl transition-all duration-300 hover:scale-103 overflow-hidden w-full h-auto min-w-64 sm:min-w-56"
 		>
 			<div className="w-1/2 md:w-full h-32 sm:h-48">
 				<CoverImage
