@@ -10,7 +10,6 @@ type AuthCtx = {
 	userInfo: User | undefined;
 	isAuthenticated: boolean;
 	handleRegister: (userCredential: any) => void;
-	// login: (data: any) => Promise<void>;
 	handleLogout: () => void;
 };
 const AuthContext = createContext<AuthCtx | undefined>(undefined);
@@ -18,7 +17,6 @@ const AuthContext = createContext<AuthCtx | undefined>(undefined);
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const { userInfo, isAuthenticated, logout } = useFirebaseAuth();
 
-	// handleNewUser
 	const handleRegister = async ({ uid }: { uid: string }) => {
 		const newUserData = {
 			lastUpdatedAt: serverTimestamp(),
@@ -29,8 +27,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 				throw new Error('user credential is invalid');
 			}
 			await setDoc(doc(firebaseDB, 'users', uid), newUserData);
-
-			// Create the default bookshelf using shared service
 			await createBookshelfForUser({
 				uid,
 				key: DEFAULT_BOOKSHELF_KEY,
@@ -44,7 +40,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const handleLogout = async () => {
 		try {
 			await logout();
-			// @todo reload page or navigate to main page ?
 			location.reload();
 		} catch (err) {
 			console.error(err);
