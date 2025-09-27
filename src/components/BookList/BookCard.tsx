@@ -114,7 +114,7 @@ export default function BookCard({
 							<button
 								key={idx}
 								type="button"
-								onClick={(e) => b.onClickHandler(e, { data, book })}
+								onClick={(e) => b.onClickHandler({ e, data, book })}
 								className="text-sm flex-1/2 inline-flex justify-center items-center gap-2"
 							>
 								{b.icon !== undefined ? b.icon : null}
