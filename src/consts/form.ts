@@ -103,25 +103,24 @@ const bookLengthOptions: OptionMeta[] = [
 	},
 ];
 
-const genreOptions: OptionMeta[] = [
-	{
-		id: 'g_biography',
-		label: 'Biography',
-		keywords: ['biography'],
-	},
-	{
-		id: 'g_drama',
-		label: 'Drama',
-		keywords: ['drama'],
-	},
-];
+// const genreOptions: OptionMeta[] = [
+// 	{
+// 		id: 'g_biography',
+// 		label: 'Biography',
+// 		keywords: ['biography'],
+// 	},
+// 	{
+// 		id: 'g_drama',
+// 		label: 'Drama',
+// 		keywords: ['drama'],
+// 	},
+// ];
 
 const questions: Question[] = [
 	{
 		id: 1,
 		question: '🫥 How are you feeling today?',
 		options: emotionOptions,
-		// options: ['Happy', 'Sad', 'Angry'],
 	},
 	{
 		id: 2,

@@ -84,7 +84,7 @@ export default function Bookshelf({
 		}
 	};
 
-	const handleRemoveBook = async (e, { data }: { data: BookItem }) => {
+	const handleRemoveBook = async ({ data }: { data: BookItem }) => {
 		const ok = confirm('Do you really want to delete this book?');
 
 		if (!ok) {

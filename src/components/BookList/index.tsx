@@ -68,10 +68,13 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 	const { openModal, closeModal } = useModal();
 	const { isAuthenticated } = useAuth();
 
-	const handleAddBook = (
-		e: React.MouseEvent<HTMLButtonElement>,
-		{ book }: { book: Book },
-	) => {
+	const handleAddBook = ({
+		e,
+		book,
+	}: {
+		e: React.MouseEvent<HTMLButtonElement>;
+		book: Book;
+	}) => {
 		e.stopPropagation();
 
 		if (isAuthenticated) {
