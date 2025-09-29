@@ -1,15 +1,10 @@
 # Bookit List
 
+<img width="140" height="auto" alt="Image" src="https://github.com/user-attachments/assets/a3480b24-cc11-4349-9228-c4eb0bcc3c49" />
 
 Bookit List is a book recommendation and management system to make your reading life happier. 🤓✨
 
-<img width="1365" height="1024" alt="Image" src="https://github.com/user-attachments/assets/a3480b24-cc11-4349-9228-c4eb0bcc3c49" />
-
-<br/>
-
-Find out what your next reads are going to be
-
-Here 👉 [Live demo 🔗](https://bookit-list-v2.netlify.app/)
+Find out what your next reads are going to be here 👉 [Live demo](https://bookit-list-v2.netlify.app/)
 
 
 ## Features
