@@ -1,54 +1,44 @@
-# React + TypeScript + Vite
+# Bookit List
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+Bookit List is a book recommendation and management system to make your reading life happier. 🤓✨
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+<img width="1365" height="1024" alt="Image" src="https://github.com/user-attachments/assets/a3480b24-cc11-4349-9228-c4eb0bcc3c49" />
 
-## Expanding the ESLint configuration
+<br/>
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Find out what your next reads are going to be
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Here 👉 [Live demo 🔗](https://bookit-list-v2.netlify.app/)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Features
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- Book recommendation based on a short survey of your preferences
+- Personal bookshelf to save and organize books
+
+<!-- #### cf. Screenshots 📷
+
+1. Main page / Landing page
+2. Recommendation page
+3. Bookshelf page -->
+
+
+## Planned features
+- Search for books in a search bar
+- Add notes for books saved in bookshelves
+
+### Known issues (to be fixed)
+1. For OAuth login, there is an account duplication issue.
+ > When user is registered for Github using a Google account, and attempts to login using Google and Github like they're two different accounts, there will be an error.
+2. Slow book cover image load time
+
+> Book cover image loading takes long occasionally, especially when there's slow internet connection. For better user experience, this loading process can be improved (or fixed to look faster).
+3. Data is unsynchronized when application is used within multiple browser tabs at the same time.
+
+## Developed using..
+- Typescript + React 19
+- Tailwind CSS
+- Firebase Database
+- Firebase Authentication
+- Sonner Toast UI
