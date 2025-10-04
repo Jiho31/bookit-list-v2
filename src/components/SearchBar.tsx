@@ -1,24 +1,15 @@
 import { useState } from 'react';
-import useOpenLibraryAPI from '@/hooks/useOpenLibraryAPI';
+import { useNavigate } from 'react-router';
 
 function SearchBar() {
+	const navigate = useNavigate();
 	const [keywordInput, setKeywordInput] = useState('');
-	const { search } = useOpenLibraryAPI();
 
-	const handleBookSearch = async () => {
-		console.log('####Search :', keywordInput);
+	const handleBookSearch = () => {
+		// 1. keyword 값 검증 ?? 특수문자 제거!
+		const validatedKeyword = keywordInput.trim();
 
-		try {
-			const result = await search(keywordInput, 50);
-			console.log(result, '########### RESULT ');
-		} catch (err) {
-			console.error(err);
-		}
-
-		// keyword 값 검증 ??
-
-		// 1. url 쿼리에 keyword 저장
-		// 2. page 검색 결과 페이지로 라우팅
+		void navigate(`/search?keyword=${validatedKeyword}`);
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -29,8 +20,6 @@ function SearchBar() {
 	};
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		// @todo add throttling ?
-
 		setKeywordInput(e.target.value);
 	};
 
