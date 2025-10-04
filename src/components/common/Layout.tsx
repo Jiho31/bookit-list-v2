@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Toaster } from 'sonner';
 import ModalRoot from './ModalRoot';
+import SearchBar from '../SearchBar';
 
 function NavigationBar() {
 	const { isAuthenticated, handleLogout, userInfo } = useAuth();
@@ -57,6 +58,11 @@ function NavigationBar() {
 					My Shelves
 				</Link>
 			</nav>
+			<div id="mini-search-bar-wrapper" className="w-24 self-center">
+				<button>search icon</button>
+
+				<SearchBar />
+			</div>
 			<div className="flex align-middle items-center gap-4">
 				{isAuthenticated && (
 					<span>Hello, {userInfo?.displayName || userInfo?.email}!</span>
