@@ -43,7 +43,7 @@ function MainPage() {
 
 			const query = makeQuery();
 			// console.log(query, '<<<< QUERY');
-			const books = await fetchBooks(query);
+			const books: unknown = await fetchBooks(query);
 			const parsedResult: Book[] = books?.docs.map(
 				({
 					author_name,
@@ -53,7 +53,7 @@ function MainPage() {
 					key,
 					cover_i,
 					...rest
-				}: any) => ({
+				}: unknown) => ({
 					...rest,
 					author: author_name,
 					title,
@@ -89,9 +89,9 @@ function MainPage() {
 			return;
 		}
 
-		await setIsLoading(true);
+		setIsLoading(true);
 		try {
-			await setRecommendations(
+			setRecommendations(
 				fetchedBooks.slice(
 					pageIndex * MAX_RECOMMENDATIONS,
 					pageIndex * MAX_RECOMMENDATIONS + MAX_RECOMMENDATIONS,
@@ -125,6 +125,7 @@ function MainPage() {
 					</p>
 					<div className="flex flex-col md:flex-row max-w-[90%] gap-4 sm:gap-10 justify-center items-center">
 						<button
+							type="button"
 							className="group flex flex-col gap-2 bg-white text-slate-900 hover:text-indigo-50 hover:bg-indigo-400 border border-slate-200 rounded-2xl py-10 px-8 w-[100%] md:w-auto min-w-[90%] md:min-w-64"
 							onClick={() => setDisplayContent('form')}
 						>
@@ -139,6 +140,7 @@ function MainPage() {
 							</span>
 						</button>
 						<button
+							type="button"
 							className="group flex flex-col gap-2 bg-white text-slate-900 hover:text-indigo-50 hover:bg-indigo-400 border border-slate-200 rounded-2xl py-10 px-8 w-[100%] md:w-auto min-w-[90%] md:min-w-64 "
 							onClick={() => navigate('/library')}
 						>
