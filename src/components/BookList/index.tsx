@@ -64,7 +64,7 @@ function BookshelfListModal({
 	);
 }
 
-function BookList({ recommendations }: { recommendations: Book[] }) {
+function BookList({ data }: { data: Book[] }) {
 	const { openModal, closeModal } = useModal();
 	const { isAuthenticated } = useAuth();
 
@@ -111,7 +111,7 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 
 	return (
 		<section className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-full sm:max-w-4xl mx-auto">
-			{recommendations.map((book) => (
+			{data.map((book) => (
 				<BookCard key={book.key} book={book} buttons={buttons} />
 			))}
 		</section>

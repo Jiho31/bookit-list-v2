@@ -39,7 +39,7 @@ function BookRecommendations({
 							Start over to adjust your choices and discover great reads. :)
 						</div>
 					) : (
-						<BookList recommendations={recommendations} />
+						<BookList data={recommendations} />
 					)}
 					<div className="flex gap-2 justify-center mt-6">
 						<button
