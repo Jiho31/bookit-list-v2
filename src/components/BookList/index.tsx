@@ -51,10 +51,15 @@ function BookshelfListModal({
 					</li>
 				))}
 			</ul>
-			<button className="mt-2 w-min self-center" onClick={addToBookshelf}>
+			<button
+				type="button"
+				className="mt-2 w-min self-center"
+				onClick={addToBookshelf}
+			>
 				Add
 			</button>
 			<button
+				type="button"
 				className="text-slate-800 bg-slate-200 absolute top-5 right-5 p-2"
 				onClick={close}
 			>
