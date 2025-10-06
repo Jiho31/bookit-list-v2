@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import useOpenLibraryAPI from '../../hooks/useOpenLibraryAPI';
 import fallbackImage from '../../assets/fallbackImage.png';
-import type { BookItem, CardButton } from '../../types';
+import type { Book, BookItem, CardButton } from '../../types';
 import LoadingSpinner from '../common/LoadingSpinner';
 
 function CoverImage({
@@ -61,7 +61,7 @@ export default function BookCard({
 	buttons,
 }: {
 	data?: BookItem;
-	book: any;
+	book: Book;
 	onClickHandler?: () => void;
 	buttons: CardButton[];
 }) {
