@@ -1,17 +1,56 @@
 import BookList from '@/components/BookList';
 import useOpenLibraryAPI from '@/hooks/useOpenLibraryAPI';
-import { useEffect, useState } from 'react';
+import {
+	type Book,
+	// type OpenLibrarySearchResponse,
+	type SearchResultDocs,
+} from '@/types';
+import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
-function BookListPage() {
-	const [searchParams, setSearchParams] = useSearchParams();
-	const [searchResult, setSearchResult] = useState([]);
-	const [keyword, setKeyword] = useState('');
-	const { search } = useOpenLibraryAPI();
+type SearchInfo = {
+	data: Book[];
+	total: number;
+	pageIndex: number;
+	pageSize: number;
+};
 
-	const handleKeywordSearch = async () => {
+const PAGE_SIZE = 30;
+
+function BookListPage() {
+	const [searchParams /* , setSearchParams */] = useSearchParams();
+	const [searchResult, setSearchResult] = useState<SearchInfo | undefined>({});
+	const [keyword, setKeyword] = useState('');
+	const [data, setData] = useState<Book[]>([]);
+	const { searchByKeyword } = useOpenLibraryAPI();
+
+	const handleKeywordSearch = async (filteredKeyword: string) => {
 		try {
-			const result = await search(keyword);
+			const result = await searchByKeyword(filteredKeyword);
+			// console.log(result, '1111111111 search RESULT');
+
+			const parsedData =
+				result?.docs.map((origin: SearchResultDocs) => ({
+					key: origin.key,
+					author:
+						typeof origin.author_name == 'object'
+							? origin.author_name[0]
+							: 'Unknown',
+					title: origin.title,
+					coverEditionKey: origin.cover_edition_key,
+					coverId: origin.cover_i,
+					publishedYear: origin.first_publish_year,
+				})) || [];
+
+			setSearchResult({
+				pageIndex: 0,
+				pageSize: 30,
+				data: parsedData,
+				total: result?.numFound || 0,
+			});
+
+			console.log(parsedData, '##### PARSED');
+
 			// parse data format
 			/** result.docs
        {
@@ -52,6 +91,8 @@ function BookListPage() {
        */
 
 			// setSearchResult
+
+			setData(parsedData.slice(0, PAGE_SIZE));
 		} catch (err) {
 			console.error(err);
 		}
@@ -59,23 +100,28 @@ function BookListPage() {
 
 	useEffect(() => {
 		const newKeyword = searchParams.get('keyword') || '';
-		console.log(newKeyword, '<<<<<<<<<<<<<< keyword from params');
+
+		// @todo 영어 아닌 언어 입력하면 어떻게 되지..? 예외 처리 필요한가
+
 		setKeyword(newKeyword);
 	}, [searchParams]);
 
 	useEffect(() => {
-		// 쿼리에서 키워드 가져와서 검색
-		if (keyword.trim() == '') {
+		// @todo keyword reg test
+		const filteredKeyword = keyword.trim();
+		if (filteredKeyword == '') {
 			return;
 		}
 
-		// @todo void 키워드 붙여야 돼?
-		void handleKeywordSearch();
+		void handleKeywordSearch(filteredKeyword);
 	}, [keyword]);
 	return (
-		<div>
-			<BookList data={searchResult} />
-		</div>
+		<section className="w-full h-full px-8 flex flex-col justify-center align-middle">
+			<h1 className="text-center py-8 font-semibold text-2xl">
+				Search results for '{keyword}':
+			</h1>
+			<BookList data={data} />
+		</section>
 	);
 }
 
