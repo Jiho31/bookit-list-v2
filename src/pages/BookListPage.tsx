@@ -1,11 +1,12 @@
 import BookList from '@/components/BookList';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import useOpenLibraryAPI from '@/hooks/useOpenLibraryAPI';
 import {
 	type Book,
 	// type OpenLibrarySearchResponse,
 	type SearchResultDocs,
 } from '@/types';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
 type SearchInfo = {
@@ -22,10 +23,14 @@ function BookListPage() {
 	const [searchResult, setSearchResult] = useState<SearchInfo | undefined>({});
 	const [keyword, setKeyword] = useState('');
 	const [data, setData] = useState<Book[]>([]);
+	const [isLoading, setIsLoading] = useState(false);
 	const { searchByKeyword } = useOpenLibraryAPI();
+	const isEmpty = useMemo(() => data.length === 0, [data]);
 
 	const handleKeywordSearch = async (filteredKeyword: string) => {
 		try {
+			setIsLoading(true);
+
 			const result = await searchByKeyword(filteredKeyword);
 			// console.log(result, '1111111111 search RESULT');
 
@@ -95,6 +100,8 @@ function BookListPage() {
 			setData(parsedData.slice(0, PAGE_SIZE));
 		} catch (err) {
 			console.error(err);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -120,7 +127,18 @@ function BookListPage() {
 			<h1 className="text-center py-8 font-semibold text-2xl">
 				Search results for '{keyword}':
 			</h1>
-			<BookList data={data} />
+			{isLoading ? (
+				<div className="w-full h-full m-auto">
+					<LoadingSpinner width={48} height={48} />
+					<p className="text-center">Loading results ...</p>
+				</div>
+			) : !isEmpty ? (
+				<BookList data={data} />
+			) : (
+				<div className="text-center text-gray-500 py-10">
+					No result can be found.
+				</div>
+			)}
 		</section>
 	);
 }
