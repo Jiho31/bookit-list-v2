@@ -6,7 +6,7 @@ import {
 	// type OpenLibrarySearchResponse,
 	type SearchResultDocs,
 } from '@/types';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
 type SearchInfo = {
@@ -25,7 +25,8 @@ function BookListPage() {
 	const [data, setData] = useState<Book[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const { searchByKeyword } = useOpenLibraryAPI();
-	const isEmpty = useMemo(() => data.length === 0, [data]);
+
+	const emptyContent = 'No result can be found.';
 
 	const handleKeywordSearch = async (filteredKeyword: string) => {
 		try {
@@ -127,18 +128,8 @@ function BookListPage() {
 			<h1 className="text-center py-8 font-semibold text-2xl">
 				Search results for '{keyword}':
 			</h1>
-			{isLoading ? (
-				<div className="w-full h-full m-auto">
-					<LoadingSpinner width={48} height={48} />
-					<p className="text-center">Loading results ...</p>
-				</div>
-			) : !isEmpty ? (
-				<BookList data={data} />
-			) : (
-				<div className="text-center text-gray-500 py-10">
-					No result can be found.
-				</div>
-			)}
+
+			<BookList data={data} isLoading={isLoading} emptyContent={emptyContent} />
 		</section>
 	);
 }

@@ -20,6 +20,15 @@ function BookRecommendations({
 		[recommendations],
 	);
 
+	const emptyContent = (
+		<>
+			No books found for your preferences. <br />
+			Start over to adjust your choices and discover great reads. :)
+		</>
+	);
+
+	const loadingContent = 'Generating recommendations ...';
+
 	return (
 		<section className="flex flex-col p-10">
 			{isLoading ? (
@@ -33,14 +42,14 @@ function BookRecommendations({
 						className="text-center"
 						title="Book recommendations for you 🤗"
 					/>
-					{isEmpty ? (
-						<div className="text-center text-gray-500 py-10">
-							No books found for your preferences. <br />
-							Start over to adjust your choices and discover great reads. :)
-						</div>
-					) : (
-						<BookList data={recommendations} />
-					)}
+
+					<BookList
+						data={recommendations}
+						isLoading={isLoading}
+						loadingContent={loadingContent}
+						emptyContent={emptyContent}
+					/>
+
 					<div className="flex gap-2 justify-center mt-6">
 						<button
 							type="button"
@@ -48,7 +57,6 @@ function BookRecommendations({
 							onClick={refreshForm}
 						>
 							Start Over
-							{/* New Search */}
 						</button>
 						<button
 							type="button"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState, type ReactElement } from 'react';
 import { toast } from 'sonner';
 import type { Book, CardButton } from '../../types';
 import BookCard from './BookCard';
@@ -6,6 +6,7 @@ import { useBookshelf } from '../../contexts/BookshelfContext';
 import { useModal } from '../../contexts/ModalContext';
 import { useAuth } from '@/contexts/AuthContext';
 import RegisterModal from '../RegisterModal';
+import LoadingSpinner from '../common/LoadingSpinner';
 
 function BookshelfListModal({
 	book,
@@ -69,9 +70,20 @@ function BookshelfListModal({
 	);
 }
 
-function BookList({ data }: { data: Book[] }) {
+function BookList({
+	data,
+	isLoading,
+	loadingContent = 'Loading ...',
+	emptyContent,
+}: {
+	data: Book[];
+	isLoading: boolean;
+	loadingContent?: string;
+	emptyContent?: ReactElement;
+}) {
 	const { openModal, closeModal } = useModal();
 	const { isAuthenticated } = useAuth();
+	const isEmpty = useMemo(() => data.length === 0, [data]);
 
 	const handleAddBook = ({
 		e,
@@ -115,11 +127,22 @@ function BookList({ data }: { data: Book[] }) {
 	}, [closeModal]);
 
 	return (
-		<section className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-full sm:max-w-4xl mx-auto">
-			{data.map((book) => (
-				<BookCard key={book.key} book={book} buttons={buttons} />
-			))}
-		</section>
+		<>
+			{isLoading ? (
+				<div className="w-full h-full m-auto">
+					<LoadingSpinner width={48} height={48} />
+					<p className="text-center">{loadingContent}</p>
+				</div>
+			) : isEmpty ? (
+				<div className="text-center text-gray-500 py-10">{emptyContent}</div>
+			) : (
+				<section className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-full sm:max-w-4xl mx-auto">
+					{data.map((book) => (
+						<BookCard key={book.key} book={book} buttons={buttons} />
+					))}
+				</section>
+			)}
+		</>
 	);
 }
 
