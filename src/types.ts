@@ -89,6 +89,20 @@ type CardButton = {
 	icon?: React.ReactElement;
 };
 
+type SearchResultDocs = {
+	key: string;
+	title: string;
+	author_name: string[];
+	cover_i: number;
+	cover_edition_key: string;
+	first_publish_year: number;
+};
+
+type OpenLibrarySearchResponse = {
+	docs: Array<SearchResultDocs>;
+	numFound: number;
+};
+
 export type {
 	Book,
 	Form,
@@ -98,4 +112,6 @@ export type {
 	User,
 	BookshelfItem,
 	CardButton,
+	SearchResultDocs,
+	OpenLibrarySearchResponse,
 };
