@@ -25,7 +25,7 @@ function SearchBar() {
 
 	return (
 		<input
-			className="w-full px-5 py-3 rounded-3xl bg-white border border-slate-400"
+			className="w-full px-5 py-3 rounded-3xl bg-white border border-slate-200"
 			placeholder="Search books (Title, author, ISBN)"
 			onKeyDown={handleKeyDown}
 			onChange={handleInputChange}
