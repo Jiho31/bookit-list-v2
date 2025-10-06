@@ -11,7 +11,7 @@ const MAX_RECOMMENDATIONS = 8;
 
 function MainPage() {
 	const navigate = useNavigate();
-	const { search: fetchBooks } = useOpenLibraryAPI();
+	const { searchByQuery: fetchBooks } = useOpenLibraryAPI();
 
 	const [questionIndex, setQuestionIndex] = useState(0);
 	const [userResponse, setUserResponse] = useState<Form>({});
