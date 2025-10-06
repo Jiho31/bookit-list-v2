@@ -184,7 +184,8 @@ export default function LibraryPage() {
 			{isLoading && <LoadingSpinner width={56} height={56} />}
 			{!!bookshelfData && !isLoading && (
 				<Bookshelf
-					{...(bookshelfData as BookshelfItem)}
+					{...bookshelfData}
+					key={bookshelfData.key}
 					bookshelfKey={bookshelfData.key}
 					toggleSidebar={toggleSidebar}
 				/>
