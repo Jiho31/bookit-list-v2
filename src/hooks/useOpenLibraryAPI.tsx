@@ -1,10 +1,18 @@
 import type { OpenLibrarySearchResponse } from '@/types';
 
 function useOpenLibraryAPI() {
-	const searchByKeyword = async (keyword: string, limit: number = 100) => {
+	const searchByKeyword = async ({
+		keyword,
+		limit = 30,
+		page = 1,
+	}: {
+		keyword: string;
+		limit?: number;
+		page?: number;
+	}) => {
 		try {
 			const response = await fetch(
-				`https://openlibrary.org/search.json?q=${keyword} AND language:eng&limit=${limit}`,
+				`https://openlibrary.org/search.json?q=${keyword} AND language:eng&limit=${limit}&page=${page}`,
 			);
 
 			if (response.status !== 200) {
