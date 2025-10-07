@@ -1,40 +1,43 @@
-import BookList from '@/components/BookList';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
-import useOpenLibraryAPI from '@/hooks/useOpenLibraryAPI';
-import {
-	type Book,
-	// type OpenLibrarySearchResponse,
-	type SearchResultDocs,
-} from '@/types';
+import { toast } from 'sonner';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
-
-type SearchInfo = {
-	data: Book[];
-	total: number;
-	pageIndex: number;
-	pageSize: number;
-};
+import BookList from '@/components/BookList';
+import useOpenLibraryAPI from '@/hooks/useOpenLibraryAPI';
+import type { Book, SearchMetaInfo, SearchResultDocs } from '@/types';
 
 const PAGE_SIZE = 30;
+// @todo meta 정보 저장 필요할까??
+const defaultMeta: SearchMetaInfo = {
+	total: 0,
+	pageIndex: 1,
+	pageSize: PAGE_SIZE,
+};
 
 function BookListPage() {
 	const [searchParams /* , setSearchParams */] = useSearchParams();
-	const [searchResult, setSearchResult] = useState<SearchInfo | undefined>({});
 	const [keyword, setKeyword] = useState('');
 	const [data, setData] = useState<Book[]>([]);
+	const [metaInfo, setMetaInfo] = useState<SearchMetaInfo>(defaultMeta);
 	const [isLoading, setIsLoading] = useState(false);
+	const filteredKeyword = useMemo(() => keyword.trim(), [keyword]);
 	const { searchByKeyword } = useOpenLibraryAPI();
 
-	const emptyContent = 'No result can be found.';
+	const emptyContent = <>'No result can be found.'</>;
 
-	const handleKeywordSearch = async (filteredKeyword: string) => {
+	const fetchData = async ({
+		page,
+		isInit = false,
+	}: {
+		page: number;
+		isInit?: boolean;
+	}) => {
 		try {
 			setIsLoading(true);
-
-			const result = await searchByKeyword(filteredKeyword);
-			// console.log(result, '1111111111 search RESULT');
-
+			const result = await searchByKeyword({
+				keyword: filteredKeyword,
+				limit: PAGE_SIZE,
+				page,
+			});
 			const parsedData =
 				result?.docs.map((origin: SearchResultDocs) => ({
 					key: origin.key,
@@ -48,62 +51,28 @@ function BookListPage() {
 					publishedYear: origin.first_publish_year,
 				})) || [];
 
-			setSearchResult({
-				pageIndex: 0,
-				pageSize: 30,
-				data: parsedData,
+			// console.log(parsedData, '##### PARSED');
+
+			if (isInit) {
+				setData(parsedData);
+			} else {
+				setData([...data, ...parsedData]);
+			}
+
+			setMetaInfo((prev: SearchMetaInfo) => ({
+				...prev,
 				total: result?.numFound || 0,
-			});
-
-			console.log(parsedData, '##### PARSED');
-
-			// parse data format
-			/** result.docs
-       {
-          "author_key": [
-              "OL2832500A"
-          ],
-          "author_name": [
-              "Jeff Kinney"
-          ],
-          "cover_i": 7888937,
-          "ebook_access": "borrowable",
-          "edition_count": 52,
-          "first_publish_year": 2007,
-          "has_fulltext": true,
-          "ia": [
-              "atodamarcha0000kinn",
-              "doubledown0000jeff",
-              "doubledown0000kinn",
-              "diaryofwimpykidd0000kinn_k3w3",
-              "diaryofwimpykidd0000kinn"
-          ],
-          "ia_collection_s": "inlibrary;internetarchivebooks;openlibrary-d-ol;printdisabled",
-          "key": "/works/OL17603394W",
-          "language": [
-              "eng",
-              "spa",
-              "wel",
-              "chi",
-              "baq",
-              "pol",
-              "jpn"
-          ],
-          "lending_edition_s": "OL26782251M",
-          "lending_identifier_s": "atodamarcha0000kinn",
-          "public_scan_b": false,
-          "title": "Double Down"
-        }
-       */
-
-			// setSearchResult
-
-			setData(parsedData.slice(0, PAGE_SIZE));
+			}));
 		} catch (err) {
 			console.error(err);
+			toast.error('Failed to fetch data');
 		} finally {
 			setIsLoading(false);
 		}
+	};
+
+	const init = () => {
+		void fetchData({ page: 1, isInit: true });
 	};
 
 	useEffect(() => {
@@ -115,21 +84,26 @@ function BookListPage() {
 	}, [searchParams]);
 
 	useEffect(() => {
-		// @todo keyword reg test
-		const filteredKeyword = keyword.trim();
 		if (filteredKeyword == '') {
 			return;
 		}
 
-		void handleKeywordSearch(filteredKeyword);
-	}, [keyword]);
+		init();
+	}, [filteredKeyword]);
+
 	return (
 		<section className="w-full h-full px-8 flex flex-col justify-center align-middle">
 			<h1 className="text-center py-8 font-semibold text-2xl">
 				Search results for '{keyword}':
 			</h1>
 
-			<BookList data={data} isLoading={isLoading} emptyContent={emptyContent} />
+			<BookList
+				data={data}
+				metaInfo={metaInfo}
+				fetchData={fetchData}
+				isLoading={isLoading}
+				emptyContent={emptyContent}
+			/>
 		</section>
 	);
 }

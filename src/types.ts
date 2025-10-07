@@ -103,6 +103,13 @@ type OpenLibrarySearchResponse = {
 	numFound: number;
 };
 
+type SearchMetaInfo = {
+	// data: Book[];
+	total: number;
+	pageIndex: number;
+	pageSize: number;
+};
+
 export type {
 	Book,
 	Form,
@@ -114,4 +121,5 @@ export type {
 	CardButton,
 	SearchResultDocs,
 	OpenLibrarySearchResponse,
+	SearchMetaInfo,
 };

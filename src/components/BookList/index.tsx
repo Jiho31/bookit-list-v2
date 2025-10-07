@@ -1,5 +1,5 @@
-import { useEffect, useMemo, type ReactElement } from 'react';
-import type { Book, CardButton } from '../../types';
+import { useEffect, useMemo, useRef, useState, type ReactElement } from 'react';
+import type { Book, CardButton, SearchMetaInfo } from '@/types';
 import BookCard from './BookCard';
 import { useModal } from '../../contexts/ModalContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -9,11 +9,15 @@ import BookshelfListModal from './BookshelfListModal';
 
 function BookList({
 	data,
+	fetchData,
+	metaInfo,
 	isLoading,
 	loadingContent = 'Loading ...',
 	emptyContent,
 }: {
 	data: Book[];
+	fetchData: ({ page }: { page: number }) => Promise<void>;
+	metaInfo: SearchMetaInfo;
 	isLoading: boolean;
 	loadingContent?: string;
 	emptyContent?: ReactElement;
@@ -21,6 +25,52 @@ function BookList({
 	const { openModal, closeModal } = useModal();
 	const { isAuthenticated } = useAuth();
 	const isEmpty = useMemo(() => data.length === 0, [data]);
+	const [page, setPage] = useState(1);
+	const observerRef = useRef(null);
+	const maxContendLoaded = useMemo(
+		() => page >= Math.ceil(metaInfo.total / metaInfo.pageSize),
+		[page, metaInfo],
+	);
+
+	useEffect(() => {
+		if (isLoading) {
+			// console.log('3333333 Data is still loading');
+			return;
+		}
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting) {
+					// console.log('####### observed!!!!!!');
+
+					if (maxContendLoaded) {
+						// console.log('222222222222 Max loaded !222222');
+
+						return;
+					}
+					setPage((prevPage) => {
+						const nextPage = prevPage + 1;
+						void fetchData({ page: nextPage });
+						return nextPage;
+					});
+				}
+			},
+			{
+				threshold: 1,
+				rootMargin: '20px',
+			},
+		);
+
+		if (observerRef.current) {
+			observer.observe(observerRef.current);
+		}
+
+		return () => {
+			if (observerRef.current) {
+				observer.unobserve(observerRef.current);
+			}
+		};
+	}, [isLoading, maxContendLoaded, fetchData, observerRef]);
 
 	const handleAddBook = ({
 		e,
@@ -65,12 +115,7 @@ function BookList({
 
 	return (
 		<>
-			{isLoading ? (
-				<div className="w-full h-full m-auto">
-					<LoadingSpinner width={48} height={48} />
-					<p className="text-center">{loadingContent}</p>
-				</div>
-			) : isEmpty ? (
+			{isEmpty ? (
 				<div className="text-center text-gray-500 py-10">{emptyContent}</div>
 			) : (
 				<section className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-full sm:max-w-4xl mx-auto">
@@ -78,6 +123,13 @@ function BookList({
 						<BookCard key={book.key} book={book} buttons={buttons} />
 					))}
 				</section>
+			)}
+			<div ref={observerRef}></div>
+			{isLoading && (
+				<div className="w-full h-full m-auto">
+					<LoadingSpinner width={48} height={48} />
+					<p className="text-center">{loadingContent}</p>
+				</div>
 			)}
 		</>
 	);
