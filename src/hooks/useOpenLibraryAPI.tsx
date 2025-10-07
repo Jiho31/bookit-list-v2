@@ -1,25 +1,48 @@
+import type { OpenLibrarySearchResponse } from '@/types';
+
 function useOpenLibraryAPI() {
-	const search = async (keyword: string, limit: number = 100) => {
-		// console.log('search keyword: ', keyword);
-
-		/** SORT Options
-		 * want_to_read
-		 * rating
-		 * new
-		 * already_read
-		 * random
-		 */
-
+	const searchByKeyword = async ({
+		keyword,
+		limit = 30,
+		page = 1,
+	}: {
+		keyword: string;
+		limit?: number;
+		page?: number;
+	}) => {
 		try {
 			const response = await fetch(
-				`https://openlibrary.org/search.json?q=${keyword} AND language:eng&sort=rating&limit=${limit}`,
+				`https://openlibrary.org/search.json?q=${keyword} AND language:eng&limit=${limit}&page=${page}`,
 			);
 
 			if (response.status !== 200) {
 				throw new Error();
 			}
 
-			const json = await response.json();
+			const json = (await response.json()) as OpenLibrarySearchResponse;
+			return json;
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
+	const searchByQuery = async (keyword: string, limit: number = 100) => {
+		const sortOptions = ['want_to_read', 'rating', 'random'];
+		const getRandomIndex = (max: number) => {
+			return Math.floor(Math.random() * max);
+		};
+
+		try {
+			const sortBy = sortOptions[getRandomIndex(sortOptions.length)];
+			const response = await fetch(
+				`https://openlibrary.org/search.json?q=${keyword} AND language:eng&sort=${sortBy}&limit=${limit}`,
+			);
+
+			if (response.status !== 200) {
+				throw new Error();
+			}
+
+			const json = (await response.json()) as OpenLibrarySearchResponse;
 			// console.log(json, '<<<<<<<<<<<<<<<<<<<<< RESULT');
 			return json;
 		} catch (err) {
@@ -32,8 +55,8 @@ function useOpenLibraryAPI() {
 		key,
 		id,
 	}: {
-		key: string | null;
-		id: number | null;
+		key: string | undefined;
+		id: number | undefined;
 	}) =>
 		typeof id === 'number'
 			? `https://covers.openlibrary.org/b/id/${id}.jpg`
@@ -41,10 +64,7 @@ function useOpenLibraryAPI() {
 				? `https://covers.openlibrary.org/b/olid/${key}.jpg`
 				: '/fallbackImage.png';
 
-	return {
-		search,
-		getBookCoverImage,
-	};
+	return { searchByKeyword, searchByQuery, getBookCoverImage };
 }
 
 export default useOpenLibraryAPI;
