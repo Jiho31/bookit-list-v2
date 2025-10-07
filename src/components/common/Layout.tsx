@@ -42,7 +42,7 @@ function NavigationBar() {
 				</Link>
 				<Link
 					to="/library"
-					className="inline-flex flex-col sm:flex-row gap-0.5 sm:gap-2 items-center group text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 py-2 px-3 rounded-xl"
+					className="inline-flex flex-col sm:flex-row gap-0.5 sm:gap-2 items-center group text-center text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 py-2 px-3 rounded-xl"
 				>
 					<svg
 						className="fill-current"
@@ -58,16 +58,18 @@ function NavigationBar() {
 					My Shelves
 				</Link>
 			</nav>
-			<div id="mini-search-bar-wrapper" className="w-24 self-center">
-				<button>search icon</button>
-
-				<SearchBar />
-			</div>
 			<div className="flex align-middle items-center gap-4">
+				<SearchBar />
 				{isAuthenticated && (
-					<span>Hello, {userInfo?.displayName || userInfo?.email}!</span>
+					<p className="px-2">
+						Hello, {userInfo?.displayName || userInfo?.email}!
+					</p>
 				)}
-				<button className="h-fit text-sm self-center" onClick={handleClick}>
+				<button
+					type="button"
+					className="h-fit text-sm self-center"
+					onClick={handleClick}
+				>
 					{isAuthenticated ? (
 						<span className="inline-flex text-white gap-1 align-middle">
 							<svg

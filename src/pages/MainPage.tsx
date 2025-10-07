@@ -5,7 +5,6 @@ import type { Book, Form, SearchMetaInfo, SearchResultDocs } from '../types';
 import RecommendationForm from '../components/RecommendationForm';
 import BookRecommendations from '../pages/BookRecommendations';
 import { questions } from '../consts/form';
-import SearchBar from '@/components/SearchBar';
 
 const MAX_RECOMMENDATIONS = 9;
 const defaultMeta: SearchMetaInfo = {
@@ -165,9 +164,6 @@ function MainPage() {
 								Organize your reads and add new books.
 							</span>
 						</button>
-					</div>
-					<div id="searchBarWrapper" className="my-10 flex w-[50%] min-w-36">
-						<SearchBar />
 					</div>
 				</section>
 			)}
