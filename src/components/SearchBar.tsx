@@ -9,7 +9,7 @@ function SearchBar() {
 		// 1. keyword 값 검증 ?? 특수문자 제거!
 		const validatedKeyword = keywordInput.trim();
 
-		void navigate(`/search?keyword=${validatedKeyword}`);
+		navigate(`/search?keyword=${validatedKeyword}`);
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

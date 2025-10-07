@@ -45,6 +45,18 @@ export default tseslint.config(
 					checksVoidReturn: false,
 				},
 			],
+			'@typescript-eslint/no-floating-promises': [
+				'error',
+				{
+					allowForKnownSafeCalls: [
+						{
+							from: 'package',
+							name: 'NavigateFunction',
+							package: 'react-router',
+						},
+					],
+				},
+			],
 		},
 	},
 );
