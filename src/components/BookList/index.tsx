@@ -1,72 +1,80 @@
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import type { Book, CardButton } from '../../types';
+import { useEffect, useMemo, useRef, useState, type ReactElement } from 'react';
+import type { Book, CardButton, SearchMetaInfo } from '@/types';
 import BookCard from './BookCard';
-import { useBookshelf } from '../../contexts/BookshelfContext';
 import { useModal } from '../../contexts/ModalContext';
 import { useAuth } from '@/contexts/AuthContext';
 import RegisterModal from '../RegisterModal';
+import LoadingSpinner from '../common/LoadingSpinner';
+import BookshelfListModal from './BookshelfListModal';
 
-function BookshelfListModal({
-	book,
-	close,
+function BookList({
+	data,
+	fetchData,
+	metaInfo,
+	isLoading,
+	loadingContent = 'Loading ...',
+	emptyContent,
+	enableInfiniteScroll,
 }: {
-	book: Book;
-	close: () => void;
+	data: Book[];
+	fetchData?: ({ page }: { page: number }) => Promise<void>;
+	metaInfo: SearchMetaInfo;
+	isLoading: boolean;
+	loadingContent?: string;
+	emptyContent?: ReactElement;
+	enableInfiniteScroll: boolean;
 }) {
-	const { list, addBookToShelf } = useBookshelf();
-	const [targetKey, setTargetKey] = useState('');
+	const { openModal, closeModal } = useModal();
+	const { isAuthenticated } = useAuth();
+	const isEmpty = useMemo(() => data.length === 0, [data]);
+	const [page, setPage] = useState(1);
+	const observerRef = useRef(null);
+	const maxContendLoaded = useMemo(
+		() => page >= Math.ceil(metaInfo.total / metaInfo.pageSize),
+		[page, metaInfo],
+	);
 
-	const addToBookshelf = async () => {
-		if (targetKey === '') {
-			toast.info('You have to select one bookshelf');
+	useEffect(() => {
+		if (isLoading || !enableInfiniteScroll || typeof fetchData !== 'function') {
+			// console.log('3333333 Data is still loading');
 			return;
 		}
 
-		try {
-			await addBookToShelf(targetKey, book);
-			toast.success('Successfully added book to bookshelf');
-		} catch (err) {
-			if (typeof err === 'string') {
-				toast.info(err);
-			} else {
-				console.error(err);
-			}
-		} finally {
-			close();
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting) {
+					if (maxContendLoaded) {
+						return;
+					}
+					setPage((prevPage) => {
+						const nextPage = prevPage + 1;
+						void fetchData({ page: nextPage });
+						return nextPage;
+					});
+				}
+			},
+			{
+				threshold: 1,
+				rootMargin: '20px',
+			},
+		);
+
+		if (observerRef.current) {
+			observer.observe(observerRef.current);
 		}
-	};
 
-	return (
-		<div className="flex flex-col gap-2 w-[350px] h-auto max-h-2/3 overflow-scroll bg-slate-200 p-5 rounded-2xl">
-			<h2 className="text-md font-semibold py-1 mb-5">Add to bookshelf</h2>
-			<ul className="w-full flex flex-col gap-1.5">
-				{list.map((item) => (
-					<li
-						className={`rounded-lg px-3 py-2 text-sm ${item.key === targetKey ? 'bg-indigo-400 text-indigo-50' : 'bg-white'}  hover:bg-indigo-600 hover:text-indigo-50 cursor-pointer`}
-						key={item.key}
-						onClick={() => setTargetKey(item.key)}
-					>
-						{item.name} ({item.numOfBooks})
-					</li>
-				))}
-			</ul>
-			<button className="mt-2 w-min self-center" onClick={addToBookshelf}>
-				Add
-			</button>
-			<button
-				className="text-slate-800 bg-slate-200 absolute top-5 right-5 p-2"
-				onClick={close}
-			>
-				X
-			</button>
-		</div>
-	);
-}
-
-function BookList({ recommendations }: { recommendations: Book[] }) {
-	const { openModal, closeModal } = useModal();
-	const { isAuthenticated } = useAuth();
+		return () => {
+			if (observerRef.current) {
+				observer.unobserve(observerRef.current);
+			}
+		};
+	}, [
+		isLoading,
+		maxContendLoaded,
+		enableInfiniteScroll,
+		fetchData,
+		observerRef,
+	]);
 
 	const handleAddBook = ({
 		e,
@@ -110,11 +118,24 @@ function BookList({ recommendations }: { recommendations: Book[] }) {
 	}, [closeModal]);
 
 	return (
-		<section className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-full sm:max-w-4xl mx-auto">
-			{recommendations.map((book) => (
-				<BookCard key={book.key} book={book} buttons={buttons} />
-			))}
-		</section>
+		<>
+			{isEmpty ? (
+				<div className="text-center text-gray-500 py-10">{emptyContent}</div>
+			) : (
+				<section className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-full sm:max-w-4xl mx-auto">
+					{data.map((book) => (
+						<BookCard key={book.key} book={book} buttons={buttons} />
+					))}
+				</section>
+			)}
+			<div ref={observerRef}></div>
+			{isLoading && (
+				<div className="w-full h-full m-auto">
+					<LoadingSpinner width={48} height={48} />
+					<p className="text-center">{loadingContent}</p>
+				</div>
+			)}
+		</>
 	);
 }
 

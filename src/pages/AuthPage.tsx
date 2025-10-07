@@ -158,7 +158,6 @@ const LoginForm = () => {
 
 		try {
 			await handleEmailLogin(email, password);
-			// @todo init bookshelf data
 		} catch (error: any) {
 			setError(error.message);
 		}

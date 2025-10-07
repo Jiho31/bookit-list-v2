@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, use, useEffect, useState } from 'react';
 import type { Book, BookItem, BookshelfItem } from '../types';
 import { DEFAULT_BOOKSHELF_KEY } from '../consts/books';
 import { useAuth } from './AuthContext';
@@ -306,7 +306,7 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 const useBookshelf = () => {
-	const ctx = useContext(BookshelfContext);
+	const ctx = use(BookshelfContext);
 	if (!ctx)
 		throw new Error('useBookshlef must me used within Bookshelf Context');
 	return ctx;

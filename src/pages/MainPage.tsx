@@ -1,16 +1,21 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import useOpenLibraryAPI from '../hooks/useOpenLibraryAPI';
-import type { Book, Form } from '../types';
+import type { Book, Form, SearchMetaInfo, SearchResultDocs } from '../types';
 import RecommendationForm from '../components/RecommendationForm';
 import BookRecommendations from '../pages/BookRecommendations';
 import { questions } from '../consts/form';
 
-const MAX_RECOMMENDATIONS = 8;
+const MAX_RECOMMENDATIONS = 9;
+const defaultMeta: SearchMetaInfo = {
+	total: 0,
+	pageIndex: 1,
+	pageSize: MAX_RECOMMENDATIONS,
+};
 
 function MainPage() {
 	const navigate = useNavigate();
-	const { search: fetchBooks } = useOpenLibraryAPI();
+	const { searchByQuery: fetchBooks } = useOpenLibraryAPI();
 
 	const [questionIndex, setQuestionIndex] = useState(0);
 	const [userResponse, setUserResponse] = useState<Form>({});
@@ -21,7 +26,7 @@ function MainPage() {
 	);
 	const [fetchedBooks, setFetchedBooks] = useState<Book[]>([]);
 	const [recommendations, setRecommendations] = useState<Book[]>([]);
-	const [pageIndex, setPageIndex] = useState(1);
+	const [metaInfo, setMetaInfo] = useState(defaultMeta);
 
 	const [displayContent, setDisplayContent] = useState<'mainPage' | 'form'>(
 		'mainPage',
@@ -39,32 +44,37 @@ function MainPage() {
 		setIsLoading(true);
 
 		try {
-			// console.log('generating..');
-
 			const query = makeQuery();
-			// console.log(query, '<<<< QUERY');
 			const books = await fetchBooks(query);
-			const parsedResult: Book[] = books?.docs.map(
-				({
-					author_name,
-					title,
-					cover_edition_key,
-					first_publish_year,
-					key,
-					cover_i,
-					...rest
-				}: any) => ({
-					...rest,
-					author: author_name,
-					title,
-					key,
-					publishedYear: first_publish_year,
-					// coverEditionKey: cover_edition_key || null,
-					coverId: cover_i || null,
-				}),
-			);
+			const parsedResult =
+				books?.docs.map(
+					({
+						author_name,
+						title,
+						// cover_edition_key,
+						first_publish_year,
+						key,
+						cover_i,
+						...rest
+					}: SearchResultDocs) => ({
+						...rest,
+						author:
+							typeof author_name == 'string' ? author_name : author_name[0],
+						title,
+						key,
+						publishedYear: first_publish_year,
+						// coverEditionKey: cover_edition_key || null,
+						coverId: cover_i || undefined,
+					}),
+				) || [];
 
 			setFetchedBooks(parsedResult);
+			setMetaInfo({
+				pageIndex: 1,
+				pageSize: MAX_RECOMMENDATIONS,
+				total: books?.numFound || 0,
+			});
+
 			setRecommendations(parsedResult.slice(0, MAX_RECOMMENDATIONS));
 		} catch (err) {
 			console.error(err);
@@ -76,11 +86,13 @@ function MainPage() {
 	const refreshForm = () => {
 		setUserResponse({});
 		setQuestionIndex(0);
-		setPageIndex(1);
+		setMetaInfo(defaultMeta);
 	};
 
-	const shuffleRecommendations = async () => {
-		if (pageIndex === Math.ceil(fetchedBooks.length / MAX_RECOMMENDATIONS)) {
+	const shuffleRecommendations = () => {
+		if (
+			metaInfo.pageIndex === Math.ceil(fetchedBooks.length / metaInfo.pageSize)
+		) {
 			// @todo call book search API for more results
 			// or
 			// Recommend user to do the survey again ?
@@ -89,15 +101,15 @@ function MainPage() {
 			return;
 		}
 
-		await setIsLoading(true);
+		setIsLoading(true);
 		try {
-			await setRecommendations(
+			setRecommendations(
 				fetchedBooks.slice(
-					pageIndex * MAX_RECOMMENDATIONS,
-					pageIndex * MAX_RECOMMENDATIONS + MAX_RECOMMENDATIONS,
+					metaInfo.pageIndex * metaInfo.pageSize,
+					metaInfo.pageIndex * metaInfo.pageSize + metaInfo.pageSize,
 				),
 			);
-			setPageIndex(pageIndex + 1);
+			setMetaInfo((prev) => ({ ...prev, pageIndex: prev.pageIndex + 1 }));
 		} catch (err) {
 			console.error(err);
 		} finally {
@@ -107,7 +119,7 @@ function MainPage() {
 
 	useEffect(() => {
 		if (isFormComplete) {
-			generateRecommendation();
+			void generateRecommendation();
 		}
 	}, [isFormComplete]);
 
@@ -125,6 +137,7 @@ function MainPage() {
 					</p>
 					<div className="flex flex-col md:flex-row max-w-[90%] gap-4 sm:gap-10 justify-center items-center">
 						<button
+							type="button"
 							className="group flex flex-col gap-2 bg-white text-slate-900 hover:text-indigo-50 hover:bg-indigo-400 border border-slate-200 rounded-2xl py-10 px-8 w-[100%] md:w-auto min-w-[90%] md:min-w-64"
 							onClick={() => setDisplayContent('form')}
 						>
@@ -139,6 +152,7 @@ function MainPage() {
 							</span>
 						</button>
 						<button
+							type="button"
 							className="group flex flex-col gap-2 bg-white text-slate-900 hover:text-indigo-50 hover:bg-indigo-400 border border-slate-200 rounded-2xl py-10 px-8 w-[100%] md:w-auto min-w-[90%] md:min-w-64 "
 							onClick={() => navigate('/library')}
 						>
@@ -168,6 +182,7 @@ function MainPage() {
 							recommendations={recommendations}
 							refreshForm={refreshForm}
 							shuffleRecommendations={shuffleRecommendations}
+							metaInfo={metaInfo}
 						/>
 					)}
 				</>
