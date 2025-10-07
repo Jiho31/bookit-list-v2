@@ -14,13 +14,15 @@ function BookList({
 	isLoading,
 	loadingContent = 'Loading ...',
 	emptyContent,
+	enableInfiniteScroll,
 }: {
 	data: Book[];
-	fetchData: ({ page }: { page: number }) => Promise<void>;
+	fetchData?: ({ page }: { page: number }) => Promise<void>;
 	metaInfo: SearchMetaInfo;
 	isLoading: boolean;
 	loadingContent?: string;
 	emptyContent?: ReactElement;
+	enableInfiniteScroll: boolean;
 }) {
 	const { openModal, closeModal } = useModal();
 	const { isAuthenticated } = useAuth();
@@ -33,7 +35,7 @@ function BookList({
 	);
 
 	useEffect(() => {
-		if (isLoading) {
+		if (isLoading || !enableInfiniteScroll || typeof fetchData !== 'function') {
 			// console.log('3333333 Data is still loading');
 			return;
 		}
@@ -41,11 +43,7 @@ function BookList({
 		const observer = new IntersectionObserver(
 			(entries) => {
 				if (entries[0].isIntersecting) {
-					// console.log('####### observed!!!!!!');
-
 					if (maxContendLoaded) {
-						// console.log('222222222222 Max loaded !222222');
-
 						return;
 					}
 					setPage((prevPage) => {
@@ -70,7 +68,13 @@ function BookList({
 				observer.unobserve(observerRef.current);
 			}
 		};
-	}, [isLoading, maxContendLoaded, fetchData, observerRef]);
+	}, [
+		isLoading,
+		maxContendLoaded,
+		enableInfiniteScroll,
+		fetchData,
+		observerRef,
+	]);
 
 	const handleAddBook = ({
 		e,

@@ -100,6 +100,7 @@ function BookListPage() {
 			<BookList
 				data={data}
 				metaInfo={metaInfo}
+				enableInfiniteScroll={true}
 				fetchData={fetchData}
 				isLoading={isLoading}
 				emptyContent={emptyContent}
