@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import type { Book } from '../types';
+import type { Book, SearchMetaInfo } from '../types';
 import BookList from '../components/BookList';
 import Header from '../components/common/Header';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -9,11 +9,13 @@ function BookRecommendations({
 	recommendations,
 	refreshForm,
 	shuffleRecommendations,
+	metaInfo,
 }: {
 	isLoading: boolean;
 	recommendations: Book[];
 	refreshForm: () => void;
 	shuffleRecommendations: () => void;
+	metaInfo: SearchMetaInfo;
 }) {
 	const isEmpty = useMemo(
 		() => recommendations.length === 0,
@@ -46,8 +48,10 @@ function BookRecommendations({
 					<BookList
 						data={recommendations}
 						isLoading={isLoading}
+						metaInfo={metaInfo}
 						loadingContent={loadingContent}
 						emptyContent={emptyContent}
+						enableInfiniteScroll={false}
 					/>
 
 					<div className="flex gap-2 justify-center mt-6">

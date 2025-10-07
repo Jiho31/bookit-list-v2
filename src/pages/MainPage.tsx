@@ -1,13 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import useOpenLibraryAPI from '../hooks/useOpenLibraryAPI';
-import type { Book, Form } from '../types';
+import type { Book, Form, SearchMetaInfo, SearchResultDocs } from '../types';
 import RecommendationForm from '../components/RecommendationForm';
 import BookRecommendations from '../pages/BookRecommendations';
 import { questions } from '../consts/form';
 import SearchBar from '@/components/SearchBar';
 
-const MAX_RECOMMENDATIONS = 8;
+const MAX_RECOMMENDATIONS = 9;
+const defaultMeta: SearchMetaInfo = {
+	total: 0,
+	pageIndex: 1,
+	pageSize: MAX_RECOMMENDATIONS,
+};
 
 function MainPage() {
 	const navigate = useNavigate();
@@ -22,7 +27,7 @@ function MainPage() {
 	);
 	const [fetchedBooks, setFetchedBooks] = useState<Book[]>([]);
 	const [recommendations, setRecommendations] = useState<Book[]>([]);
-	const [pageIndex, setPageIndex] = useState(1);
+	const [metaInfo, setMetaInfo] = useState(defaultMeta);
 
 	const [displayContent, setDisplayContent] = useState<'mainPage' | 'form'>(
 		'mainPage',
@@ -40,32 +45,37 @@ function MainPage() {
 		setIsLoading(true);
 
 		try {
-			// console.log('generating..');
-
 			const query = makeQuery();
-			// console.log(query, '<<<< QUERY');
-			const books: unknown = await fetchBooks(query);
-			const parsedResult: Book[] = books?.docs.map(
-				({
-					author_name,
-					title,
-					cover_edition_key,
-					first_publish_year,
-					key,
-					cover_i,
-					...rest
-				}: unknown) => ({
-					...rest,
-					author: author_name,
-					title,
-					key,
-					publishedYear: first_publish_year,
-					// coverEditionKey: cover_edition_key || null,
-					coverId: cover_i || null,
-				}),
-			);
+			const books = await fetchBooks(query);
+			const parsedResult =
+				books?.docs.map(
+					({
+						author_name,
+						title,
+						// cover_edition_key,
+						first_publish_year,
+						key,
+						cover_i,
+						...rest
+					}: SearchResultDocs) => ({
+						...rest,
+						author:
+							typeof author_name == 'string' ? author_name : author_name[0],
+						title,
+						key,
+						publishedYear: first_publish_year,
+						// coverEditionKey: cover_edition_key || null,
+						coverId: cover_i || undefined,
+					}),
+				) || [];
 
 			setFetchedBooks(parsedResult);
+			setMetaInfo({
+				pageIndex: 1,
+				pageSize: MAX_RECOMMENDATIONS,
+				total: books?.numFound || 0,
+			});
+
 			setRecommendations(parsedResult.slice(0, MAX_RECOMMENDATIONS));
 		} catch (err) {
 			console.error(err);
@@ -77,11 +87,13 @@ function MainPage() {
 	const refreshForm = () => {
 		setUserResponse({});
 		setQuestionIndex(0);
-		setPageIndex(1);
+		setMetaInfo(defaultMeta);
 	};
 
-	const shuffleRecommendations = async () => {
-		if (pageIndex === Math.ceil(fetchedBooks.length / MAX_RECOMMENDATIONS)) {
+	const shuffleRecommendations = () => {
+		if (
+			metaInfo.pageIndex === Math.ceil(fetchedBooks.length / metaInfo.pageSize)
+		) {
 			// @todo call book search API for more results
 			// or
 			// Recommend user to do the survey again ?
@@ -94,11 +106,11 @@ function MainPage() {
 		try {
 			setRecommendations(
 				fetchedBooks.slice(
-					pageIndex * MAX_RECOMMENDATIONS,
-					pageIndex * MAX_RECOMMENDATIONS + MAX_RECOMMENDATIONS,
+					metaInfo.pageIndex * metaInfo.pageSize,
+					metaInfo.pageIndex * metaInfo.pageSize + metaInfo.pageSize,
 				),
 			);
-			setPageIndex(pageIndex + 1);
+			setMetaInfo((prev) => ({ ...prev, pageIndex: prev.pageIndex + 1 }));
 		} catch (err) {
 			console.error(err);
 		} finally {
@@ -108,7 +120,7 @@ function MainPage() {
 
 	useEffect(() => {
 		if (isFormComplete) {
-			generateRecommendation();
+			void generateRecommendation();
 		}
 	}, [isFormComplete]);
 
@@ -174,6 +186,7 @@ function MainPage() {
 							recommendations={recommendations}
 							refreshForm={refreshForm}
 							shuffleRecommendations={shuffleRecommendations}
+							metaInfo={metaInfo}
 						/>
 					)}
 				</>
