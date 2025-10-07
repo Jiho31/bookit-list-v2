@@ -10,8 +10,8 @@ function CoverImage({
 	title,
 	// setIsLoading,
 }: {
-	coverEditionKey: string | null;
-	coverId: number | null;
+	coverEditionKey: string | undefined;
+	coverId: number | undefined;
 	title: string;
 	// setIsLoading: Function;
 }) {
@@ -21,7 +21,7 @@ function CoverImage({
 	useEffect(() => {
 		// setIsLoading(true);
 		if (!coverId) {
-			console.log(`[${title}] Invalid cover id:`, coverId);
+			// console.log(`[${title}] Invalid cover id:`, coverId);
 			setImageStatus('failed');
 		}
 	}, [coverId, title]);
@@ -65,16 +65,6 @@ export default function BookCard({
 	onClickHandler?: () => void;
 	buttons: CardButton[];
 }) {
-	// @todo add loader
-
-	// useEffect(() => {
-	// 	console.log(data, book, book.length, '<<<<<<<<<< book data in [BookCard]');
-
-	// 	// if book is not empty, load Book component
-	// 	// else, show loading
-	// 	// toast('hi');
-	// }, [book]);
-
 	return (
 		<div
 			onClick={onClickHandler}

@@ -55,8 +55,8 @@ function useOpenLibraryAPI() {
 		key,
 		id,
 	}: {
-		key: string | null;
-		id: number | null;
+		key: string | undefined;
+		id: number | undefined;
 	}) =>
 		typeof id === 'number'
 			? `https://covers.openlibrary.org/b/id/${id}.jpg`
