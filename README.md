@@ -11,6 +11,7 @@ Find out what your next reads are going to be here 👉 [Live demo](https://book
 
 - Book recommendation based on a short survey of your preferences
 - Personal bookshelf to save and organize books
+- Search for books in a search bar
 
 <!-- #### cf. Screenshots 📷
 
@@ -20,7 +21,6 @@ Find out what your next reads are going to be here 👉 [Live demo](https://book
 
 
 ## Planned features
-- Search for books in a search bar
 - Add notes for books saved in bookshelves
 
 ### Known issues (to be fixed)
@@ -34,6 +34,6 @@ Find out what your next reads are going to be here 👉 [Live demo](https://book
 ## Developed using..
 - Typescript + React 19
 - Tailwind CSS
-- Firebase Database
+- Firestore Database
 - Firebase Authentication
 - Sonner Toast UI
