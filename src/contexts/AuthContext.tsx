@@ -12,11 +12,13 @@ type AuthCtx = {
 	isAuthenticated: boolean;
 	handleRegister: (userCredential: UserCredential) => Promise<void>;
 	handleLogout: () => void;
+	requestSocialLogin: (provider: string) => Promise<void>;
 };
 const AuthContext = createContext<AuthCtx | undefined>(undefined);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-	const { userInfo, isAuthenticated, logout } = useFirebaseAuth();
+	const { userInfo, isAuthenticated, logout, handleSocialLogin } =
+		useFirebaseAuth();
 
 	const handleRegister = async ({ user }: UserCredential) => {
 		const newUserData = {
@@ -47,6 +49,22 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		}
 	};
 
+	const requestSocialLogin = async (provider: string) => {
+		try {
+			const response = await handleSocialLogin(provider);
+
+			if (
+				response &&
+				response.userCredential &&
+				response.additionalInfo?.isNewUser
+			) {
+				await handleRegister(response.userCredential);
+			}
+		} catch (err) {
+			console.error(err);
+		}
+	};
+
 	return (
 		<AuthContext
 			value={{
@@ -54,6 +72,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 				isAuthenticated,
 				handleRegister,
 				handleLogout,
+				requestSocialLogin,
 			}}
 		>
 			{children}
