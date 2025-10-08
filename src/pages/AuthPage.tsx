@@ -51,7 +51,7 @@ const SignupForm = () => {
 		try {
 			const userCredential = await createUserWithEmail(email, password);
 
-			await handleRegister(userCredential.user);
+			await handleRegister(userCredential);
 			toast.success('Successfully registered new user.');
 		} catch (error: any) {
 			setError(error.message);
@@ -288,6 +288,7 @@ function UserAuthForm() {
 						<>
 							New to Bookit List?
 							<button
+								type="button"
 								onClick={toggleDisplay}
 								className="ml-1 bg-inherit p-0 text-indigo-700 hover:underline"
 							>
@@ -298,6 +299,7 @@ function UserAuthForm() {
 						<>
 							Already have an account?
 							<button
+								type="button"
 								onClick={toggleDisplay}
 								className="ml-1 bg-inherit p-0 text-indigo-700 hover:underline"
 							>
