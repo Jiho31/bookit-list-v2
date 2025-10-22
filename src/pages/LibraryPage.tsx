@@ -49,8 +49,11 @@ function CreateBookshelfModal({
 				onChange={handleInputChange}
 			/>
 			<div className="flex gap-2 mt-1.5 justify-center">
-				<button onClick={handleCreate}>Create</button>
+				<button type="button" onClick={handleCreate}>
+					Create
+				</button>
 				<button
+					type="button"
 					onClick={close}
 					className="bg-slate-300 text-slate-600 hover:bg-slate-400"
 				>
@@ -58,6 +61,7 @@ function CreateBookshelfModal({
 				</button>
 			</div>
 			<button
+				type="button"
 				className="text-slate-800 bg-slate-200 absolute top-4 right-5 p-2"
 				onClick={close}
 			>
