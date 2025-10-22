@@ -31,24 +31,20 @@ function CoverImage({
 
 	if (isError) {
 		return (
-			<div className="relative w-full min-w-full h-48 min-h-48 bg-gray-100 flex items-center justify-center">
-				<img
-					className="w-full h-full object-cover"
-					src={fallbackImage}
-					alt="Fallback cover"
-				/>
-			</div>
+			<img
+				className="w-full h-full object-cover"
+				src={fallbackImage}
+				alt="Fallback cover"
+			/>
 		);
 	}
 
 	return (
-		<div className="relative w-full min-w-full h-48 min-h-48 bg-gray-100 flex items-center justify-center">
-			<img
-				className="w-full h-full object-cover"
-				src={imageUrl}
-				alt={`Cover of ${title}`}
-			/>
-		</div>
+		<img
+			className="w-full h-full object-cover"
+			src={imageUrl}
+			alt={`Cover of ${title}`}
+		/>
 	);
 }
 
@@ -66,19 +62,19 @@ export default function BookCard({
 	return (
 		<div
 			onClick={onClickHandler}
-			className="flex flex-row md:flex-col bg-white rounded-xl shadow-md sm:shadow-lg hover:shadow-lg sm:hover:shadow-2xl transition-all duration-300 hover:scale-103 overflow-hidden w-full h-auto min-w-64 sm:min-w-56"
+			className="flex flex-row md:flex-col bg-white rounded-xl shadow-md sm:shadow-lg hover:shadow-lg sm:hover:shadow-2xl transition-all duration-300 hover:scale-103 overflow-hidden w-full h-48 md:h-auto min-w-64 sm:min-w-56"
 		>
-			<div className="w-1/2 md:w-full h-32 sm:h-48">
+			<div className="aspect-3/4 w-2/5 md:w-full h-auto sm:h-48">
 				<CoverImage
 					coverEditionKey={book.coverEditionKey}
 					coverId={book.coverId}
 					title={book.title}
 				/>
 			</div>
-			<div className="p-4 w-1/2 md:w-full flex flex-col">
+			<div className="p-4 w-3/5 md:w-full flex flex-col justify-evenly">
 				<div className="relative group">
 					<h3
-						className="font-bold text-md mb-2 text-gray-800 truncate"
+						className="font-bold text-md mb-2 text-gray-800 line-clamp-1"
 						title={book.title}
 					>
 						{book.title}
@@ -86,7 +82,7 @@ export default function BookCard({
 				</div>
 				<div className="relative group">
 					<p
-						className="text-gray-600 mb-3 text-sm truncate"
+						className="text-gray-600 mb-3 text-sm line-clamp-1"
 						title={book.author}
 					>
 						{book.author}
