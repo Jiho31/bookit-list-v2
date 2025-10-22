@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './components/common/Layout';
 import MainPage from './pages/MainPage';
 import AuthPage from './pages/AuthPage';
@@ -23,15 +24,19 @@ const router = createBrowserRouter([
 	},
 ]);
 
+const queryClient = new QueryClient();
+
 function App() {
 	return (
-		<AuthProvider>
-			<BookshelfProvider>
-				<ModalProvider>
-					<RouterProvider router={router} />
-				</ModalProvider>
-			</BookshelfProvider>
-		</AuthProvider>
+		<QueryClientProvider client={queryClient}>
+			<AuthProvider>
+				<BookshelfProvider>
+					<ModalProvider>
+						<RouterProvider router={router} />
+					</ModalProvider>
+				</BookshelfProvider>
+			</AuthProvider>
+		</QueryClientProvider>
 	);
 }
 export default App;
