@@ -1,55 +1,53 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import useOpenLibraryAPI from '../../hooks/useOpenLibraryAPI';
-import fallbackImage from '../../assets/fallbackImage.png';
 import type { Book, BookItem, CardButton } from '../../types';
+import fallbackImage from '../../assets/fallbackImage.png';
 import LoadingSpinner from '../common/LoadingSpinner';
 
 function CoverImage({
 	coverEditionKey,
 	coverId,
 	title,
-	// setIsLoading,
 }: {
 	coverEditionKey: string | undefined;
 	coverId: number | undefined;
 	title: string;
-	// setIsLoading: Function;
 }) {
-	const { getBookCoverImage } = useOpenLibraryAPI();
-	const [imageStatus, setImageStatus] = useState('loading');
+	const { fetchCoverImage } = useOpenLibraryAPI();
 
-	useEffect(() => {
-		// setIsLoading(true);
-		if (!coverId) {
-			// console.log(`[${title}] Invalid cover id:`, coverId);
-			setImageStatus('failed');
-		}
-	}, [coverId, title]);
+	const {
+		isPending,
+		isError,
+		data: imageUrl,
+	} = useQuery({
+		queryKey: ['coverImage', coverEditionKey, coverId],
+		queryFn: () => fetchCoverImage({ key: coverEditionKey, id: coverId }),
+		enabled: !!(coverEditionKey || coverId),
+	});
 
-	const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-		const img = e.target as HTMLImageElement;
+	if (isPending) {
+		return <LoadingSpinner width={36} height={36} />;
+	}
 
-		// If image is too small, treat as failed
-		if (img.naturalWidth < 50 || img.naturalHeight < 50) {
-			setImageStatus('failed');
-		} else {
-			setImageStatus('loaded');
-		}
-	};
+	if (isError) {
+		return (
+			<div className="relative w-full min-w-full h-48 min-h-48 bg-gray-100 flex items-center justify-center">
+				<img
+					className="w-full h-full object-cover"
+					src={fallbackImage}
+					alt="Fallback cover"
+				/>
+			</div>
+		);
+	}
 
 	return (
 		<div className="relative w-full min-w-full h-48 min-h-48 bg-gray-100 flex items-center justify-center">
-			{imageStatus === 'loading' && <LoadingSpinner width={36} height={36} />}
 			<img
-				className={`w-full h-full object-cover ${(imageStatus == 'loading' || imageStatus == 'failed') && 'hidden'}`}
-				src={getBookCoverImage({ key: coverEditionKey, id: coverId })}
+				className="w-full h-full object-cover"
+				src={imageUrl}
 				alt={`Cover of ${title}`}
-				onLoad={handleImageLoad}
-				onError={() => setImageStatus('failed')}
 			/>
-			{imageStatus === 'failed' && (
-				<img className="w-full h-full object-cover" src={fallbackImage} />
-			)}
 		</div>
 	);
 }
@@ -75,7 +73,6 @@ export default function BookCard({
 					coverEditionKey={book.coverEditionKey}
 					coverId={book.coverId}
 					title={book.title}
-					// setIsLoading={setIsLoading}
 				/>
 			</div>
 			<div className="p-4 w-1/2 md:w-full flex flex-col">
