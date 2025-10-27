@@ -61,9 +61,9 @@ function useOpenLibraryAPI() {
 		try {
 			const url =
 				typeof id === 'number'
-					? `https://covers.openlibrary.org/b/id/${id}.jpg`
+					? `https://covers.openlibrary.org/b/id/${id}.jpg?default=false`
 					: typeof key === 'string'
-						? `https://covers.openlibrary.org/b/olid/${key}.jpg`
+						? `https://covers.openlibrary.org/b/olid/${key}.jpg?default=false`
 						: '';
 
 			if (!url) {
