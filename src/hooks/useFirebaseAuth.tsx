@@ -23,6 +23,7 @@ const PROVIDER_INSTANCES = {
 
 export default function useFirebaseAuth() {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	const [userInfo, setUserInfo] = useState<User>();
 
 	const parseUserData = (user: any) => ({
@@ -41,6 +42,7 @@ export default function useFirebaseAuth() {
 				setIsAuthenticated(false);
 				setUserInfo(undefined);
 			}
+			setIsLoading(false);
 		});
 	};
 
@@ -77,6 +79,7 @@ export default function useFirebaseAuth() {
 	return {
 		getCurrentUser,
 		isAuthenticated,
+		isLoading,
 		userInfo,
 		logout,
 		createUserWithEmail,

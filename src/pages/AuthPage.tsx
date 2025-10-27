@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import { useAuth } from '../contexts/AuthContext.tsx';
 import useFirebaseAuth from '../hooks/useFirebaseAuth.tsx';
+import LoadingSpinner from '@/components/common/LoadingSpinner.tsx';
 
 const SignupForm = () => {
 	const [email, setEmail] = useState('');
@@ -323,22 +325,30 @@ function UserAuthForm() {
 	);
 }
 
-// AuthPage / LoginPage
 export default function AuthPage() {
-	const { isAuthenticated, userInfo } = useAuth();
+	const { isAuthenticated, isLoading } = useAuth();
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (!isLoading && isAuthenticated) {
+			navigate('/library', { replace: true });
+		}
+	}, [isAuthenticated, isLoading, navigate]);
+
+	if (isLoading || isAuthenticated) {
+		return (
+			<section
+				id="container"
+				className="w-full flex justify-center items-center"
+			>
+				<LoadingSpinner />
+			</section>
+		);
+	}
 
 	return (
 		<section id="container" className="w-full flex justify-center items-center">
-			{isAuthenticated ? (
-				<>
-					<div>
-						Email: {userInfo?.email}
-						Name: {userInfo?.displayName}
-					</div>
-				</>
-			) : (
-				<UserAuthForm />
-			)}
+			<UserAuthForm />
 		</section>
 	);
 }

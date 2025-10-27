@@ -10,6 +10,7 @@ import type { UserCredential } from 'firebase/auth';
 type AuthCtx = {
 	userInfo: User | undefined;
 	isAuthenticated: boolean;
+	isLoading: boolean;
 	handleRegister: (userCredential: UserCredential) => Promise<void>;
 	handleLogout: () => void;
 	requestSocialLogin: (provider: string) => Promise<void>;
@@ -17,7 +18,7 @@ type AuthCtx = {
 const AuthContext = createContext<AuthCtx | undefined>(undefined);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-	const { userInfo, isAuthenticated, logout, handleSocialLogin } =
+	const { userInfo, isAuthenticated, isLoading, logout, handleSocialLogin } =
 		useFirebaseAuth();
 
 	const handleRegister = async ({ user }: UserCredential) => {
@@ -70,6 +71,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 			value={{
 				userInfo,
 				isAuthenticated,
+				isLoading,
 				handleRegister,
 				handleLogout,
 				requestSocialLogin,

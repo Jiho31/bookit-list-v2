@@ -1,5 +1,5 @@
 import { Link, Outlet, useNavigate } from 'react-router';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { Toaster } from 'sonner';
 import ModalRoot from './ModalRoot';
@@ -96,16 +96,17 @@ function NavigationBar() {
 }
 
 export default function Layout() {
-	const { isAuthenticated } = useAuth();
-	const navigate = useNavigate();
+	// const { isAuthenticated } = useAuth();
+	// const navigate = useNavigate();
 
-	useEffect(() => {
-		if (isAuthenticated) {
-			navigate('/library');
-		} else {
-			navigate('/');
-		}
-	}, [isAuthenticated]);
+	// useEffect(() => {
+	// if (isAuthenticated) {
+	// 	// navigate('/library');
+	// 	console.log('111111authenticated user !!');
+	// } else {
+	// 	navigate('/');
+	// }
+	// }, [isAuthenticated]);
 
 	return (
 		<div id="app-container" className="w-full h-auto flex flex-col">
