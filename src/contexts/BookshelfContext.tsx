@@ -123,7 +123,7 @@ const BookshelfProvider = ({ children }: { children: React.ReactNode }) => {
 			};
 		} catch (error) {
 			console.error('Error fetching bookshelf:', error);
-			return null;
+			return {};
 		}
 	};
 
