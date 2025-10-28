@@ -158,10 +158,14 @@ export default function LibraryPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [showSidebar, setShowSidebar] = useState(false);
 
-	const handleFetchBookshelf = async () => {
+	const handleFetchBookshelf = async (bookshelfKey: BookshelfItem['key']) => {
 		setIsLoading(true);
 		try {
-			const newBookshelfData = await fetchBookshelf(activeKey);
+			// console.log(bookshelfKey, '######## ACTIVE KEY');
+
+			const newBookshelfData = await fetchBookshelf(bookshelfKey);
+
+			// console.log('5555555', newBookshelfData);
 
 			setBookshelfData(newBookshelfData);
 		} catch (error) {
@@ -179,8 +183,8 @@ export default function LibraryPage() {
 		if (!isAuthenticated) {
 			return;
 		}
-		handleFetchBookshelf();
-	}, [activeKey]);
+		void handleFetchBookshelf(activeKey);
+	}, [isAuthenticated, activeKey]);
 
 	return (
 		<div className="w-full h-auto sm:h-dvh flex flex-col sm:flex-row">
