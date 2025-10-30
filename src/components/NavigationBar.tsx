@@ -117,8 +117,21 @@ export function NavigationBar() {
 
 	return (
 		<header className="w-full min-h-15 text-sm bg-slate-50 border-b border-b-slate-200 px-4 sm:px-6 md:px-10 lg:px-20 flex justify-between">
-			<div onClick={() => setIsNavDisplayed(true)}>Hamburger</div>
-			<MobileNav isVisible={isNavDisplayed} close={closeNavMenu} />
+			<div
+				className="self-center cursor-pointer sm:hidden"
+				onClick={() => setIsNavDisplayed(true)}
+			>
+				<svg
+					role="img"
+					aria-labelledby="nav-sidebar-menu-buton"
+					className="fill-current w-6 h-6"
+					xmlns="http://www.w3.org/2000/svg"
+					viewBox="0 -960 960 960"
+				>
+					<title id="nav-sidebar-menu-buton">navigation menu</title>
+					<path d="M160-240q-17 0-28.5-11.5T120-280q0-17 11.5-28.5T160-320h640q17 0 28.5 11.5T840-280q0 17-11.5 28.5T800-240H160Zm0-200q-17 0-28.5-11.5T120-480q0-17 11.5-28.5T160-520h640q17 0 28.5 11.5T840-480q0 17-11.5 28.5T800-440H160Zm0-200q-17 0-28.5-11.5T120-680q0-17 11.5-28.5T160-720h640q17 0 28.5 11.5T840-680q0 17-11.5 28.5T800-640H160Z" />
+				</svg>
+			</div>
 			<VerticalSideMenu isVisible={isNavDisplayed} close={closeNavMenu} />
 			{/* <nav className="flex gap-2 md:gap-10 items-center text-slate-900">
 				<Link to="/">
