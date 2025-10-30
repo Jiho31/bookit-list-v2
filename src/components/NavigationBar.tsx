@@ -1,6 +1,5 @@
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '@/contexts/AuthContext';
-import SearchBar from './SearchBar';
 import { useState } from 'react';
 
 function VerticalSideMenu({
@@ -10,6 +9,8 @@ function VerticalSideMenu({
 	isVisible: boolean;
 	close: () => void;
 }) {
+	const { isAuthenticated, userInfo } = useAuth();
+
 	const handlePropagation = (e: React.MouseEvent<HTMLLinkElement>) => {
 		e.stopPropagation();
 	};
@@ -27,7 +28,7 @@ function VerticalSideMenu({
 				className={`w-[70%] h-full bg-white flex flex-col text-slate-900 transition-transform duration-300 ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
 				onClick={handlePropagation}
 			>
-				<div className="h-15 bg-indigo-200 flex flex-row items-center">
+				<div className="px-2 h-15 bg-indigo-200 flex flex-row justify-between items-center">
 					<button
 						type="button"
 						className="text-white h-fit bg-inherit"
@@ -35,13 +36,11 @@ function VerticalSideMenu({
 					>
 						X
 					</button>
-					<Link to="/" onClick={close}>
-						<img
-							className="w-18 h-auto min-w-10"
-							src="/logo.png"
-							alt="Bookit List logo"
-						/>
-					</Link>
+					{isAuthenticated && (
+						<p className="p-2 text-indigo-800 text-center font-semibold">
+							Hello, {userInfo?.displayName || userInfo?.email}! 🙌
+						</p>
+					)}
 				</div>
 				<Link
 					to="/"
