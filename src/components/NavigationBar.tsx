@@ -3,7 +3,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import SearchBar from './SearchBar';
 import { useState } from 'react';
 
-function MobileNav({
+function VerticalSideMenu({
 	isVisible,
 	close,
 }: {
@@ -119,6 +119,7 @@ export function NavigationBar() {
 		<header className="w-full min-h-15 text-sm bg-slate-50 border-b border-b-slate-200 px-4 sm:px-6 md:px-10 lg:px-20 flex justify-between">
 			<div onClick={() => setIsNavDisplayed(true)}>Hamburger</div>
 			<MobileNav isVisible={isNavDisplayed} close={closeNavMenu} />
+			<VerticalSideMenu isVisible={isNavDisplayed} close={closeNavMenu} />
 			{/* <nav className="flex gap-2 md:gap-10 items-center text-slate-900">
 				<Link to="/">
 					<img className="w-18 h-auto min-w-10" src="/logo.png" alt="logo" />
