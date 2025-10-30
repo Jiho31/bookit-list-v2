@@ -23,7 +23,7 @@ function SearchPage() {
 	const filteredKeyword = useMemo(() => keyword.trim(), [keyword]);
 	const { searchByKeyword } = useOpenLibraryAPI();
 
-	const emptyContent = <>'No result can be found.'</>;
+	const emptyContent = <>'No results can be found.'</>;
 
 	const fetchData = async ({
 		page,
