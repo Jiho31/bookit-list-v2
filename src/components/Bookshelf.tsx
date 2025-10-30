@@ -123,10 +123,11 @@ export default function Bookshelf({
 	];
 
 	return (
-		<div className="relative flex flex-col gap-4 overflow-y-scroll p-10 w-full">
+		<div className="relative flex flex-col gap-4 overflow-y-scroll p-3 md:p-10 w-full">
 			<div className="flex gap-0.5 justify-between items-center text-xl font-semibold py-3 h-auto w-full">
 				<button
-					className="block sm:hidden mr-2 bg-slate-200 hover:bg-slate-300 text-sm text-slate-600 border-slate-400"
+					type="button"
+					className="block md:hidden mr-2 bg-slate-200 hover:bg-slate-300 text-sm text-slate-600 border-slate-400"
 					onClick={toggleSidebar}
 				>
 					<svg
@@ -213,7 +214,8 @@ export default function Bookshelf({
 				</div>
 			</div>
 			{numOfBooks > 0 ? (
-				<section className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-full sm:max-w-4xl">
+				// <section className="self-start grid gap-6 grid-cols-1 md:grid-cols-2 max-w-full">
+				<section className="justify-center md:justify-start flex gap-6 flex-wrap max-w-full">
 					{booksData.map((data: BookItem, idx) => (
 						<BookCard
 							key={idx}

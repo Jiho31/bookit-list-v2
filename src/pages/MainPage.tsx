@@ -128,10 +128,9 @@ function MainPage() {
 			{displayContent === 'mainPage' && (
 				<section className="flex flex-col w-full h-full align-middle items-center justify-center gap-4 text-center">
 					<h1 className="max-w-2/3 self-center sm:text-slate-900 text-3xl md:text-4xl lg:text-6xl font-extrabold">
-						{/* Welcome to Bookit List: Your Personal Reading Tracker */}
 						Bookit List: Track, Organize, and Discover
 					</h1>
-					<p className="text-slate-600 py-6 md:py-10">
+					<p className="text-slate-600 max-w-2/3 py-6 md:py-10">
 						Your comprehensive system to manage your reads and find your next
 						favorite book.
 					</p>

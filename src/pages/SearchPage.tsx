@@ -1,9 +1,10 @@
 import { toast } from 'sonner';
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import BookList from '@/components/BookList';
-import useOpenLibraryAPI from '@/hooks/useOpenLibraryAPI';
 import type { Book, SearchMetaInfo, SearchResultDocs } from '@/types';
+import useOpenLibraryAPI from '@/hooks/useOpenLibraryAPI';
+import BookList from '@/components/BookList';
+import SearchBar from '@/components/SearchBar';
 
 const PAGE_SIZE = 30;
 // @todo meta 정보 저장 필요할까??
@@ -13,7 +14,7 @@ const defaultMeta: SearchMetaInfo = {
 	pageSize: PAGE_SIZE,
 };
 
-function BookListPage() {
+function SearchPage() {
 	const [searchParams /* , setSearchParams */] = useSearchParams();
 	const [keyword, setKeyword] = useState('');
 	const [data, setData] = useState<Book[]>([]);
@@ -22,7 +23,7 @@ function BookListPage() {
 	const filteredKeyword = useMemo(() => keyword.trim(), [keyword]);
 	const { searchByKeyword } = useOpenLibraryAPI();
 
-	const emptyContent = <>'No result can be found.'</>;
+	const emptyContent = <>'No results can be found.'</>;
 
 	const fetchData = async ({
 		page,
@@ -92,11 +93,11 @@ function BookListPage() {
 	}, [filteredKeyword]);
 
 	return (
-		<section className="w-full h-full px-8 flex flex-col justify-center align-middle">
-			<h1 className="text-center py-8 font-semibold text-2xl">
+		<section className="w-full h-full p-3 md:p-8 flex flex-col gap-6 justify-center align-middle">
+			<SearchBar />
+			<h1 className="text-center font-semibold text-2xl">
 				Search results for '{keyword}':
 			</h1>
-
 			<BookList
 				data={data}
 				metaInfo={metaInfo}
@@ -109,4 +110,4 @@ function BookListPage() {
 	);
 }
 
-export default BookListPage;
+export default SearchPage;
