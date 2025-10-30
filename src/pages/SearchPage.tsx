@@ -14,7 +14,7 @@ const defaultMeta: SearchMetaInfo = {
 	pageSize: PAGE_SIZE,
 };
 
-function BookListPage() {
+function SearchPage() {
 	const [searchParams /* , setSearchParams */] = useSearchParams();
 	const [keyword, setKeyword] = useState('');
 	const [data, setData] = useState<Book[]>([]);
@@ -110,4 +110,4 @@ function BookListPage() {
 	);
 }
 
-export default BookListPage;
+export default SearchPage;
