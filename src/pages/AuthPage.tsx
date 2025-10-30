@@ -282,18 +282,17 @@ function UserAuthForm() {
 	};
 
 	return (
-		<section className="flex my-20 h-[450px] min-h-1/2 w-[700px] min-w-50vw max-w-90vw gap-10 p-10 bg-white border border-slate-200 rounded-3xl">
-			<div className="w-1/2 flex flex-col gap-3 items-center text-center">
+		<section className="flex flex-col md:flex-row h-full md:h-[450px] min-h-fit w-full md:w-[700px] max-w-90vw gap-10 p-4 sm:p-10 md:m-10 bg-white border border-slate-200 md:rounded-3xl">
+			<div className="w-full md:w-1/2 flex flex-col gap-3 items-center text-center">
 				<img
-					className="w-50 h-auto self-center"
+					className="w-36 md:w-50 h-auto self-center"
 					src="/logo.png"
 					alt="Bookit List logo"
 				/>
 				<h2 className="text-xl font-semibold mb-3">Welcome to Bookit List!</h2>
 				<p>Get started to create and manage your personal bookshelves!</p>
 			</div>
-
-			<div className="w-1/2 flex flex-col gap-3 justify-center">
+			<div className="w-full md:w-1/2 flex flex-col gap-3 justify-center">
 				<>{display == 'LOGIN' ? <LoginForm /> : <SignupForm />}</>
 				<div className="text-sm self-center">
 					{display == 'LOGIN' ? (
@@ -347,7 +346,10 @@ export default function AuthPage() {
 	}
 
 	return (
-		<section id="container" className="w-full flex justify-center items-center">
+		<section
+			id="container"
+			className="w-full h-auto flex justify-center items-center"
+		>
 			<UserAuthForm />
 		</section>
 	);
