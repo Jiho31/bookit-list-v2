@@ -103,7 +103,7 @@ function VerticalSideMenu({
 }
 
 export function NavigationBar() {
-	const { isAuthenticated, handleLogout, userInfo } = useAuth();
+	const { isAuthenticated, handleLogout /* userInfo */ } = useAuth();
 	const navigate = useNavigate();
 	const [isNavDisplayed, setIsNavDisplayed] = useState(false);
 

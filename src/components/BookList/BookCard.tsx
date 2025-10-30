@@ -42,7 +42,7 @@ function CoverImage({
 	return (
 		<img
 			className="w-full h-full object-cover"
-			src={imageUrl}
+			src={typeof imageUrl === 'string' && imageUrl ? imageUrl : fallbackImage}
 			alt={`Cover of ${title}`}
 		/>
 	);
