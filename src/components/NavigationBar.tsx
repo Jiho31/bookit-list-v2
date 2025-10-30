@@ -35,7 +35,7 @@ function VerticalSideMenu({
 					>
 						X
 					</button>
-					<Link to="/">
+					<Link to="/" onClick={close}>
 						<img
 							className="w-18 h-auto min-w-10"
 							src="/logo.png"
@@ -45,6 +45,7 @@ function VerticalSideMenu({
 				</div>
 				<Link
 					to="/"
+					onClick={close}
 					className="flex flex-row gap-3 items-center px-6 py-4 group text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 rounded-xl"
 				>
 					<svg
@@ -62,6 +63,7 @@ function VerticalSideMenu({
 				</Link>
 				<Link
 					to="/library"
+					onClick={close}
 					className="flex flex-row gap-3 items-center px-6 py-4 group text-center text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 rounded-xl"
 				>
 					<svg
@@ -79,6 +81,7 @@ function VerticalSideMenu({
 				</Link>
 				<Link
 					to="/search"
+					onClick={close}
 					className="flex flex-row gap-3 items-center px-6 py-4 group text-center text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 rounded-xl"
 				>
 					<svg
