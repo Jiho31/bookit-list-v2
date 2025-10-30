@@ -187,7 +187,7 @@ export default function LibraryPage() {
 	}, [isAuthenticated, activeKey]);
 
 	return (
-		<div className="w-full h-auto sm:h-dvh flex flex-col sm:flex-row">
+		<div className="w-full h-auto sm:h-dvh flex flex-col md:flex-row">
 			<Sidebar isVisible={showSidebar} />
 			{isLoading && <LoadingSpinner width={56} height={56} />}
 			{!!bookshelfData && !isLoading && (

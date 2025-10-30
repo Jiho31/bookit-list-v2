@@ -93,7 +93,7 @@ function SearchPage() {
 	}, [filteredKeyword]);
 
 	return (
-		<section className="w-full h-full p-8 flex flex-col gap-6 justify-center align-middle">
+		<section className="w-full h-full p-3 md:p-8 flex flex-col gap-6 justify-center align-middle">
 			<SearchBar />
 			<h1 className="text-center font-semibold text-2xl">
 				Search results for '{keyword}':

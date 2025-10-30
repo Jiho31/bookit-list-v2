@@ -62,16 +62,16 @@ export default function BookCard({
 	return (
 		<div
 			onClick={onClickHandler}
-			className="flex flex-row md:flex-col bg-white rounded-xl shadow-md sm:shadow-lg hover:shadow-lg sm:hover:shadow-2xl transition-all duration-300 hover:scale-103 overflow-hidden w-full h-48 md:h-auto min-w-64 sm:min-w-56"
+			className="flex flex-row md:flex-col bg-white rounded-xl shadow-md sm:shadow-lg hover:shadow-lg sm:hover:shadow-2xl transition-all duration-300 hover:scale-103 overflow-hidden w-auto md:w-[350px] lg:w-[300px] h-48 md:h-auto"
 		>
-			<div className="aspect-3/4 w-2/5 md:w-full h-auto sm:h-48">
+			<div className="aspect-3/4 w-[250px] md:w-full h-auto sm:h-48">
 				<CoverImage
 					coverEditionKey={book.coverEditionKey}
 					coverId={book.coverId}
 					title={book.title}
 				/>
 			</div>
-			<div className="p-4 w-3/5 md:w-full flex flex-col justify-evenly">
+			<div className="p-4 w-[300px] md:w-full flex flex-col justify-evenly">
 				<div className="relative group">
 					<h3
 						className="font-bold text-md mb-2 text-gray-800 line-clamp-1"

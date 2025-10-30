@@ -122,7 +122,7 @@ function BookList({
 			{isEmpty ? (
 				<div className="text-center text-gray-500 py-10">{emptyContent}</div>
 			) : (
-				<section className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-full sm:max-w-4xl mx-auto">
+				<section className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-full mx-auto">
 					{data.map((book) => (
 						<BookCard key={book.key} book={book} buttons={buttons} />
 					))}
