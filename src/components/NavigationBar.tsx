@@ -200,11 +200,11 @@ export function NavigationBar() {
 				<img className="w-18 h-auto min-w-10" src="/logo.png" alt="logo" />
 			</Link>
 			<div className="flex align-middle items-center gap-4">
-				{isAuthenticated && (
+				{/* {isAuthenticated && (
 					<p className="px-2 hidden sm:block">
 						Hello, {userInfo?.displayName || userInfo?.email}!
 					</p>
-				)}
+				)} */}
 
 				<button
 					type="button"
@@ -212,7 +212,7 @@ export function NavigationBar() {
 					onClick={handleClick}
 				>
 					{isAuthenticated ? (
-						<span className="inline-flex text-white gap-1 align-middle">
+						<span className="inline-flex text-white gap-1 items-center align-middle">
 							<svg
 								className="fill-current hidden sm:block"
 								role="img"
