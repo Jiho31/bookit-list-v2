@@ -15,86 +15,88 @@ function VerticalSideMenu({
 	};
 
 	return (
-		isVisible && (
-			<div
-				className="absolute left-0 top-0 w-full h-full z-30 bg-black/70"
-				onClick={close}
+		<div
+			className={`absolute left-0 top-0 w-full h-full z-30 transition-colors duration-300 ${
+				isVisible
+					? 'bg-black/70 pointer-events-auto'
+					: 'bg-transparent pointer-events-none'
+			}`}
+			onClick={close}
+		>
+			<nav
+				className={`w-[70%] h-full bg-white flex flex-col text-slate-900 transition-transform duration-300 ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
+				onClick={handlePropagation}
 			>
-				<nav
-					className="w-[70%] h-full bg-white flex flex-col text-slate-900"
-					onClick={handlePropagation}
+				<div className="h-15 bg-indigo-200 flex flex-row items-center">
+					<button
+						type="button"
+						className="text-white h-fit bg-inherit"
+						onClick={close}
+					>
+						X
+					</button>
+					<Link to="/">
+						<img
+							className="w-18 h-auto min-w-10"
+							src="/logo.png"
+							alt="Bookit List logo"
+						/>
+					</Link>
+				</div>
+				<Link
+					to="/"
+					className="flex flex-row gap-3 items-center px-6 py-4 group text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 rounded-xl"
 				>
-					<div className="h-15 bg-indigo-200 flex flex-row items-center">
-						<button
-							type="button"
-							className="text-white h-fit bg-inherit"
-							onClick={close}
-						>
-							X
-						</button>
-						<Link to="/">
-							<img
-								className="w-18 h-auto min-w-10"
-								src="/logo.png"
-								alt="Bookit List logo"
-							/>
-						</Link>
-					</div>
-					<Link
-						to="/"
-						className="flex flex-row gap-3 items-center px-6 py-4 group text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 rounded-xl"
+					<svg
+						className="fill-current"
+						role="img"
+						xmlns="http://www.w3.org/2000/svg"
+						height="24px"
+						viewBox="0 -960 960 960"
+						width="24px"
 					>
-						<svg
-							className="fill-current"
-							role="img"
-							xmlns="http://www.w3.org/2000/svg"
-							height="24px"
-							viewBox="0 -960 960 960"
-							width="24px"
-						>
-							<title>Home</title>
-							<path d="M160-120v-480l320-240 320 240v480H560v-280H400v280H160Z" />
-						</svg>
-						Home
-					</Link>
-					<Link
-						to="/library"
-						className="flex flex-row gap-3 items-center px-6 py-4 group text-center text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 rounded-xl"
+						<title>Home</title>
+						<path d="M160-120v-480l320-240 320 240v480H560v-280H400v280H160Z" />
+					</svg>
+					Home
+				</Link>
+				<Link
+					to="/library"
+					className="flex flex-row gap-3 items-center px-6 py-4 group text-center text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 rounded-xl"
+				>
+					<svg
+						className="fill-current"
+						role="img"
+						xmlns="http://www.w3.org/2000/svg"
+						height="24px"
+						viewBox="0 -960 960 960"
+						width="24px"
 					>
-						<svg
-							className="fill-current"
-							role="img"
-							xmlns="http://www.w3.org/2000/svg"
-							height="24px"
-							viewBox="0 -960 960 960"
-							width="24px"
-						>
-							<title>My Shelves</title>
-							<path d="M80-160v-80h800v80H80Zm80-160v-320h80v320h-80Zm160 0v-480h80v480h-80Zm160 0v-480h80v480h-80Zm280 0L600-600l70-40 160 280-70 40Z" />
-						</svg>
-						My Shelves
-					</Link>
-					<Link
-						to="/search"
-						className="flex flex-row gap-3 items-center px-6 py-4 group text-center text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 rounded-xl"
+						<title>My Shelves</title>
+						<path d="M80-160v-80h800v80H80Zm80-160v-320h80v320h-80Zm160 0v-480h80v480h-80Zm160 0v-480h80v480h-80Zm280 0L600-600l70-40 160 280-70 40Z" />
+					</svg>
+					My Shelves
+				</Link>
+				<Link
+					to="/search"
+					className="flex flex-row gap-3 items-center px-6 py-4 group text-center text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 rounded-xl"
+				>
+					<svg
+						className="fill-current"
+						xmlns="http://www.w3.org/2000/svg"
+						height="24px"
+						viewBox="0 -960 960 960"
+						width="24px"
+						role="img"
+						aria-labelledby="search-icon"
 					>
-						<svg
-							className="fill-current"
-							xmlns="http://www.w3.org/2000/svg"
-							height="24px"
-							viewBox="0 -960 960 960"
-							width="24px"
-							role="img"
-							aria-labelledby="search-icon"
-						>
-							<title id="search-icon">Magnifying glass</title>
-							<path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
-						</svg>
-						Search books
-					</Link>
-				</nav>
-			</div>
-		)
+						<title id="search-icon">Magnifying glass</title>
+						<path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+					</svg>
+					Search books
+				</Link>
+			</nav>
+		</div>
 	);
 }
 
@@ -172,13 +174,19 @@ export function NavigationBar() {
 					My Shelves
 				</Link>
 			</nav> */}
+			<Link to="/" className="sm:hidden self-center">
+				<img className="w-18 h-auto min-w-10" src="/logo.png" alt="logo" />
+			</Link>
 			<div className="flex align-middle items-center gap-4">
-				<SearchBar />
+				<span className="hidden sm:block">
+					<SearchBar />
+				</span>
 				{isAuthenticated && (
-					<p className="px-2">
+					<p className="px-2 hidden sm:block">
 						Hello, {userInfo?.displayName || userInfo?.email}!
 					</p>
 				)}
+
 				<button
 					type="button"
 					className="h-fit text-sm self-center"
