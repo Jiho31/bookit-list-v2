@@ -96,7 +96,7 @@ function VerticalSideMenu({
 						<title id="search-icon">Magnifying glass</title>
 						<path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
 					</svg>
-					Search books
+					Search
 				</Link>
 			</nav>
 		</div>
@@ -138,7 +138,7 @@ export function NavigationBar() {
 				</svg>
 			</div>
 			<VerticalSideMenu isVisible={isNavDisplayed} close={closeNavMenu} />
-			{/* <nav className="flex gap-2 md:gap-10 items-center text-slate-900">
+			<nav className="hidden sm:flex gap-2 md:gap-10 items-center text-slate-900">
 				<Link to="/">
 					<img className="w-18 h-auto min-w-10" src="/logo.png" alt="logo" />
 				</Link>
@@ -176,14 +176,31 @@ export function NavigationBar() {
 					</svg>
 					My Shelves
 				</Link>
-			</nav> */}
+				<Link
+					to="/search"
+					onClick={close}
+					// className="flex flex-row gap-3 items-center px-6 py-4 group text-center text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 rounded-xl"
+					className="inline-flex flex-col sm:flex-row gap-0.5 sm:gap-2 items-center group text-center text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 py-2 px-3 rounded-xl"
+				>
+					<svg
+						className="fill-current"
+						xmlns="http://www.w3.org/2000/svg"
+						height="24px"
+						viewBox="0 -960 960 960"
+						width="24px"
+						role="img"
+						aria-labelledby="search-icon"
+					>
+						<title id="search-icon">Magnifying glass</title>
+						<path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+					</svg>
+					Search
+				</Link>
+			</nav>
 			<Link to="/" className="sm:hidden self-center">
 				<img className="w-18 h-auto min-w-10" src="/logo.png" alt="logo" />
 			</Link>
 			<div className="flex align-middle items-center gap-4">
-				<span className="hidden sm:block">
-					<SearchBar />
-				</span>
 				{isAuthenticated && (
 					<p className="px-2 hidden sm:block">
 						Hello, {userInfo?.displayName || userInfo?.email}!
