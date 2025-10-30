@@ -127,7 +127,7 @@ export default function Bookshelf({
 			<div className="flex gap-0.5 justify-between items-center text-xl font-semibold py-3 h-auto w-full">
 				<button
 					type="button"
-					className="block sm:hidden mr-2 bg-slate-200 hover:bg-slate-300 text-sm text-slate-600 border-slate-400"
+					className="block md:hidden mr-2 bg-slate-200 hover:bg-slate-300 text-sm text-slate-600 border-slate-400"
 					onClick={toggleSidebar}
 				>
 					<svg

@@ -101,7 +101,7 @@ function Sidebar({ isVisible }: { isVisible: boolean }) {
 
 	return (
 		<section
-			className={`w-full ${!isVisible && 'hidden'} sm:block sm:max-w-1/4 sm:w-md h-auto sm:h-full border-b sm:border-r bg-slate-100 border-slate-200 text-slate-900`}
+			className={`w-full ${!isVisible && 'hidden'} md:block md:w-1/4 min-w-[300px] h-auto md:h-full border-b md:border-r bg-slate-100 border-slate-200 text-slate-900`}
 		>
 			<div className="px-4">
 				<p className="py-6 font-semibold">My Bookshelves</p>
