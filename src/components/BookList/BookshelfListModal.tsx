@@ -21,7 +21,6 @@ function BookshelfListModal({
 
 		try {
 			await addBookToShelf(targetKey, book);
-			toast.success('Successfully added book to bookshelf');
 		} catch (err) {
 			if (typeof err === 'string') {
 				toast.info(err);
