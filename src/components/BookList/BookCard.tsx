@@ -1,28 +1,39 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Book, BookItem, CardButton } from '../../types';
 import fallbackImage from '../../assets/fallbackImage.png';
-import LoadingSpinner from '../common/LoadingSpinner';
 
-function CoverImage({ title, imgUrl }: { title: string; imgUrl: string }) {
-	const [isLoading, setIsLoading] = useState(true);
+function CoverImage({
+	title,
+	imgUrl,
+	placeholderUrl,
+}: {
+	title: string;
+	imgUrl: string;
+	placeholderUrl: string;
+}) {
 	const [isError, setIsError] = useState(false);
+	const [imgSrc, setImgSrc] = useState(placeholderUrl || imgUrl);
+
+	useEffect(() => {
+		const img = new Image();
+		img.src = imgUrl;
+		img.onload = () => {
+			setImgSrc(imgUrl);
+		};
+	}, [imgUrl]);
 
 	if (isError) {
 		return <img className="w-full h-full object-cover" src={fallbackImage} />;
 	}
 
 	return (
-		<>
-			{isLoading && <LoadingSpinner width={36} height={36} />}
-			<img
-				className={`w-full h-full object-cover ${isLoading ? 'opacity-0' : 'opacity-100'}`}
-				src={imgUrl}
-				onError={() => setIsError(true)}
-				onLoad={() => setIsLoading(false)}
-				loading="lazy"
-				alt={`Cover of ${title}`}
-			/>
-		</>
+		<img
+			className={`w-full h-full object-cover ${placeholderUrl && imgUrl === placeholderUrl ? 'blur-[10px] mask-clip-fill' : 'blur-none transition-all duration-500 ease-linear'}`}
+			src={imgSrc}
+			onError={() => setIsError(true)}
+			loading="lazy"
+			alt={`Cover of ${title}`}
+		/>
 	);
 }
 
@@ -37,11 +48,20 @@ export default function BookCard({
 	onClickHandler?: () => void;
 	buttons: CardButton[];
 }) {
+	const placeholderUrl = useMemo(() => {
+		if (typeof book.coverId === 'number') {
+			return `https://covers.openlibrary.org/b/id/${book.coverId}-S.jpg?default=false`;
+		} else if (typeof book.coverEditionKey === 'string') {
+			return `https://covers.openlibrary.org/b/olid/${book.coverEditionKey}-S.jpg?default=false`;
+		} else {
+			return '';
+		}
+	}, [book]);
 	const imgUrl = useMemo(() => {
 		if (typeof book.coverId === 'number') {
 			return `https://covers.openlibrary.org/b/id/${book.coverId}.jpg?default=false`;
 		} else if (typeof book.coverEditionKey === 'string') {
-			return `https://covers.openlibrary.org/b/olid/${coverEditionKey}.jpg?default=false`;
+			return `https://covers.openlibrary.org/b/olid/${book.coverEditionKey}.jpg?default=false`;
 		} else {
 			return '';
 		}
@@ -56,7 +76,11 @@ export default function BookCard({
 		>
 			<div className="aspect-3/4 w-[250px] md:w-full h-auto sm:h-48 bg-slate-100">
 				{hasValidCoverImage ? (
-					<CoverImage imgUrl={imgUrl} title={book.title} />
+					<CoverImage
+						imgUrl={imgUrl}
+						placeholderUrl={placeholderUrl}
+						title={book.title}
+					/>
 				) : (
 					<img className="w-full h-full object-cover" src={fallbackImage} />
 				)}

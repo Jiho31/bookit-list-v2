@@ -7,7 +7,6 @@ import BookList from '@/components/BookList';
 import SearchBar from '@/components/SearchBar';
 
 const PAGE_SIZE = 20;
-// @todo meta 정보 저장 필요할까??
 const defaultMeta: SearchMetaInfo = {
 	total: 0,
 	pageIndex: 1,
