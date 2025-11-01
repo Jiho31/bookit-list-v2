@@ -1,50 +1,28 @@
-import { useQuery } from '@tanstack/react-query';
-import useOpenLibraryAPI from '../../hooks/useOpenLibraryAPI';
+import { useMemo, useState } from 'react';
 import type { Book, BookItem, CardButton } from '../../types';
 import fallbackImage from '../../assets/fallbackImage.png';
 import LoadingSpinner from '../common/LoadingSpinner';
 
-function CoverImage({
-	coverEditionKey,
-	coverId,
-	title,
-}: {
-	coverEditionKey: string | undefined;
-	coverId: number | undefined;
-	title: string;
-}) {
-	const { fetchCoverImage } = useOpenLibraryAPI();
-
-	const {
-		isPending,
-		isError,
-		data: imageUrl,
-	} = useQuery({
-		queryKey: ['coverImage', coverEditionKey, coverId],
-		queryFn: () => fetchCoverImage({ key: coverEditionKey, id: coverId }),
-		enabled: !!(coverEditionKey || coverId),
-	});
-
-	if (isPending) {
-		return <LoadingSpinner width={36} height={36} />;
-	}
+function CoverImage({ title, imgUrl }: { title: string; imgUrl: string }) {
+	const [isLoading, setIsLoading] = useState(true);
+	const [isError, setIsError] = useState(false);
 
 	if (isError) {
-		return (
-			<img
-				className="w-full h-full object-cover"
-				src={fallbackImage}
-				alt="Fallback cover"
-			/>
-		);
+		return <img className="w-full h-full object-cover" src={fallbackImage} />;
 	}
 
 	return (
-		<img
-			className="w-full h-full object-cover"
-			src={typeof imageUrl === 'string' && imageUrl ? imageUrl : fallbackImage}
-			alt={`Cover of ${title}`}
-		/>
+		<>
+			{isLoading && <LoadingSpinner width={36} height={36} />}
+			<img
+				className={`w-full h-full object-cover ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+				src={imgUrl}
+				onError={() => setIsError(true)}
+				onLoad={() => setIsLoading(false)}
+				loading="lazy"
+				alt={`Cover of ${title}`}
+			/>
+		</>
 	);
 }
 
@@ -59,17 +37,29 @@ export default function BookCard({
 	onClickHandler?: () => void;
 	buttons: CardButton[];
 }) {
+	const imgUrl = useMemo(() => {
+		if (typeof book.coverId === 'number') {
+			return `https://covers.openlibrary.org/b/id/${book.coverId}.jpg?default=false`;
+		} else if (typeof book.coverEditionKey === 'string') {
+			return `https://covers.openlibrary.org/b/olid/${coverEditionKey}.jpg?default=false`;
+		} else {
+			return '';
+		}
+	}, [book]);
+
+	const hasValidCoverImage = useMemo(() => imgUrl !== '', [imgUrl]);
+
 	return (
 		<div
 			onClick={onClickHandler}
 			className="flex flex-row md:flex-col bg-white rounded-xl shadow-md sm:shadow-lg hover:shadow-lg sm:hover:shadow-2xl transition-all duration-300 hover:scale-103 overflow-hidden w-auto md:w-[350px] lg:w-[300px] h-48 md:h-auto"
 		>
-			<div className="aspect-3/4 w-[250px] md:w-full h-auto sm:h-48">
-				<CoverImage
-					coverEditionKey={book.coverEditionKey}
-					coverId={book.coverId}
-					title={book.title}
-				/>
+			<div className="aspect-3/4 w-[250px] md:w-full h-auto sm:h-48 bg-slate-100">
+				{hasValidCoverImage ? (
+					<CoverImage imgUrl={imgUrl} title={book.title} />
+				) : (
+					<img className="w-full h-full object-cover" src={fallbackImage} />
+				)}
 			</div>
 			<div className="p-4 w-[300px] md:w-full flex flex-col justify-evenly">
 				<div className="relative group">
