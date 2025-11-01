@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { BookItem, BookshelfItem, CardButton } from '../types';
 import BookCard from './BookList/BookCard';
 import { useBookshelf } from '../contexts/BookshelfContext';
 import { toast } from 'sonner';
+import { DEFAULT_BOOKSHELF_KEY } from '@/consts/books';
 
 type BookshelfProps = BookshelfItem & {
 	bookshelfKey: string;
@@ -21,6 +22,11 @@ export default function Bookshelf({
 	const [isEditing, setIsEditing] = useState(false);
 	const { deleteBookshelf, removeBookFromShelf, updateBookshelf } =
 		useBookshelf();
+
+	const isDefaultBookshelf = useMemo(
+		() => bookshelfKey === DEFAULT_BOOKSHELF_KEY,
+		[bookshelfKey],
+	);
 
 	useEffect(() => {
 		setBooksData(books);
@@ -191,7 +197,7 @@ export default function Bookshelf({
 							</>
 						)}
 					</button>
-					{isEditing && (
+					{isEditing && !isDefaultBookshelf && (
 						<button
 							type="button"
 							className="bg-red-500 text-red-50 hover:bg-red-600 hover:text-white  w-auto min-w-[40px] h-[32px] flex justify-center items-center p-2"
