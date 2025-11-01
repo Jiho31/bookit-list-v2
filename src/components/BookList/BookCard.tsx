@@ -31,7 +31,6 @@ function CoverImage({
 			className={`w-full h-full object-cover ${placeholderUrl && imgUrl === placeholderUrl ? 'blur-[10px] mask-clip-fill' : 'blur-none transition-all duration-500 ease-linear'}`}
 			src={imgSrc}
 			onError={() => setIsError(true)}
-			loading="lazy"
 			alt={`Cover of ${title}`}
 		/>
 	);
