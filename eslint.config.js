@@ -6,6 +6,7 @@ import reactX from 'eslint-plugin-react-x';
 import reactDom from 'eslint-plugin-react-dom';
 import tseslint from 'typescript-eslint';
 import eslintPluginPrettier from 'eslint-plugin-prettier';
+import tanstackQuery from '@tanstack/eslint-plugin-query';
 
 export default tseslint.config(
 	{ ignores: ['dist'] },
@@ -30,6 +31,7 @@ export default tseslint.config(
 			'react-x': reactX,
 			'react-dom': reactDom,
 			prettier: eslintPluginPrettier,
+			'@tanstack/query': tanstackQuery,
 		},
 		rules: {
 			...reactHooks.configs.recommended.rules,

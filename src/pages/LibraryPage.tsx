@@ -49,8 +49,11 @@ function CreateBookshelfModal({
 				onChange={handleInputChange}
 			/>
 			<div className="flex gap-2 mt-1.5 justify-center">
-				<button onClick={handleCreate}>Create</button>
+				<button type="button" onClick={handleCreate}>
+					Create
+				</button>
 				<button
+					type="button"
 					onClick={close}
 					className="bg-slate-300 text-slate-600 hover:bg-slate-400"
 				>
@@ -58,6 +61,7 @@ function CreateBookshelfModal({
 				</button>
 			</div>
 			<button
+				type="button"
 				className="text-slate-800 bg-slate-200 absolute top-4 right-5 p-2"
 				onClick={close}
 			>
@@ -97,7 +101,7 @@ function Sidebar({ isVisible }: { isVisible: boolean }) {
 
 	return (
 		<section
-			className={`w-full ${!isVisible && 'hidden'} sm:block sm:max-w-1/4 sm:w-md h-auto sm:h-full border-b sm:border-r bg-slate-100 border-slate-200 text-slate-900`}
+			className={`w-full ${!isVisible && 'hidden'} md:block md:w-1/4 min-w-[300px] h-auto md:h-full border-b md:border-r bg-slate-100 border-slate-200 text-slate-900`}
 		>
 			<div className="px-4">
 				<p className="py-6 font-semibold">My Bookshelves</p>
@@ -154,10 +158,14 @@ export default function LibraryPage() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [showSidebar, setShowSidebar] = useState(false);
 
-	const handleFetchBookshelf = async () => {
+	const handleFetchBookshelf = async (bookshelfKey: BookshelfItem['key']) => {
 		setIsLoading(true);
 		try {
-			const newBookshelfData = await fetchBookshelf(activeKey);
+			// console.log(bookshelfKey, '######## ACTIVE KEY');
+
+			const newBookshelfData = await fetchBookshelf(bookshelfKey);
+
+			// console.log('5555555', newBookshelfData);
 
 			setBookshelfData(newBookshelfData);
 		} catch (error) {
@@ -175,11 +183,11 @@ export default function LibraryPage() {
 		if (!isAuthenticated) {
 			return;
 		}
-		handleFetchBookshelf();
-	}, [activeKey]);
+		void handleFetchBookshelf(activeKey);
+	}, [isAuthenticated, activeKey]);
 
 	return (
-		<div className="w-full h-auto sm:h-dvh flex flex-col sm:flex-row">
+		<div className="w-full h-auto sm:h-dvh flex flex-col md:flex-row">
 			<Sidebar isVisible={showSidebar} />
 			{isLoading && <LoadingSpinner width={56} height={56} />}
 			{!!bookshelfData && !isLoading && (

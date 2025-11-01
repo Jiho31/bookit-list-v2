@@ -24,7 +24,7 @@ function SearchBar() {
 	};
 
 	return (
-		<div className="flex text-slate-400 w-[100px] md:w-64 self-center">
+		<div className="flex text-slate-400 w-[90%] md:max-w-[50%] self-center">
 			<svg
 				className="absolute self-center ml-3.5 fill-current"
 				xmlns="http://www.w3.org/2000/svg"
