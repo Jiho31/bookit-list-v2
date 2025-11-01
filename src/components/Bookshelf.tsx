@@ -130,10 +130,10 @@ export default function Bookshelf({
 
 	return (
 		<div className="relative flex flex-col gap-4 overflow-y-scroll p-3 md:p-10 w-full">
-			<div className="flex gap-0.5 justify-between items-center text-xl font-semibold py-3 h-auto w-full">
+			<div className="flex gap-1.5 justify-between items-center text-xl font-semibold py-3 h-auto w-full">
 				<button
 					type="button"
-					className="block md:hidden mr-2 bg-slate-200 hover:bg-slate-300 text-sm text-slate-600 border-slate-400"
+					className="block md:hidden bg-slate-200 hover:bg-slate-300 text-sm text-slate-600 border-slate-400"
 					onClick={toggleSidebar}
 				>
 					<svg
@@ -149,6 +149,7 @@ export default function Bookshelf({
 				</button>
 				<h3 className="flex w-full sm:w-full max-w-[90%]">
 					<input
+						// className={`font-normal w-[90%] text-wrap text-ellipsis ${isEditing && 'border-b border-slate-600 focus:outline-none'} `}
 						className={`font-normal w-[90%] sm:w-[60%] text-wrap text-ellipsis ${isEditing && 'border-b border-slate-600 focus:outline-none'} `}
 						type="text"
 						id="newName"
@@ -157,32 +158,36 @@ export default function Bookshelf({
 						readOnly={!isEditing}
 						disabled={!isEditing}
 						maxLength={40}
+						title={nameInput}
 					/>
-					<span className="shrink-0">({numOfBooks})</span>
+					<span className="mx-1 shrink-0">({numOfBooks})</span>
 				</h3>
 				<div className="inline-flex gap-1.5">
 					<button
 						type="button"
-						className="bg-white text-indigo-600 hover:bg-indigo-600 hover:text-white border border-indigo-600 w-auto min-w-[40px] h-[32px] flex justify-center items-center p-2"
+						className="bg-white text-indigo-600 hover:bg-indigo-600 hover:text-white border border-indigo-600 w-auto min-w-[42px] h-[36px] flex justify-center gap-1 items-center p-2"
 						onClick={handleEditClick}
 					>
 						{isEditing ? (
-							<svg
-								className="fill-current"
-								aria-labelledby="save-button"
-								role="img"
-								xmlns="http://www.w3.org/2000/svg"
-								height="20px"
-								viewBox="0 -960 960 960"
-								width="20px"
-							>
-								<path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z" />
-								<title id="save-button">Save changes</title>
-							</svg>
+							<>
+								<svg
+									className="fill-current hidden sm:block"
+									aria-labelledby="save-button"
+									role="img"
+									xmlns="http://www.w3.org/2000/svg"
+									height="20px"
+									viewBox="0 -960 960 960"
+									width="20px"
+								>
+									<path d="M840-680v480q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h480l160 160Zm-80 34L646-760H200v560h560v-446ZM480-240q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35ZM240-560h360v-160H240v160Zm-40-86v446-560 114Z" />
+									<title id="save-button">Save changes</title>
+								</svg>
+								<span>Save</span>
+							</>
 						) : (
 							<>
 								<svg
-									className="fill-current"
+									className="fill-current hidden sm:block"
 									role="img"
 									aria-labelledby="edit-button"
 									xmlns="http://www.w3.org/2000/svg"
@@ -193,18 +198,18 @@ export default function Bookshelf({
 									<title id="edit-button">Edit</title>
 									<path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
 								</svg>
-								<span className="hidden sm:block ml-1 text-sm">Edit</span>
+								<span className="text-sm">Edit</span>
 							</>
 						)}
 					</button>
 					{isEditing && !isDefaultBookshelf && (
 						<button
 							type="button"
-							className="bg-red-500 text-red-50 hover:bg-red-600 hover:text-white  w-auto min-w-[40px] h-[32px] flex justify-center items-center p-2"
+							className="bg-red-500 text-red-50 hover:bg-red-600 hover:text-white w-auto min-w-[42px] h-[36px] flex justify-center gap-1 items-center p-2"
 							onClick={handleDeleteClick}
 						>
 							<svg
-								className="fill-current"
+								className="fill-current hidden sm:block"
 								aria-labelledby="delete-button"
 								role="img"
 								xmlns="http://www.w3.org/2000/svg"
@@ -215,6 +220,7 @@ export default function Bookshelf({
 								<path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z" />
 								<title id="delete-button">Delete</title>
 							</svg>
+							Delete
 						</button>
 					)}
 				</div>
