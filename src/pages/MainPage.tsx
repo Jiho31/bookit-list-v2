@@ -126,7 +126,7 @@ function MainPage() {
 	return (
 		<div className="w-full h-auto">
 			{displayContent === 'mainPage' && (
-				<section className="flex flex-col w-full h-full align-middle items-center justify-center gap-4 text-center">
+				<section className="flex flex-col w-full h-full py-10 sm:py-0 align-middle items-center justify-center gap-4 text-center">
 					<h1 className="max-w-2/3 self-center sm:text-slate-900 text-3xl md:text-4xl lg:text-6xl font-extrabold">
 						Bookit List: Track, Organize, and Discover
 					</h1>

@@ -50,38 +50,7 @@ function useOpenLibraryAPI() {
 		}
 	};
 
-	// https://covers.openlibrary.org/b/$key/$value-$size.jpg
-	const fetchCoverImage = async ({
-		key,
-		id,
-	}: {
-		key: string | undefined;
-		id: number | undefined;
-	}) => {
-		try {
-			const url =
-				typeof id === 'number'
-					? `https://covers.openlibrary.org/b/id/${id}.jpg?default=false`
-					: typeof key === 'string'
-						? `https://covers.openlibrary.org/b/olid/${key}.jpg?default=false`
-						: '';
-
-			if (!url) {
-				throw new Error('No valid cover ID or key provided');
-			}
-
-			return new Promise((resolve, reject) => {
-				const img = new Image();
-				img.onload = () => resolve(url);
-				img.onerror = () => reject(new Error('Failed to load cover image'));
-				img.src = url;
-			});
-		} catch (err) {
-			console.error(err);
-			throw err;
-		}
-	};
-	return { searchByKeyword, searchByQuery, fetchCoverImage };
+	return { searchByKeyword, searchByQuery };
 }
 
 export default useOpenLibraryAPI;

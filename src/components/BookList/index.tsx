@@ -36,7 +36,6 @@ function BookList({
 
 	useEffect(() => {
 		if (isLoading || !enableInfiniteScroll || typeof fetchData !== 'function') {
-			// console.log('3333333 Data is still loading');
 			return;
 		}
 
@@ -54,8 +53,8 @@ function BookList({
 				}
 			},
 			{
-				threshold: 1,
-				rootMargin: '20px',
+				threshold: 0,
+				rootMargin: '150px',
 			},
 		);
 

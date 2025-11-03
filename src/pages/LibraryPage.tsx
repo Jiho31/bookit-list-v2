@@ -114,7 +114,9 @@ function Sidebar({ isVisible }: { isVisible: boolean }) {
 								id={data.key}
 								onClick={() => setActiveKey(data.key)}
 							>
-								<span>{data.name}</span>
+								<span className="truncate" title={data.name}>
+									{data.name}
+								</span>
 								<span
 									className={`w-10 shrink-0 h-6 inline-flex justify-center items-center text-sm rounded-2xl bg-slate-300  ${activeKey === data.key && 'text-amber-50 bg-slate-400'} `}
 								>
