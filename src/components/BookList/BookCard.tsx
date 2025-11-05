@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { Book, BookItem, CardButton } from '../../types';
-import fallbackImage from '../../assets/fallbackImage.png';
+import fallbackImage from '@/assets/fallbackImage.jpg';
 
 function CoverImage({
 	title,
