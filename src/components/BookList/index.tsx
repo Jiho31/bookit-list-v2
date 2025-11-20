@@ -54,7 +54,7 @@ function BookList({
 			},
 			{
 				threshold: 0,
-				rootMargin: '150px',
+				rootMargin: '500px',
 			},
 		);
 
