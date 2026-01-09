@@ -13,7 +13,8 @@ import { ModalProvider } from './contexts/ModalContext';
 
 const router = createBrowserRouter([
 	{
-		element: <Layout />,
+		Component: Layout,
+		ErrorBoundary: AppErrorBoundary,
 		children: [
 			{
 				path: '/',
