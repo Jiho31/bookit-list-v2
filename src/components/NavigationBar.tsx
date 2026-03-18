@@ -177,7 +177,6 @@ export function NavigationBar() {
 				</Link>
 				<Link
 					to="/search"
-					onClick={close}
 					// className="flex flex-row gap-3 items-center px-6 py-4 group text-center text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 rounded-xl"
 					className="inline-flex flex-col sm:flex-row gap-0.5 sm:gap-2 items-center group text-center text-sm sm:text-md text-slate-600 hover:text-slate-800 hover:bg-indigo-50 py-2 px-3 rounded-xl"
 				>
