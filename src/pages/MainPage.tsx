@@ -45,7 +45,7 @@ function MainPage() {
 
 		try {
 			const query = makeQuery();
-			const books = await fetchBooks(query);
+			const books = await fetchBooks(query, 30);
 			const parsedResult =
 				books?.docs.map(
 					({
@@ -72,7 +72,7 @@ function MainPage() {
 			setMetaInfo({
 				pageIndex: 1,
 				pageSize: MAX_RECOMMENDATIONS,
-				total: books?.numFound || 0,
+				total: books?.docs?.length || 0,
 			});
 
 			setRecommendations(parsedResult.slice(0, MAX_RECOMMENDATIONS));
