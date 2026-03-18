@@ -26,10 +26,7 @@ Find out what your next reads are going to be here 👉 [Live demo](https://book
 ### Known issues (to be fixed)
 1. For OAuth login, there is an account duplication issue.
  > When user is registered for Github using a Google account, and attempts to login using Google and Github like they're two different accounts, there will be an error.
-2. Slow book cover image load time
-
-> Book cover image loading takes long occasionally, especially when there's slow internet connection. For better user experience, this loading process can be improved (or fixed to look faster).
-3. Data is unsynchronized when application is used within multiple browser tabs at the same time.
+2. Data is unsynchronized when application is used within multiple browser tabs at the same time.
 
 ## Developed using..
 - Typescript + React 19

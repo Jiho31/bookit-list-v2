@@ -1,24 +1,28 @@
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import Layout from './components/common/Layout';
-import MainPage from './pages/MainPage';
-import AuthPage from './pages/AuthPage';
-import LibraryPage from './pages/LibraryPage';
-import SearchPage from './pages/SearchPage';
+import {
+	MainPage,
+	AuthPage,
+	LibraryPage,
+	SearchPage,
+	AppErrorBoundary,
+} from './pages';
 import { AuthProvider } from './contexts/AuthContext';
 import { BookshelfProvider } from './contexts/BookshelfContext';
 import { ModalProvider } from './contexts/ModalContext';
 
 const router = createBrowserRouter([
 	{
-		element: <Layout />,
+		Component: Layout,
+		ErrorBoundary: AppErrorBoundary,
 		children: [
 			{
 				path: '/',
-				element: <MainPage />,
+				Component: MainPage,
 			},
-			{ path: '/auth', element: <AuthPage /> },
-			{ path: '/library', element: <LibraryPage /> },
-			{ path: '/search', element: <SearchPage /> },
+			{ path: '/auth', Component: AuthPage },
+			{ path: '/library', Component: LibraryPage },
+			{ path: '/search', Component: SearchPage },
 		],
 	},
 ]);

@@ -47,6 +47,7 @@ export default tseslint.config(
 					checksVoidReturn: false,
 				},
 			],
+			'@typescript-eslint/no-unsafe-call': 'error',
 			'@typescript-eslint/no-floating-promises': [
 				'error',
 				{
