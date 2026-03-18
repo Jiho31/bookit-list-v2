@@ -1,9 +1,10 @@
-import { Link, useRouteError } from 'react-router';
+import { Link, useRouteError, isRouteErrorResponse } from 'react-router';
 
 const AppErrorBoundary = () => {
 	const error = useRouteError();
-	if (error) {
+	if (!isRouteErrorResponse(error)) {
 		console.error('Error boundary caught an error:', error);
+		return <div>An unexpected error occurred.</div>;
 	}
 
 	if (error.status === 404) {
